@@ -15,14 +15,13 @@ class ListAdapter extends StatelessWidget{
         child: Column(
           children: <Widget>[
             ListTile(
-              title: Text(modelAbsensi.dateIn +"\n" +modelAbsensi.dateOut),
-              subtitle: Text(modelAbsensi.reason),
-              trailing: Text(modelAbsensi.dayAbsent),
+              title: Text("Time " +modelAbsensi.timeIn + " - " +modelAbsensi.timeOut),
+              subtitle: Text("Reason " +modelAbsensi.reason),
+              trailing: Text(modelAbsensi.dateAbsent),
             )
           ],
         ),
       )
     );
   }
-
 }

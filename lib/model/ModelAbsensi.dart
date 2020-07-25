@@ -1,8 +1,8 @@
 class ModelAbsensi{
-  final String dayAbsent;
-  final String dateIn;
-  final String dateOut;
+  final String dateAbsent;
+  final String timeIn;
+  final String timeOut;
   final String reason;
 
-  ModelAbsensi({this.dayAbsent, this.dateIn, this.dateOut, this.reason});
+  ModelAbsensi({this.dateAbsent, this.timeIn, this.timeOut, this.reason});
 }
