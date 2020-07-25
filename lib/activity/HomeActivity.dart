@@ -1,8 +1,10 @@
 
+import 'package:absent_hris/activity/DetailAbsentActivity.dart';
 import 'package:absent_hris/list_adapter/list_absent_adapter.dart';
 import 'package:absent_hris/model/ModelAbsensi.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class HomeActivity extends StatelessWidget {
   // This widget is the root of your application.
   List<ModelAbsensi> listAbsents = [
@@ -21,9 +23,13 @@ class HomeActivity extends StatelessWidget {
               return GestureDetector(
                 child: ListAdapter(modelAbsensi: listAbsents[index]),
                 onTap: () {
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text(listAbsents[index].dateAbsent),
-                  ));
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => DetailAbsentActivity(),
+                      ),
+                    );
+//                  Scaffold.of(context).showSnackBar(SnackBar(
+//                    content: Text(listAbsents[index].dateAbsent),
+//                  ));
                 },
               );
 //              return Dismissible(
@@ -46,7 +52,6 @@ class HomeActivity extends StatelessWidget {
 //                key: UniqueKey(),
 //                direction: DismissDirection.endToStart,
 //              );
-//
             }
         ) : Center(child: Text('No Data Found'))
     );
