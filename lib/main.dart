@@ -61,11 +61,12 @@ class _MyHomePageState extends State<MyHomePage> {
             itemBuilder: (BuildContext context, int index) {
               return GestureDetector(
                 child: ListAdapter(modelAbsensi: listAbsents[index]),
-                onTap: () => Scaffold
-                    .of(context)
-                    .showSnackBar(SnackBar(content: Text(listAbsents[index].dayAbsent))),
+                onTap: () {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text(listAbsents[index].dayAbsent),
+                  ));
+                },
               );
-//              for swipe delete
 //              return Dismissible(
 //                onDismissed: (DismissDirection direction) {
 //                  setState(() {

@@ -22,7 +22,6 @@ class ListAdapter extends StatelessWidget{
           ],
         ),
       )
-
     );
   }
 
