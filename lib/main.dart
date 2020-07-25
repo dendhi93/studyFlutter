@@ -59,30 +59,37 @@ class _MyHomePageState extends State<MyHomePage> {
         ListView.builder(
             itemCount: listAbsents.length,
             itemBuilder: (BuildContext context, int index) {
-              return Dismissible(
-                onDismissed: (DismissDirection direction) {
-                  setState(() {
-                    listAbsents.removeAt(index);
-                  });
-                },
-                secondaryBackground: Container(
-                  child: Center(
-                    child: Text(
-                      'Delete',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  color: Colors.red,
-                ),
-                background: Container(),
+              return GestureDetector(
                 child: ListAdapter(modelAbsensi: listAbsents[index]),
-                key: UniqueKey(),
-                direction: DismissDirection.endToStart,
+                onTap: () => Scaffold
+                    .of(context)
+                    .showSnackBar(SnackBar(content: Text(listAbsents[index].dayAbsent))),
               );
+//              for swipe delete
+//              return Dismissible(
+//                onDismissed: (DismissDirection direction) {
+//                  setState(() {
+//                    listAbsents.removeAt(index);
+//                  });
+//                },
+//                secondaryBackground: Container(
+//                  child: Center(
+//                    child: Text(
+//                      'Delete',
+//                      style: TextStyle(color: Colors.white),
+//                    ),
+//                  ),
+//                  color: Colors.red,
+//                ),
+//                background: Container(),
+//                child: ListAdapter(modelAbsensi: listAbsents[index]),
+//                key: UniqueKey(),
+//                direction: DismissDirection.endToStart,
+//              );
+//              
             }
         ) : Center(child: Text('No Data Found'))
     );
-
   }
 
   @override
