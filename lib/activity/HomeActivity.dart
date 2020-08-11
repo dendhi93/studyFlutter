@@ -24,7 +24,7 @@ class HomeActivity extends StatelessWidget {
                 child: ListAdapter(modelAbsensi: listAbsents[index]),
                 onTap: () {
                     Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => DetailAbsentActivity(),
+                        builder: (context) => DetailAbsentActivity(absensiModel: listAbsents[index]),
                       ),
                     );
 //                  Scaffold.of(context).showSnackBar(SnackBar(

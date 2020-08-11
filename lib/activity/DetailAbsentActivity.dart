@@ -1,9 +1,12 @@
 
 
+import 'package:absent_hris/model/ModelAbsensi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DetailAbsentActivity extends StatelessWidget {
+  final ModelAbsensi absensiModel;
+  DetailAbsentActivity({Key key, @required this.absensiModel}) : super(key: key);
 
   Widget _initDetail(){
 //    return Container(
