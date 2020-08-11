@@ -39,6 +39,46 @@ class DetailAbsentActivity extends StatelessWidget {
                           fontFamily: "Poppins",
                         ),
                       ),
+                        new Padding(padding: EdgeInsets.only(top: 30.0)),
+                        new TextFormField(
+                          decoration: new InputDecoration(
+                            labelText: "Absen Masuk",
+                            fillColor: Colors.white,
+                            border: new OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(25.0),
+                              borderSide: new BorderSide(
+                              ),
+                            ),
+                          ),
+                          validator: (val) {
+                            if(val.length==0) {return "Date cannot be empty";
+                            }else{return null;}
+                          },
+                          keyboardType: TextInputType.datetime,
+                          style: new TextStyle(
+                            fontFamily: "Poppins",
+                          ),
+                        ),
+                        new Padding(padding: EdgeInsets.only(top: 10.0)),
+                        new TextFormField(
+                          decoration: new InputDecoration(
+                            labelText: "Absen Pulang",
+                            fillColor: Colors.white,
+                            border: new OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(25.0),
+                              borderSide: new BorderSide(
+                              ),
+                            ),
+                          ),
+                          validator: (val) {
+                            if(val.length==0) {return "Date cannot be empty";
+                            }else{return null;}
+                          },
+                          keyboardType: TextInputType.datetime,
+                          style: new TextStyle(
+                            fontFamily: "Poppins",
+                          ),
+                        ),
                 ],
               ),
             ),
