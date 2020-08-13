@@ -9,6 +9,9 @@ class DetailAbsentActivity extends StatelessWidget {
   DetailAbsentActivity({Key key, @required this.absensiModel}) : super(key: key);
 
   Widget _initDetail(){
+    TextEditingController etDateAbsent = new TextEditingController();
+    TextEditingController etInputTime = new TextEditingController();
+    TextEditingController etLeaveTime = new TextEditingController();
 //    return Container(
 //      padding: EdgeInsets.all(12.0),
 //      child: Text('Flat Button'),
@@ -24,6 +27,7 @@ class DetailAbsentActivity extends StatelessWidget {
                 children: <Widget>[
                       new Padding(padding: EdgeInsets.only(top: 10.0)),
                       new TextFormField(
+                          controller: etDateAbsent,
                           decoration: new InputDecoration(
                             labelText: "Date Absent",
                             fillColor: Colors.white,
@@ -44,6 +48,7 @@ class DetailAbsentActivity extends StatelessWidget {
                       ),
                         new Padding(padding: EdgeInsets.only(top: 30.0)),
                         new TextFormField(
+                          controller: etInputTime,
                           decoration: new InputDecoration(
                             labelText: "Absen Masuk",
                             fillColor: Colors.white,
@@ -64,6 +69,7 @@ class DetailAbsentActivity extends StatelessWidget {
                         ),
                         new Padding(padding: EdgeInsets.only(top: 10.0)),
                         new TextFormField(
+                          controller: etLeaveTime,
                           decoration: new InputDecoration(
                             labelText: "Absen Pulang",
                             fillColor: Colors.white,
