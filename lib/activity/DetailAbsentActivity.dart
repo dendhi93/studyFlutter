@@ -12,6 +12,9 @@ class DetailAbsentActivity extends StatelessWidget {
     TextEditingController etDateAbsent = new TextEditingController();
     TextEditingController etInputTime = new TextEditingController();
     TextEditingController etLeaveTime = new TextEditingController();
+//    Scaffold.of(context).showSnackBar(SnackBar(
+//      content: Text(absensiModel.dateAbsent),
+//    ));
 //    return Container(
 //      padding: EdgeInsets.all(12.0),
 //      child: Text('Flat Button'),
@@ -30,6 +33,7 @@ class DetailAbsentActivity extends StatelessWidget {
                           controller: etDateAbsent,
                           decoration: new InputDecoration(
                             labelText: "Date Absent",
+                            hintText: absensiModel.dateAbsent,
                             fillColor: Colors.white,
                             border: new OutlineInputBorder(
                               borderRadius: new BorderRadius.circular(25.0),
@@ -50,7 +54,8 @@ class DetailAbsentActivity extends StatelessWidget {
                         new TextFormField(
                           controller: etInputTime,
                           decoration: new InputDecoration(
-                            labelText: "Absen Masuk",
+                            labelText: "Absent In",
+                            hintText: absensiModel.timeIn,
                             fillColor: Colors.white,
                             border: new OutlineInputBorder(
                               borderRadius: new BorderRadius.circular(25.0),
@@ -72,6 +77,7 @@ class DetailAbsentActivity extends StatelessWidget {
                           controller: etLeaveTime,
                           decoration: new InputDecoration(
                             labelText: "Absen Pulang",
+                            hintText: absensiModel.timeOut,
                             fillColor: Colors.white,
                             border: new OutlineInputBorder(
                               borderRadius: new BorderRadius.circular(25.0),
