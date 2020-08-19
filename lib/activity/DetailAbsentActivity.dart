@@ -94,6 +94,22 @@ class DetailAbsentActivity extends StatelessWidget {
                             fontFamily: "Poppins",
                           ),
                         ),
+                  new Padding(padding: EdgeInsets.only(top: 50.0)),
+                  new FlatButton(
+                      color: Colors.blue,
+                      textColor: Colors.white,
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.black,
+                      padding: EdgeInsets.all(20.0),
+                      splashColor: Colors.blueAccent,
+                      onPressed: () {
+                        /*...*/
+                      },
+                      child: Text(
+                        "Save",
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                  ),
                 ],
               ),
             ),
