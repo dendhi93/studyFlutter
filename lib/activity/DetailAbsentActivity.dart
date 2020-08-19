@@ -1,18 +1,28 @@
-
-
 import 'package:absent_hris/model/ModelAbsensi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-class DetailAbsentActivity extends StatelessWidget {
+class DetailAbsentActivity extends StatefulWidget {
   final ModelAbsensi absensiModel;
   DetailAbsentActivity({Key key, @required this.absensiModel}) : super(key: key);
+  @override
+  _DetailAbsentActivityState createState() => _DetailAbsentActivityState();
+}
+
+class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
+
+  TextEditingController etDateAbsent = new TextEditingController();
+  TextEditingController etInputTime = new TextEditingController();
+  TextEditingController etLeaveTime = new TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    etDateAbsent.text = widget.absensiModel.dateAbsent;
+    etInputTime.text = widget.absensiModel.timeIn;
+    etLeaveTime.text = widget.absensiModel.timeOut;
+  }
 
   Widget _initDetail(BuildContext context){
-    TextEditingController etDateAbsent = new TextEditingController();
-    TextEditingController etInputTime = new TextEditingController();
-    TextEditingController etLeaveTime = new TextEditingController();
-
     return Material(
       child: new Container(
         padding: const EdgeInsets.all(10.0),
@@ -47,7 +57,6 @@ class DetailAbsentActivity extends StatelessWidget {
                   controller: etInputTime,
                   decoration: new InputDecoration(
                     labelText: "Absent In",
-                    hintText: absensiModel.timeIn,
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(25.0),
@@ -69,7 +78,6 @@ class DetailAbsentActivity extends StatelessWidget {
                   controller: etLeaveTime,
                   decoration: new InputDecoration(
                     labelText: "Absen Pulang",
-                    hintText: absensiModel.timeOut,
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(25.0),
@@ -127,6 +135,5 @@ class DetailAbsentActivity extends StatelessWidget {
       body: _initDetail(context),
     );
   }
-
   Color hexToColor(String code) {return new Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);}
 }
