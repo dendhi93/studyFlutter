@@ -16,7 +16,7 @@ class ListAdapter extends StatelessWidget{
           children: <Widget>[
             ListTile(
               title: Text("Time " +modelAbsensi.timeIn + " - " +modelAbsensi.timeOut),
-              subtitle: Text("Reason " +modelAbsensi.reason),
+              subtitle: Text(modelAbsensi.addressAbsent+"\nReason " +modelAbsensi.reason),
               trailing: Text(modelAbsensi.dateAbsent),
             )
           ],

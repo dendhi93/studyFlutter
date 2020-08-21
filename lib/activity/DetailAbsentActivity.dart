@@ -13,6 +13,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
   TextEditingController etDateAbsent = new TextEditingController();
   TextEditingController etInputTime = new TextEditingController();
   TextEditingController etLeaveTime = new TextEditingController();
+  TextEditingController etAddressAbsent = new TextEditingController();
 
   @override
   void initState() {
@@ -20,6 +21,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
     etDateAbsent.text = widget.absensiModel.dateAbsent;
     etInputTime.text = widget.absensiModel.timeIn;
     etLeaveTime.text = widget.absensiModel.timeOut;
+    etAddressAbsent.text = widget.absensiModel.addressAbsent;
   }
 
   Widget _initDetail(BuildContext context){
@@ -38,7 +40,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                     labelText: "Date Absent",
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
+                      borderRadius: new BorderRadius.circular(15.0),
                       borderSide: new BorderSide(
                       ),
                     ),
@@ -59,7 +61,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                     labelText: "Absent In",
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
+                      borderRadius: new BorderRadius.circular(15.0),
                       borderSide: new BorderSide(
                       ),
                     ),
@@ -80,7 +82,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                     labelText: "Absen Pulang",
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
+                      borderRadius: new BorderRadius.circular(15.0),
                       borderSide: new BorderSide(
                       ),
                     ),
@@ -94,6 +96,27 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                     fontFamily: "Poppins",
                   ),
                 ),
+                new Padding(padding: EdgeInsets.only(top: 10.0)),
+                new TextFormField(
+                  controller: etAddressAbsent,
+                  decoration: new InputDecoration(
+                    labelText: "Alamat",
+                    fillColor: Colors.white,
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(15.0),
+                      borderSide: new BorderSide(
+                      ),
+                    ),
+                  ),
+                  validator: (val) {
+                    if(val.length==0) {return "address cannot be empty";
+                    }else{return null;}
+                  },
+                  keyboardType: TextInputType.text,
+                  style: new TextStyle(
+                    fontFamily: "Poppins",
+                  ),
+                ),
                 new Padding(padding: EdgeInsets.only(top: 50.0)),
                 new FlatButton(
                   color: Colors.blue,
@@ -102,8 +125,11 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                   disabledTextColor: Colors.black,
                   padding: EdgeInsets.all(20.0),
                   splashColor: Colors.blueAccent,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      side: BorderSide(color: Colors.yellow)
+                  ),
                   onPressed: () {
-                    /*...*/
                     return showDialog(
                       context: context,
                       builder: (context) {
