@@ -118,31 +118,62 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                   ),
                 ),
                 new Padding(padding: EdgeInsets.only(top: 50.0)),
-                new FlatButton(
-                  color: Colors.blue,
-                  textColor: Colors.white,
-                  disabledColor: Colors.grey,
-                  disabledTextColor: Colors.black,
-                  padding: EdgeInsets.all(20.0),
-                  splashColor: Colors.blueAccent,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                      side: BorderSide(color: Colors.yellow)
-                  ),
-                  onPressed: () {
-                    return showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          content: Text(etDateAbsent.text),
+                new Row(
+                  children: <Widget>[
+                        new FlatButton(
+                          color: Colors.blue,
+                          textColor: Colors.white,
+                          disabledColor: Colors.grey,
+                          disabledTextColor: Colors.black,
+                          padding: EdgeInsets.all(20.0),
+                          splashColor: Colors.blueAccent,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(color: Colors.yellow)
+                          ),
+                          onPressed: () {
+                            return showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  content: Text(etDateAbsent.text),
+                                );
+                              },
+                            );
+                          },
+                          child: Text(
+                            "Save",
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                        ),
+
+                    new FlatButton(
+                      color: Colors.white,
+                      textColor: Colors.black,
+                      disabledColor: Colors.grey,
+                      disabledTextColor: Colors.grey,
+                      padding: EdgeInsets.all(20.0),
+                      splashColor: Colors.blueAccent,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                          side: BorderSide(color: Colors.grey)
+                      ),
+                      onPressed: () {
+                        return showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              content: Text(etDateAbsent.text),
+                            );
+                          },
                         );
                       },
-                    );
-                  },
-                  child: Text(
-                    "Save",
-                    style: TextStyle(fontSize: 20.0),
-                  ),
+                      child: Text(
+                        "Clear",
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                    ),
+                    ],
                 ),
               ],
             ),
