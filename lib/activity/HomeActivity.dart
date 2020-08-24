@@ -5,8 +5,14 @@ import 'package:absent_hris/model/ModelAbsensi.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class HomeActivity extends StatelessWidget {
+class HomeActivity extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _HomeActivityState createState() => _HomeActivityState();
+}
+
+
+class _HomeActivityState extends State<HomeActivity> {
   List<ModelAbsensi> listAbsents = [
     ModelAbsensi(dateAbsent: '2020-07-20', timeIn: '07:00', timeOut: '12:00', reason: '', addressAbsent :'Multivision Tower'),
     ModelAbsensi(dateAbsent: '2020-07-21', timeIn: '06:30', timeOut: '12:00', reason: '',addressAbsent :'Multivision Tower'),
@@ -23,10 +29,10 @@ class HomeActivity extends StatelessWidget {
               return GestureDetector(
                 child: ListAdapter(modelAbsensi: listAbsents[index]),
                 onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => DetailAbsentActivity(absensiModel: listAbsents[index]),
-                      ),
-                    );
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => DetailAbsentActivity(absensiModel: listAbsents[index]),
+                  ),
+                  );
 //                  Scaffold.of(context).showSnackBar(SnackBar(
 //                    content: Text(listAbsents[index].dateAbsent),
 //                  ));
