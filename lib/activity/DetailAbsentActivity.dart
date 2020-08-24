@@ -147,33 +147,33 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                           ),
                         ),
 
-                    new FlatButton(
-                      color: Colors.white,
-                      textColor: Colors.black,
-                      disabledColor: Colors.grey,
-                      disabledTextColor: Colors.grey,
-                      padding: EdgeInsets.all(20.0),
-                      splashColor: Colors.blueAccent,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: Colors.grey)
+                      new FlatButton(
+                        color: Colors.white,
+                        textColor: Colors.black,
+                        disabledColor: Colors.grey,
+                        disabledTextColor: Colors.grey,
+                        padding: EdgeInsets.all(20.0),
+                        splashColor: Colors.blueAccent,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: Colors.grey)
+                        ),
+                        onPressed: () {
+                          return showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                content: Text(etDateAbsent.text),
+                              );
+                            },
+                          );
+                        },
+                        child: Text(
+                          "Clear",
+                          style: TextStyle(fontSize: 20.0),
+                        ),
                       ),
-                      onPressed: () {
-                        return showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              content: Text(etDateAbsent.text),
-                            );
-                          },
-                        );
-                      },
-                      child: Text(
-                        "Clear",
-                        style: TextStyle(fontSize: 20.0),
-                      ),
-                    ),
-                    ],
+                  ],
                 ),
               ],
             ),
