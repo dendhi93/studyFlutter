@@ -119,6 +119,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                 ),
                 new Padding(padding: EdgeInsets.only(top: 50.0)),
                 new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                         new FlatButton(
                           color: Colors.blue,
@@ -147,7 +148,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                           ),
                         ),
 
-                      new FlatButton(
+                      FlatButton(
                         color: Colors.white,
                         textColor: Colors.black,
                         disabledColor: Colors.grey,
