@@ -124,9 +124,9 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                         new FlatButton(
                           color: Colors.blue,
                           textColor: Colors.white,
-                          disabledColor: Colors.grey,
+                          disabledColor: Colors.blueGrey,
                           disabledTextColor: Colors.black,
-                          padding: EdgeInsets.all(20.0),
+                          padding: EdgeInsets.only(left: 70, top:20, right: 70, bottom: 20),
                           splashColor: Colors.blueAccent,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.0),
@@ -153,7 +153,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                         textColor: Colors.black,
                         disabledColor: Colors.grey,
                         disabledTextColor: Colors.grey,
-                        padding: EdgeInsets.all(20.0),
+                        padding: EdgeInsets.only(left: 70, top:20, right: 70, bottom: 20),
                         splashColor: Colors.blueAccent,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
