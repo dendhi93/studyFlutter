@@ -148,7 +148,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                           ),
                         ),
 
-                      FlatButton(
+                      new FlatButton(
                         color: Colors.white,
                         textColor: Colors.black,
                         disabledColor: Colors.grey,
