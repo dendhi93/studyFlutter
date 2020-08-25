@@ -207,7 +207,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
         .then((Position position) {
       setState(() {
         _currentPosition = position;
-        //mo nampilin snackbar d sn
+        //manifest sama info.plist hrs copas manual
         if(_currentPosition != null){
           Fluttertoast.showToast(
               msg: "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}",
