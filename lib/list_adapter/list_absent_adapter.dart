@@ -11,8 +11,6 @@ class ListAdapter extends StatefulWidget{
   _ListAdapterState createState() => _ListAdapterState();
 }
 
-
-
 class _ListAdapterState extends State<ListAdapter> {
   String reasonAbsent = "";
 

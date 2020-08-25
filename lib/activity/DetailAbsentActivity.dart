@@ -1,6 +1,9 @@
 import 'package:absent_hris/model/ModelAbsensi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 class DetailAbsentActivity extends StatefulWidget {
   final ModelAbsensi absensiModel;
   DetailAbsentActivity({Key key, @required this.absensiModel}) : super(key: key);
@@ -9,7 +12,7 @@ class DetailAbsentActivity extends StatefulWidget {
 }
 
 class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
-
+  Position _currentPosition;
   TextEditingController etDateAbsent = new TextEditingController();
   TextEditingController etInputTime = new TextEditingController();
   TextEditingController etLeaveTime = new TextEditingController();
@@ -22,6 +25,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
     etInputTime.text = widget.absensiModel.timeIn;
     etLeaveTime.text = widget.absensiModel.timeOut;
     etAddressAbsent.text = widget.absensiModel.addressAbsent;
+    _getCurrentLocation();
   }
 
   Widget _initDetail(BuildContext context){
@@ -193,5 +197,31 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
     etDateAbsent.text = "";
     etInputTime.text = "";
     etLeaveTime.text = "";
+  }
+
+  void _getCurrentLocation() {
+    final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+
+    geolocator
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) {
+      setState(() {
+        _currentPosition = position;
+        //mo nampilin snackbar d sn
+        if(_currentPosition != null){
+          Fluttertoast.showToast(
+              msg: "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0
+          );
+        }
+      });
+    }).catchError((e) {
+      print(e);
+    });
   }
 }
