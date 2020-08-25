@@ -160,14 +160,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                             side: BorderSide(color: Colors.grey)
                         ),
                         onPressed: () {
-                          return showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                content: Text(etDateAbsent.text),
-                              );
-                            },
-                          );
+                          _clearText();
                         },
                         child: Text(
                           "Clear",
@@ -194,4 +187,11 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
     );
   }
   Color hexToColor(String code) {return new Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);}
+
+  void _clearText() {
+    etAddressAbsent.text = "";
+    etDateAbsent.text = "";
+    etInputTime.text = "";
+    etLeaveTime.text = "";
+  }
 }
