@@ -3,6 +3,7 @@ import 'package:absent_hris/activity/DetailAbsentActivity.dart';
 import 'package:absent_hris/list_adapter/list_absent_adapter.dart';
 import 'package:absent_hris/model/ModelAbsensi.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 // ignore: must_be_immutable
 class HomeActivity extends StatefulWidget {
@@ -59,7 +60,7 @@ class _HomeActivityState extends State<HomeActivity> {
 //                direction: DismissDirection.endToStart,
 //              );
             }
-        ) : Center(child: Text('No Data Found'))
+        ) : Center(child: Text('No Data Found')),
     );
   }
 
@@ -70,6 +71,20 @@ class _HomeActivityState extends State<HomeActivity> {
         title: Text('Home'),
       ),
       body: _initListAbsent(),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Fluttertoast.showToast(
+              msg: "Test",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.blue,
+              textColor: Colors.white,
+              fontSize: 16.0
+          );
+        },
+      ),
     );
   }
 }
