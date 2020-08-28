@@ -21,10 +21,13 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
   @override
   void initState() {
     super.initState();
-    etDateAbsent.text = widget.absensiModel.dateAbsent;
-    etInputTime.text = widget.absensiModel.timeIn;
-    etLeaveTime.text = widget.absensiModel.timeOut;
-    etAddressAbsent.text = widget.absensiModel.addressAbsent;
+    if(widget.absensiModel != null){
+      etDateAbsent.text = widget.absensiModel.dateAbsent;
+      etInputTime.text = widget.absensiModel.timeIn;
+      etLeaveTime.text = widget.absensiModel.timeOut;
+      etAddressAbsent.text = widget.absensiModel.addressAbsent;
+    }
+
     _getCurrentLocation();
   }
 

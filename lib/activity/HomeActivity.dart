@@ -30,9 +30,9 @@ class _HomeActivityState extends State<HomeActivity> {
               return GestureDetector(
                 child: ListAdapter(modelAbsensi: listAbsents[index]),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => DetailAbsentActivity(absensiModel: listAbsents[index]),
-                  ),
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => DetailAbsentActivity(absensiModel: listAbsents[index]),
+                    ),
                   );
 //                  Scaffold.of(context).showSnackBar(SnackBar(
 //                    content: Text(listAbsents[index].dateAbsent),
@@ -74,15 +74,19 @@ class _HomeActivityState extends State<HomeActivity> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Fluttertoast.showToast(
-              msg: "Test",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.blue,
-              textColor: Colors.white,
-              fontSize: 16.0
-          );
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) => DetailAbsentActivity(absensiModel: null),
+              ),
+            );
+          // Fluttertoast.showToast(
+          //     msg: "Test",
+          //     toastLength: Toast.LENGTH_LONG,
+          //     gravity: ToastGravity.CENTER,
+          //     timeInSecForIosWeb: 1,
+          //     backgroundColor: Colors.blue,
+          //     textColor: Colors.white,
+          //     fontSize: 16.0
+          // );
         },
       ),
     );
