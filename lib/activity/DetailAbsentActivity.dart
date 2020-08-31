@@ -46,6 +46,18 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                 new Padding(padding: EdgeInsets.only(top: 10.0)),
                 new TextFormField(
                   controller: etDateAbsent,
+                  onTap: (){
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                    Fluttertoast.showToast(
+                        msg: "Test",
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.blue,
+                        textColor: Colors.white,
+                        fontSize: 16.0
+                    );
+                  },
                   decoration: new InputDecoration(
                     labelText: "Date Absent",
                     fillColor: Colors.white,
