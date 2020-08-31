@@ -17,6 +17,8 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
   TextEditingController etInputTime = new TextEditingController();
   TextEditingController etLeaveTime = new TextEditingController();
   TextEditingController etAddressAbsent = new TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _autoValidate = false;
 
   @override
   void initState() {
@@ -32,7 +34,8 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
   }
 
   Widget _initDetail(BuildContext context){
-    return Material(
+    return Form(
+      key: _formKey,
       child: new Container(
         padding: const EdgeInsets.all(10.0),
         color: Colors.white,
@@ -74,7 +77,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                     ),
                   ),
                   validator: (val) {
-                    if(val.length==0) {return "Date cannot be empty";
+                    if(val.length==0) {return "Time cannot be empty";
                     }else{return null;}
                   },
                   keyboardType: TextInputType.datetime,
@@ -95,7 +98,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                     ),
                   ),
                   validator: (val) {
-                    if(val.length==0) {return "Date cannot be empty";
+                    if(val.length==0) {return "Time cannot be empty";
                     }else{return null;}
                   },
                   keyboardType: TextInputType.datetime,
@@ -140,14 +143,16 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                               side: BorderSide(color: Colors.yellow)
                           ),
                           onPressed: () {
-                            return showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  content: Text(etDateAbsent.text),
-                                );
-                              },
-                            );
+                            if (_formKey.currentState.validate()){
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        content: Text(etDateAbsent.text),
+                                      );
+                                    },
+                                  );
+                            }
                           },
                           child: Text(
                             "Save",
