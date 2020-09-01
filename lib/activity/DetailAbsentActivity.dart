@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
+
 
 class DetailAbsentActivity extends StatefulWidget {
   final ModelAbsensi absensiModel;
@@ -19,6 +21,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
   TextEditingController etAddressAbsent = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
+  DateTime selectedDate = DateTime.now();
 
   @override
   void initState() {
@@ -48,15 +51,16 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                   controller: etDateAbsent,
                   onTap: (){
                     FocusScope.of(context).requestFocus(new FocusNode());
-                    Fluttertoast.showToast(
-                        msg: "Test",
-                        toastLength: Toast.LENGTH_LONG,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.blue,
-                        textColor: Colors.white,
-                        fontSize: 16.0
-                    );
+                    _selecDatePicker(context);
+                    // Fluttertoast.showToast(
+                    //     msg: "Test",
+                    //     toastLength: Toast.LENGTH_LONG,
+                    //     gravity: ToastGravity.CENTER,
+                    //     timeInSecForIosWeb: 1,
+                    //     backgroundColor: Colors.blue,
+                    //     textColor: Colors.white,
+                    //     fontSize: 16.0
+                    // );
                   },
                   decoration: new InputDecoration(
                     labelText: "Date Absent",
@@ -219,6 +223,22 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
     etLeaveTime.text = "";
   }
 
+  _selecDatePicker(BuildContext context) async{
+    final DateTime picked = await showDatePicker(
+      context: context,
+      helpText: 'Select Absent Date',
+      initialDate: selectedDate, // Refer step 1
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+    );
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+        String selectedDateFormat = new DateFormat("yyyy-MM-dd").format(selectedDate);
+        etDateAbsent.text = selectedDateFormat;
+      });
+  }
+
   void _getCurrentLocation() {
     final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
@@ -240,8 +260,6 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
           );
         }
       });
-    }).catchError((e) {
-      print(e);
-    });
+    }).catchError((e) {print(e);});
   }
 }

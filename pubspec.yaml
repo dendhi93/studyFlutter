@@ -33,6 +33,7 @@ dev_dependencies:
   flutter_launcher_icons: "^0.7.3"
   geolocator: ^5.3.2+2
   fluttertoast: ^7.0.2
+  intl: ^0.15.8
   flutter_test:
     sdk: flutter
 
