@@ -20,8 +20,10 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
   TextEditingController etLeaveTime = new TextEditingController();
   TextEditingController etAddressAbsent = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _autoValidate = false;
   DateTime selectedDate = DateTime.now();
+  TimeOfDay timeOfDay = TimeOfDay.now();
+  int intDateIn = 1;
+  int intDateOut = 2;
 
   @override
   void initState() {
@@ -51,16 +53,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                   controller: etDateAbsent,
                   onTap: (){
                     FocusScope.of(context).requestFocus(new FocusNode());
-                    _selecDatePicker(context);
-                    // Fluttertoast.showToast(
-                    //     msg: "Test",
-                    //     toastLength: Toast.LENGTH_LONG,
-                    //     gravity: ToastGravity.CENTER,
-                    //     timeInSecForIosWeb: 1,
-                    //     backgroundColor: Colors.blue,
-                    //     textColor: Colors.white,
-                    //     fontSize: 16.0
-                    // );
+                      _selecDatePicker(context);
                   },
                   decoration: new InputDecoration(
                     labelText: "Date Absent",
@@ -83,6 +76,10 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                 new Padding(padding: EdgeInsets.only(top: 30.0)),
                 new TextFormField(
                   controller: etInputTime,
+                  onTap: (){
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                    _selectTimeAbsent(context, intDateIn);
+                  },
                   decoration: new InputDecoration(
                     labelText: "Absent In",
                     fillColor: Colors.white,
@@ -104,6 +101,10 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                 new Padding(padding: EdgeInsets.only(top: 10.0)),
                 new TextFormField(
                   controller: etLeaveTime,
+                  onTap: (){
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                    _selectTimeAbsent(context, intDateOut);
+                  },
                   decoration: new InputDecoration(
                     labelText: "Absen Pulang",
                     fillColor: Colors.white,
@@ -237,6 +238,23 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
         String selectedDateFormat = new DateFormat("yyyy-MM-dd").format(selectedDate);
         etDateAbsent.text = selectedDateFormat;
       });
+  }
+
+  _selectTimeAbsent(BuildContext context, int optionText) async{
+    TimeOfDay t = await showTimePicker(
+        context: context,
+        initialTime: timeOfDay,
+    );
+    if(t != null)
+      setState(() {
+        timeOfDay = t;
+        if(optionText == intDateIn){
+          etInputTime.text = "${timeOfDay.hour}:${timeOfDay.minute}";
+        }else{
+          etLeaveTime.text = "${timeOfDay.hour}:${timeOfDay.minute}";
+        }
+      });
+
   }
 
   void _getCurrentLocation() {
