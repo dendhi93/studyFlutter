@@ -2,6 +2,7 @@ import 'package:absent_hris/model/ModelAbsensi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
@@ -126,6 +127,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                 new Padding(padding: EdgeInsets.only(top: 10.0)),
                 new TextFormField(
                   controller: etAddressAbsent,
+                  maxLines: 3,
                   decoration: new InputDecoration(
                     labelText: "Alamat",
                     fillColor: Colors.white,
@@ -263,7 +265,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
 
   }
 
-  void _getCurrentLocation() {
+  void _getCurrentLocation() async {
     final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
     geolocator
@@ -273,6 +275,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
         _currentPosition = position;
         //manifest sama info.plist hrs copas manual
         if(_currentPosition != null){
+          _getAddress(position);
           Fluttertoast.showToast(
               msg: "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}",
               toastLength: Toast.LENGTH_LONG,
@@ -286,4 +289,31 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
       });
     }).catchError((e) {print(e);});
   }
+
+  //void _getAddress(Position _position, Geolocator _geolocator) async{
+    //using geolocator
+    // List<Placemark> newPlace = await _geolocator.placemarkFromCoordinates(_position.latitude, _position.longitude);
+    // Placemark placeMark  = newPlace[0];
+    // String name = placeMark.name;
+    // String subLocality = placeMark.subLocality;
+    // String locality = placeMark.locality;
+    // String administrativeArea = placeMark.administrativeArea;
+    // String postalCode = placeMark.postalCode;
+    // String country = placeMark.country;
+    // setState(() {
+    //     if(widget.absensiModel ==null){
+    //       etAddressAbsent.text = "$subLocality, $administrativeArea $postalCode";
+    //     }else{
+    //       print("ke else");
+    //     }
+    // });
+  //}
+
+    void _getAddress(Position _position) async{
+      final coordinates = new Coordinates(_position.latitude, _position.longitude);
+      var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+      var first = addresses.first;
+      print("${first.featureName} : ${first.addressLine}");
+      etAddressAbsent.text = "${first.addressLine}";
+    }
 }
