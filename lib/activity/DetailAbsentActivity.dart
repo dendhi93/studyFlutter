@@ -248,11 +248,17 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
     if(t != null)
       setState(() {
         timeOfDay = t;
-        if(optionText == intDateIn){
-          etInputTime.text = "${timeOfDay.hour}:${timeOfDay.minute}";
-        }else{
-          etLeaveTime.text = "${timeOfDay.hour}:${timeOfDay.minute}";
-        }
+        int intHour = timeOfDay.hour.toInt();
+        String stHour = "";
+        int intMinutes = timeOfDay.minute.toInt();
+        String stMinutes = "";
+        if(intHour < 10){stHour = "0"+intHour.toString();}
+        else{stHour = intHour.toString();}
+        if(intMinutes < 10){stMinutes = "0"+intMinutes.toString();}
+        else{stMinutes = intMinutes.toString();}
+
+        if(optionText == intDateIn){etInputTime.text = "$stHour:$stMinutes";
+        }else{etLeaveTime.text = "$stHour:$stMinutes";}
       });
 
   }
