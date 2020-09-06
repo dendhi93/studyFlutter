@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:android_intent/android_intent.dart';
 
 
 class DetailAbsentActivity extends StatefulWidget {
@@ -35,8 +36,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
       etLeaveTime.text = widget.absensiModel.timeOut;
       etAddressAbsent.text = widget.absensiModel.addressAbsent;
     }
-
-    _getCurrentLocation();
+    _gpsValidaton();
   }
 
   Widget _initDetail(BuildContext context){
@@ -265,29 +265,53 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
 
   }
 
-  void _getCurrentLocation() async {
+  Future _gpsValidaton() async {
     final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
-    geolocator
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-        .then((Position position) {
-      setState(() {
-        _currentPosition = position;
-        //manifest sama info.plist hrs copas manual
-        if(_currentPosition != null){
-          _getAddress(position);
-          Fluttertoast.showToast(
-              msg: "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.blue,
-              textColor: Colors.white,
-              fontSize: 16.0
-          );
-        }
-      });
-    }).catchError((e) {print(e);});
+    if(!(await Geolocator().isLocationServiceEnabled())){
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text("Can't get current location"),
+              actions: <Widget>[
+                FlatButton(child: Text('OK'),
+                    onPressed: (){
+                        final AndroidIntent intent = AndroidIntent(
+                        action: 'android.settings.LOCATION_SOURCE_SETTINGS');
+                        intent.launch();
+                        Navigator.of(context, rootNavigator: true).pop();
+                        _gpsValidaton();
+                    },
+                )
+              ],
+            );
+          },
+        );
+    }else{_getCurrentLocation(geolocator);}
+  }
+
+  Future _getCurrentLocation(Geolocator _geolocator){
+    _geolocator
+          .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+          .then((Position position) {
+        setState(() {
+          _currentPosition = position;
+          //manifest sama info.plist hrs copas manual
+          if(_currentPosition != null){
+            _getAddress(position);
+              Fluttertoast.showToast(
+                  msg: "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}",
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.blue,
+                  textColor: Colors.white,
+                  fontSize: 16.0
+              );
+          }
+        });
+      }).catchError((e) {print(e);});
   }
 
   //void _getAddress(Position _position, Geolocator _geolocator) async{
