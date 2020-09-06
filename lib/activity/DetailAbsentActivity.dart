@@ -167,7 +167,15 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                                     context: context,
                                     builder: (context) {
                                       return AlertDialog(
-                                        content: Text(etDateAbsent.text),
+                                        content: Text("Transaction Success"),
+                                        actions: <Widget>[
+                                            FlatButton(child: Text('OK'),
+                                                onPressed: (){
+                                                    Navigator.of(context, rootNavigator: true).pop();
+                                                    Navigator.pop(context, '');
+                                                },
+                                            ),
+                                        ],
                                       );
                                     },
                                   );
@@ -280,6 +288,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                         final AndroidIntent intent = AndroidIntent(
                         action: 'android.settings.LOCATION_SOURCE_SETTINGS');
                         intent.launch();
+                        //to close alert dialog
                         Navigator.of(context, rootNavigator: true).pop();
                         _gpsValidaton();
                     },
