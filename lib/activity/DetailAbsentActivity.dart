@@ -1,3 +1,4 @@
+
 import 'package:absent_hris/model/ModelAbsensi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:geocoder/geocoder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:android_intent/android_intent.dart';
+import 'dart:io' show Platform;
 
 
 class DetailAbsentActivity extends StatefulWidget {
@@ -276,28 +278,8 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
   Future _gpsValidaton() async {
     final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
-    if(!(await Geolocator().isLocationServiceEnabled())){
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              content: Text("Can't get current location"),
-              actions: <Widget>[
-                FlatButton(child: Text('OK'),
-                    onPressed: (){
-                        final AndroidIntent intent = AndroidIntent(
-                        action: 'android.settings.LOCATION_SOURCE_SETTINGS');
-                        intent.launch();
-                        //to close alert dialog
-                        Navigator.of(context, rootNavigator: true).pop();
-                        _gpsValidaton();
-                    },
-                )
-              ],
-            );
-          },
-        );
-    }else{_getCurrentLocation(geolocator);}
+    if(!(await Geolocator().isLocationServiceEnabled())){validateAlertGps();}
+    else{_getCurrentLocation(geolocator);}
   }
 
   Future _getCurrentLocation(Geolocator _geolocator){
@@ -321,6 +303,47 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
           }
         });
       }).catchError((e) {print(e);});
+  }
+
+  void validateAlertGps(){
+    if(Platform.isAndroid){
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: Text("Can't get current location"),
+                actions: <Widget>[
+                  FlatButton(child: Text('OK'),
+                    onPressed: (){
+                      final AndroidIntent intent = AndroidIntent(
+                          action: 'android.settings.LOCATION_SOURCE_SETTINGS');
+                      intent.launch();
+                      //to close alert dialog
+                      Navigator.of(context, rootNavigator: true).pop();
+                      _gpsValidaton();
+                    },
+                  )
+                ],
+              );
+            },
+          );
+    }else{
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: Text("Can't get current location"),
+                actions: <Widget>[
+                  FlatButton(child: Text('OK'),
+                    onPressed: (){
+                      Navigator.pop(context, '');
+                    },
+                  )
+                ],
+              );
+            },
+          );
+    }
   }
 
   //void _getAddress(Position _position, Geolocator _geolocator) async{
