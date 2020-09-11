@@ -10,6 +10,7 @@ class LoginActivity extends StatefulWidget {
 class _LoginActivityState extends State<LoginActivity> {
   TextEditingController etLoginUsername = new TextEditingController();
   TextEditingController etLoginPass = new TextEditingController();
+  bool _obscureText = true;
 
   Widget _initLogin(BuildContext context){
     return Form(
@@ -61,18 +62,27 @@ class _LoginActivityState extends State<LoginActivity> {
                       if(val.length==0) {return "password cannot be empty";
                       }else{return null;}
                     },
-                    obscureText: true,
+                    obscureText: _obscureText,
                     maxLength: 15,
                     style: new TextStyle(
                       fontFamily: "Poppins",
                     ),
                   ),
+                new FlatButton(
+                    onPressed: _toggle,
+                    child: new Text(_obscureText ? "Show" : "Hide"))
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  void _toggle() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
   }
 
   @override
