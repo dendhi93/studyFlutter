@@ -57,6 +57,9 @@ class _LoginActivityState extends State<LoginActivity> {
                         borderSide: new BorderSide(
                         ),
                       ),
+                      suffixIcon: IconButton(onPressed: () { _toggle();},
+                        icon: Icon(Icons.remove_red_eye),
+                      ),
                     ),
                     validator: (val) {
                       if(val.length==0) {return "password cannot be empty";
@@ -68,9 +71,6 @@ class _LoginActivityState extends State<LoginActivity> {
                       fontFamily: "Poppins",
                     ),
                   ),
-                new FlatButton(
-                    onPressed: _toggle,
-                    child: new Text(_obscureText ? "Show" : "Hide"))
               ],
             ),
           ),
