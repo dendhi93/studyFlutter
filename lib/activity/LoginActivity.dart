@@ -18,6 +18,22 @@ class _LoginActivityState extends State<LoginActivity> {
   HrisStore hrisStore = HrisStore();
   MessageUtil messageUtil = MessageUtil();
 
+  @override
+  void initState() {
+    super.initState();
+    Future<String> authUn = hrisStore.getAuthUsername();
+    authUn.then((data) {
+      if(data != ""){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomeActivity()),
+        );
+      }
+    },onError: (e) {
+      messageUtil.toastMessage(e);
+    });
+  }
+
 
   Widget _initLogin(BuildContext context){
     return Form(

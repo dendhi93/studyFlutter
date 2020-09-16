@@ -2,6 +2,8 @@
 import 'package:absent_hris/activity/DetailAbsentActivity.dart';
 import 'package:absent_hris/list_adapter/list_absent_adapter.dart';
 import 'package:absent_hris/model/ModelAbsensi.dart';
+import 'package:absent_hris/util/HrisStore.dart';
+import 'package:absent_hris/util/MessageUtil.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -19,6 +21,19 @@ class _HomeActivityState extends State<HomeActivity> {
     ModelAbsensi(dateAbsent: '2020-07-23', timeIn: '07:10', timeOut: '12:00', reason: 'Late',addressAbsent :'Plaza Kuningan'),
     ModelAbsensi(dateAbsent: '2020-07-24', timeIn: '07:00', timeOut: '17:00', reason: 'Meetings',addressAbsent :'Multivision Tower'),
   ];
+  MessageUtil messageUtil = MessageUtil();
+  HrisStore hrisStore = HrisStore();
+
+  @override
+  void initState() {
+    super.initState();
+    Future<String> authUn = hrisStore.getAuthUsername();
+    authUn.then((data) {
+      messageUtil.toastMessage("Welcome User " +data.trim());
+    },onError: (e) {
+      messageUtil.toastMessage(e);
+    });
+  }
 
   Widget _initListAbsent(){
     return Container(
