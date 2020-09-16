@@ -36,6 +36,7 @@ dev_dependencies:
   fluttertoast: ^7.0.2
   intl: ^0.15.8
   android_intent: ^0.3.6+12
+  shared_preferences: ^0.5.6+1
   flutter_test:
     sdk: flutter
 

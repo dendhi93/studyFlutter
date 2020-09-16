@@ -1,7 +1,9 @@
 
+import 'package:absent_hris/activity/HomeActivity.dart';
+import 'package:absent_hris/util/HrisStore.dart';
+import 'package:absent_hris/util/MessageUtil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginActivity extends StatefulWidget {
   @override
@@ -13,6 +15,9 @@ class _LoginActivityState extends State<LoginActivity> {
   TextEditingController etLoginPass = new TextEditingController();
   bool _obscureText = true;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  HrisStore hrisStore = HrisStore();
+  MessageUtil messageUtil = MessageUtil();
+
 
   Widget _initLogin(BuildContext context){
     return Form(
@@ -86,32 +91,7 @@ class _LoginActivityState extends State<LoginActivity> {
                         side: BorderSide(color: Colors.yellow)
                     ),
                     onPressed: () {
-                      if (_formKey.currentState.validate()){
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              content: Text("Transaction Success"),
-                              actions: <Widget>[
-                                FlatButton(child: Text('OK'),
-                                  onPressed: (){
-                                    Fluttertoast.showToast(
-                                        msg: "OK Thnks",
-                                        toastLength: Toast.LENGTH_LONG,
-                                        gravity: ToastGravity.CENTER,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor: Colors.blue,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0
-                                    );
-                                    Navigator.of(context, rootNavigator: true).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      }
+                      if (_formKey.currentState.validate()){_submitLogin();}
                     },
                     child: Text(
                       "LOG IN",
@@ -130,6 +110,14 @@ class _LoginActivityState extends State<LoginActivity> {
     setState(() {
       _obscureText = !_obscureText;
     });
+  }
+
+  void _submitLogin(){
+      hrisStore.setAuthUsername(etLoginUsername.text);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomeActivity()),
+      );
   }
 
   @override
