@@ -92,23 +92,28 @@ class _HomeActivityState extends State<HomeActivity> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Home'),
+    return WillPopScope(
+      onWillPop: onWillPop,
+      child: new Scaffold(
+        appBar: new AppBar(
+          title: new Text(
+            "Home",
+            style: new TextStyle(color: Colors.white),
+          ),
+        ),
+        body: _initListAbsent(), floatingActionButton: FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => DetailAbsentActivity(absensiModel: null),
+                    ),
+                  );
+              },
+            ),
       ),
-      body: WillPopScope(child: _initListAbsent(),onWillPop: onWillPop),
-      // body: _initListAbsent(),
-      // floatingActionButton: FloatingActionButton(
-      //   child: Icon(Icons.add),
-      //   onPressed: () {
-      //         Navigator.push(context, MaterialPageRoute(
-      //           builder: (context) => DetailAbsentActivity(absensiModel: null),
-      //         ),
-      //       );
-      //   },
-      // ),
     );
   }
+
 }
 
 
