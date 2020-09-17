@@ -23,6 +23,7 @@ class _HomeActivityState extends State<HomeActivity> {
   ];
   MessageUtil messageUtil = MessageUtil();
   HrisStore hrisStore = HrisStore();
+  DateTime currentBackPressTime;
 
   @override
   void initState() {
@@ -78,31 +79,34 @@ class _HomeActivityState extends State<HomeActivity> {
     );
   }
 
+  Future<bool> onWillPop() {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      messageUtil.toastMessage("please tap again to exit");
+      return Future.value(false);
+    }
+    return Future.value(true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
       ),
-      body: _initListAbsent(),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) => DetailAbsentActivity(absensiModel: null),
-              ),
-            );
-          // Fluttertoast.showToast(
-          //     msg: "Test",
-          //     toastLength: Toast.LENGTH_LONG,
-          //     gravity: ToastGravity.CENTER,
-          //     timeInSecForIosWeb: 1,
-          //     backgroundColor: Colors.blue,
-          //     textColor: Colors.white,
-          //     fontSize: 16.0
-          // );
-        },
-      ),
+      body: WillPopScope(child: _initListAbsent(),onWillPop: onWillPop),
+      // body: _initListAbsent(),
+      // floatingActionButton: FloatingActionButton(
+      //   child: Icon(Icons.add),
+      //   onPressed: () {
+      //         Navigator.push(context, MaterialPageRoute(
+      //           builder: (context) => DetailAbsentActivity(absensiModel: null),
+      //         ),
+      //       );
+      //   },
+      // ),
     );
   }
 }
