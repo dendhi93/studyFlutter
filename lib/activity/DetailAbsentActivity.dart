@@ -346,30 +346,11 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
     }
   }
 
-  //void _getAddress(Position _position, Geolocator _geolocator) async{
-    //using geolocator
-    // List<Placemark> newPlace = await _geolocator.placemarkFromCoordinates(_position.latitude, _position.longitude);
-    // Placemark placeMark  = newPlace[0];
-    // String name = placeMark.name;
-    // String subLocality = placeMark.subLocality;
-    // String locality = placeMark.locality;
-    // String administrativeArea = placeMark.administrativeArea;
-    // String postalCode = placeMark.postalCode;
-    // String country = placeMark.country;
-    // setState(() {
-    //     if(widget.absensiModel ==null){
-    //       etAddressAbsent.text = "$subLocality, $administrativeArea $postalCode";
-    //     }else{
-    //       print("ke else");
-    //     }
-    // });
-  //}
-
-    void _getAddress(Position _position) async{
+  void _getAddress(Position _position) async{
       final coordinates = new Coordinates(_position.latitude, _position.longitude);
       var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
       var first = addresses.first;
       print("${first.featureName} : ${first.addressLine}");
-      etAddressAbsent.text = "${first.addressLine}";
+      if(widget.absensiModel ==null){etAddressAbsent.text = "${first.addressLine}";}
     }
 }

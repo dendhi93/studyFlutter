@@ -46,7 +46,12 @@ class _LoginActivityState extends State<LoginActivity> {
             child: new Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                  new Padding(padding: EdgeInsets.only(top: 0.0)),
+                  new Text("Hris Mobile",
+                      style: TextStyle(fontSize: 27)
+                  ),
+                  new Padding(padding: EdgeInsets.only(top: 20.0)),
+                  new Image.asset('assets/images/ic_logo.png', width: 230, height: 160,),
+                  new Padding(padding: EdgeInsets.only(top: 30.0)),
                   new TextFormField(
                     controller: etLoginUsername,
                     decoration: new InputDecoration(
@@ -100,7 +105,7 @@ class _LoginActivityState extends State<LoginActivity> {
                     textColor: Colors.white,
                     disabledColor: Colors.blueGrey,
                     disabledTextColor: Colors.black,
-                    padding: EdgeInsets.only(left: 70, top:20, right: 70, bottom: 20),
+                    padding: EdgeInsets.only(left: 150, top:20, right: 150, bottom: 20),
                     splashColor: Colors.blueAccent,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0),
