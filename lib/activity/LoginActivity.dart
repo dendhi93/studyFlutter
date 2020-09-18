@@ -43,83 +43,85 @@ class _LoginActivityState extends State<LoginActivity> {
         color: Colors.white,
         child: new Container(
           child: new Center(
-            child: new Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                  new Text("Hris Mobile",
-                      style: TextStyle(fontSize: 27)
-                  ),
-                  new Padding(padding: EdgeInsets.only(top: 20.0)),
-                  new Image.asset('assets/images/ic_logo.png', width: 230, height: 160,),
-                  new Padding(padding: EdgeInsets.only(top: 30.0)),
-                  new TextFormField(
-                    controller: etLoginUsername,
-                    decoration: new InputDecoration(
-                      labelText: "Username",
-                      fillColor: Colors.white,
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(15.0),
-                        borderSide: new BorderSide(
+            child: new SingleChildScrollView(
+                child: new Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    new Text("Hris Mobile",
+                        style: TextStyle(fontSize: 27)
+                    ),
+                    new Padding(padding: EdgeInsets.only(top: 20.0)),
+                    new Image.asset('assets/images/ic_logo.png', width: 230, height: 160,),
+                    new Padding(padding: EdgeInsets.only(top: 30.0)),
+                    new TextFormField(
+                      controller: etLoginUsername,
+                      decoration: new InputDecoration(
+                        labelText: "Username",
+                        fillColor: Colors.white,
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(15.0),
+                          borderSide: new BorderSide(
+                          ),
                         ),
                       ),
+                      validator: (val) {
+                        if(val.length==0) {return "Username cannot be empty";
+                        }else{return null;}
+                      },
+                      keyboardType: TextInputType.text,
+                      maxLength: 15,
+                      style: new TextStyle(
+                        fontFamily: "Poppins",
+                      ),
                     ),
-                    validator: (val) {
-                      if(val.length==0) {return "Username cannot be empty";
-                      }else{return null;}
-                    },
-                    keyboardType: TextInputType.text,
-                    maxLength: 15,
-                    style: new TextStyle(
-                      fontFamily: "Poppins",
-                    ),
-                  ),
 
-                  new Padding(padding: EdgeInsets.only(top: 10.0)),
-                  new TextFormField(
-                    controller: etLoginPass,
-                    decoration: new InputDecoration(
-                      labelText: "Password",
-                      fillColor: Colors.white,
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(15.0),
-                        borderSide: new BorderSide(
+                    new Padding(padding: EdgeInsets.only(top: 10.0)),
+                    new TextFormField(
+                      controller: etLoginPass,
+                      decoration: new InputDecoration(
+                        labelText: "Password",
+                        fillColor: Colors.white,
+                        border: new OutlineInputBorder(
+                          borderRadius: new BorderRadius.circular(15.0),
+                          borderSide: new BorderSide(
+                          ),
+                        ),
+                        suffixIcon: IconButton(onPressed: () { _toggle();},
+                          icon: Icon(Icons.remove_red_eye),
                         ),
                       ),
-                      suffixIcon: IconButton(onPressed: () { _toggle();},
-                        icon: Icon(Icons.remove_red_eye),
+                      validator: (val) {
+                        if(val.length==0) {return "password cannot be empty";
+                        }else{return null;}
+                      },
+                      obscureText: _obscureText,
+                      maxLength: 15,
+                      style: new TextStyle(
+                        fontFamily: "Poppins",
                       ),
                     ),
-                    validator: (val) {
-                      if(val.length==0) {return "password cannot be empty";
-                      }else{return null;}
-                    },
-                    obscureText: _obscureText,
-                    maxLength: 15,
-                    style: new TextStyle(
-                      fontFamily: "Poppins",
+                    new Padding(padding: EdgeInsets.only(top: 50.0)),
+                    new FlatButton(
+                      color: Colors.blue,
+                      textColor: Colors.white,
+                      disabledColor: Colors.blueGrey,
+                      disabledTextColor: Colors.black,
+                      padding: EdgeInsets.only(left: 150, top:20, right: 150, bottom: 20),
+                      splashColor: Colors.blueAccent,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                          side: BorderSide(color: Colors.yellow)
+                      ),
+                      onPressed: () {
+                        if (_formKey.currentState.validate()){_submitLogin();}
+                      },
+                      child: Text(
+                        "LOG IN",
+                        style: TextStyle(fontSize: 20.0),
+                      ),
                     ),
-                  ),
-                new Padding(padding: EdgeInsets.only(top: 50.0)),
-                  new FlatButton(
-                    color: Colors.blue,
-                    textColor: Colors.white,
-                    disabledColor: Colors.blueGrey,
-                    disabledTextColor: Colors.black,
-                    padding: EdgeInsets.only(left: 150, top:20, right: 150, bottom: 20),
-                    splashColor: Colors.blueAccent,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                        side: BorderSide(color: Colors.yellow)
-                    ),
-                    onPressed: () {
-                      if (_formKey.currentState.validate()){_submitLogin();}
-                    },
-                    child: Text(
-                      "LOG IN",
-                      style: TextStyle(fontSize: 20.0),
-                    ),
-                  ),
-              ],
+                  ],
+                ),
             ),
           ),
         ),
