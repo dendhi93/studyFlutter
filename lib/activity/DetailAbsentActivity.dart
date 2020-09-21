@@ -28,6 +28,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
   TimeOfDay timeOfDay = TimeOfDay.now();
   int intDateIn = 1;
   int intDateOut = 2;
+  var isHiddenButton = true;
 
   @override
   void initState() {
@@ -37,6 +38,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
       etInputTime.text = widget.absensiModel.timeIn;
       etLeaveTime.text = widget.absensiModel.timeOut;
       etAddressAbsent.text = widget.absensiModel.addressAbsent;
+      isHiddenButton = false;
     }
     _gpsValidaton();
   }
@@ -152,7 +154,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                 new Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                        new FlatButton(
+                        isHiddenButton ? new FlatButton(
                           color: Colors.blue,
                           textColor: Colors.white,
                           disabledColor: Colors.blueGrey,
@@ -187,9 +189,9 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                             "Save",
                             style: TextStyle(fontSize: 20.0),
                           ),
-                        ),
+                        ) : Text(""),
 
-                      new FlatButton(
+                      isHiddenButton ? new FlatButton(
                         color: Colors.white,
                         textColor: Colors.black,
                         disabledColor: Colors.grey,
@@ -207,7 +209,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                           "Clear",
                           style: TextStyle(fontSize: 20.0),
                         ),
-                      ),
+                      ) : Text(""),
                   ],
                 ),
               ],
