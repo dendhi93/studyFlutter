@@ -1,5 +1,6 @@
 
 import 'package:absent_hris/activity/HomeActivity.dart';
+import 'package:absent_hris/adapter/BottomMenuAdapter.dart';
 import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/MessageUtil.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,7 +27,7 @@ class _LoginActivityState extends State<LoginActivity> {
       if(data != ""){
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomeActivity()),
+          MaterialPageRoute(builder: (context) => BottomMenuNavigationAdapter()),
         );
       }
     },onError: (e) {
@@ -139,7 +140,7 @@ class _LoginActivityState extends State<LoginActivity> {
       hrisStore.setAuthUsername(etLoginUsername.text);
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomeActivity()),
+        MaterialPageRoute(builder: (context) => BottomMenuNavigationAdapter()),
       );
   }
 

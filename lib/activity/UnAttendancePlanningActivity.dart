@@ -33,7 +33,7 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
           ),
         ),
         body: new Center(
-          child: new Text("Claim"),
+          child: new Text("UnAttendance Planning"),
         ),
       ),
     );
