@@ -6,6 +6,8 @@ import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/MessageUtil.dart';
 import 'package:flutter/material.dart';
 
+import 'package:flutter/services.dart';
+
 // ignore: must_be_immutable
 class HomeActivity extends StatefulWidget {
   // This widget is the root of your application.
@@ -87,7 +89,7 @@ class _HomeActivityState extends State<HomeActivity> {
         messageUtil.toastMessage("please tap again to exit");
         return Future.value(false);
       }
-      return Future.value(true);
+      return SystemChannels.platform.invokeMethod('SystemNavigator.pop');
     }
 
     @override

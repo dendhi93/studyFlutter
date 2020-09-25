@@ -17,6 +17,7 @@ class _BottomMenuNavigationAdapterState extends State<BottomMenuNavigationAdapte
   final HomeActivity _homeActivity = HomeActivity();
   final ClaimActivity _claimActivity = ClaimActivity();
   final UnAttendancePlanningActivity _attendancePlanningActivity = UnAttendancePlanningActivity();
+  DateTime currentBackPressTime;
 
   Widget _showPage = HomeActivity();
   Widget _selectedScreen(int intSreen){
@@ -32,6 +33,18 @@ class _BottomMenuNavigationAdapterState extends State<BottomMenuNavigationAdapte
         break;
     }
   }
+
+  Future<bool> onWillPop() {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      messageUtil.toastMessage("please tap again to exit");
+      return Future.value(false);
+    }
+    return Future.value(true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

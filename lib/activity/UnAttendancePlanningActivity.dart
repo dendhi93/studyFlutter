@@ -1,5 +1,6 @@
 import 'package:absent_hris/util/MessageUtil.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class UnAttendancePlanningActivity extends StatefulWidget {
   @override
@@ -18,7 +19,7 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
       messageUtil.toastMessage("please tap again to exit");
       return Future.value(false);
     }
-    return Future.value(true);
+    return SystemChannels.platform.invokeMethod('SystemNavigator.pop');
   }
 
   @override
