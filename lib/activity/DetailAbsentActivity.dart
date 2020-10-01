@@ -61,7 +61,8 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                       _selecDatePicker(context);
                   },
                   decoration: new InputDecoration(
-                    labelText: "Date Absent",
+                    labelText: "Date absent",
+                    contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(15.0),
@@ -78,7 +79,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                     fontFamily: "Poppins",
                   ),
                 ),
-                new Padding(padding: EdgeInsets.only(top: 30.0)),
+                new Padding(padding: EdgeInsets.only(top: 10.0)),
                 new TextFormField(
                   controller: etInputTime,
                   onTap: (){
@@ -87,6 +88,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                   },
                   decoration: new InputDecoration(
                     labelText: "Absent In",
+                    contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(15.0),
@@ -111,7 +113,8 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                     _selectTimeAbsent(context, intDateOut);
                   },
                   decoration: new InputDecoration(
-                    labelText: "Absen Pulang",
+                    labelText: "Absen out",
+                    contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(15.0),
@@ -128,12 +131,12 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                     fontFamily: "Poppins",
                   ),
                 ),
-                new Padding(padding: EdgeInsets.only(top: 10.0)),
+                new Padding(padding: EdgeInsets.only(top: 30.0)),
                 new TextFormField(
                   controller: etAddressAbsent,
                   maxLines: 3,
                   decoration: new InputDecoration(
-                    labelText: "Alamat",
+                    labelText: "Address",
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(15.0),
@@ -159,7 +162,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                           textColor: Colors.white,
                           disabledColor: Colors.blueGrey,
                           disabledTextColor: Colors.black,
-                          padding: EdgeInsets.only(left: 70, top:20, right: 70, bottom: 20),
+                          padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
                           splashColor: Colors.blueAccent,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.0),
@@ -196,7 +199,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                         textColor: Colors.black,
                         disabledColor: Colors.grey,
                         disabledTextColor: Colors.grey,
-                        padding: EdgeInsets.only(left: 70, top:20, right: 70, bottom: 20),
+                        padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
                         splashColor: Colors.blueAccent,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),

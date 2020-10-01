@@ -49,7 +49,7 @@ class _BottomMenuNavigationAdapterState extends State<BottomMenuNavigationAdapte
   Widget build(BuildContext context) {
     return Scaffold(
         bottomNavigationBar: CurvedNavigationBar(
-          key : _bottomNavigationKey, index: 0, height: 65.0,
+          key : _bottomNavigationKey, index: 0, height: 45.0,
           backgroundColor: Colors.white,
           color: Colors.blue,
           buttonBackgroundColor: Colors.transparent,
@@ -57,8 +57,8 @@ class _BottomMenuNavigationAdapterState extends State<BottomMenuNavigationAdapte
           animationDuration: Duration(milliseconds: 500),
           items: <Widget>[
             Icon(Icons.home, size: 30),
-            Icon(Icons.attach_money, size: 30),
-            Icon(Icons.list, size: 30),
+            Icon(Icons.monetization_on, size: 30),
+            Icon(Icons.calendar_today, size: 30),
           ],
           onTap: (index) {
             setState(() {

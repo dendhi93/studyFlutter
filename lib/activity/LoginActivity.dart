@@ -1,5 +1,4 @@
 
-import 'package:absent_hris/activity/HomeActivity.dart';
 import 'package:absent_hris/adapter/BottomMenuAdapter.dart';
 import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/MessageUtil.dart';
@@ -51,16 +50,17 @@ class _LoginActivityState extends State<LoginActivity> {
                     new Text("Hris Mobile",
                         style: TextStyle(fontSize: 27)
                     ),
-                    new Padding(padding: EdgeInsets.only(top: 20.0)),
-                    new Image.asset('assets/images/ic_logo.png', width: 230, height: 160,),
+                    new Padding(padding: EdgeInsets.only(top: 25.0)),
+                    new Image.asset('assets/images/ic_logo.png', width: 190, height: 120,),
                     new Padding(padding: EdgeInsets.only(top: 30.0)),
                     new TextFormField(
                       controller: etLoginUsername,
                       decoration: new InputDecoration(
+                        contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
                         labelText: "Username",
                         fillColor: Colors.white,
                         border: new OutlineInputBorder(
-                          borderRadius: new BorderRadius.circular(15.0),
+                          borderRadius: new BorderRadius.circular(10.0),
                           borderSide: new BorderSide(
                           ),
                         ),
@@ -80,10 +80,11 @@ class _LoginActivityState extends State<LoginActivity> {
                     new TextFormField(
                       controller: etLoginPass,
                       decoration: new InputDecoration(
+                        contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
                         labelText: "Password",
                         fillColor: Colors.white,
                         border: new OutlineInputBorder(
-                          borderRadius: new BorderRadius.circular(15.0),
+                          borderRadius: new BorderRadius.circular(10.0),
                           borderSide: new BorderSide(
                           ),
                         ),
@@ -107,7 +108,7 @@ class _LoginActivityState extends State<LoginActivity> {
                       textColor: Colors.white,
                       disabledColor: Colors.blueGrey,
                       disabledTextColor: Colors.black,
-                      padding: EdgeInsets.only(left: 150, top:20, right: 150, bottom: 20),
+                      padding: EdgeInsets.only(left: 120, top:20, right: 120, bottom: 20),
                       splashColor: Colors.blueAccent,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
