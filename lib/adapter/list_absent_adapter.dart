@@ -31,7 +31,7 @@ class _ListAdapterState extends State<ListAdapter> {
           child: Column(
             children: <Widget>[
               ListTile(
-                title: Text("Time " +widget.modelAbsensi.timeIn + " - " +widget.modelAbsensi.timeOut),
+                title: Text(widget.modelAbsensi.absentType +"\nTime " +widget.modelAbsensi.transTime),
                 subtitle: Text(widget.modelAbsensi.addressAbsent+""+reasonAbsent),
                 trailing: Text(widget.modelAbsensi.dateAbsent),
               )

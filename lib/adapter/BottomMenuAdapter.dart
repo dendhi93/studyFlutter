@@ -32,6 +32,7 @@ class _BottomMenuNavigationAdapterState extends State<BottomMenuNavigationAdapte
         return _attendancePlanningActivity;
         break;
     }
+    return null;
   }
 
   Future<bool> onWillPop() {

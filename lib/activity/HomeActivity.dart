@@ -18,10 +18,12 @@ class HomeActivity extends StatefulWidget {
 
 class _HomeActivityState extends State<HomeActivity> {
     List<ModelAbsensi> listAbsents = [
-      ModelAbsensi(dateAbsent: '2020-07-20', timeIn: '07:00', timeOut: '12:00', reason: '', addressAbsent :'Multivision Tower'),
-      ModelAbsensi(dateAbsent: '2020-07-21', timeIn: '06:30', timeOut: '12:00', reason: '',addressAbsent :'Multivision Tower'),
-      ModelAbsensi(dateAbsent: '2020-07-23', timeIn: '07:10', timeOut: '12:00', reason: 'Late',addressAbsent :'Plaza Kuningan'),
-      ModelAbsensi(dateAbsent: '2020-07-24', timeIn: '07:00', timeOut: '17:00', reason: 'Meetings',addressAbsent :'Multivision Tower'),
+      ModelAbsensi(dateAbsent: '2020-09-20', transTime: '08:30', absentType: "Absent In", reason: '', addressAbsent :'Multivision Tower'),
+      ModelAbsensi(dateAbsent: '2020-09-20', transTime: '17:40', absentType: "Absent Out", reason: '',addressAbsent :'Multivision Tower'),
+      ModelAbsensi(dateAbsent: '2020-09-21', transTime: '08:30', absentType: "Absent In", reason: 'Late',addressAbsent :'Plaza Kuningan'),
+      ModelAbsensi(dateAbsent: '2020-09-21', transTime: '17:41', absentType: "Absent Out", reason: 'Meetings',addressAbsent :'Multivision Tower'),
+      ModelAbsensi(dateAbsent: '2020-09-22', transTime: '08:30', absentType: "Absent In", reason: 'Late',addressAbsent :'Plaza Kuningan'),
+      ModelAbsensi(dateAbsent: '2020-09-22', transTime: '17:41', absentType: "Absent Out", reason: '',addressAbsent :'Multivision Tower'),
     ];
     MessageUtil messageUtil = MessageUtil();
     HrisStore hrisStore = HrisStore();

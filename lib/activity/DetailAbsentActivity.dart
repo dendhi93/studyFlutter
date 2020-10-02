@@ -35,8 +35,8 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
     super.initState();
     if(widget.absensiModel != null){
       etDateAbsent.text = widget.absensiModel.dateAbsent;
-      etInputTime.text = widget.absensiModel.timeIn;
-      etLeaveTime.text = widget.absensiModel.timeOut;
+      etInputTime.text = widget.absensiModel.transTime;
+      etLeaveTime.text = "";
       etAddressAbsent.text = widget.absensiModel.addressAbsent;
       isHiddenButton = false;
     }
@@ -87,33 +87,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                     _selectTimeAbsent(context, intDateIn);
                   },
                   decoration: new InputDecoration(
-                    labelText: "Absent In",
-                    contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
-                    fillColor: Colors.white,
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(15.0),
-                      borderSide: new BorderSide(
-                      ),
-                    ),
-                  ),
-                  validator: (val) {
-                    if(val.length==0) {return "Time cannot be empty";
-                    }else{return null;}
-                  },
-                  keyboardType: TextInputType.datetime,
-                  style: new TextStyle(
-                    fontFamily: "Poppins",
-                  ),
-                ),
-                new Padding(padding: EdgeInsets.only(top: 10.0)),
-                new TextFormField(
-                  controller: etLeaveTime,
-                  onTap: (){
-                    FocusScope.of(context).requestFocus(new FocusNode());
-                    _selectTimeAbsent(context, intDateOut);
-                  },
-                  decoration: new InputDecoration(
-                    labelText: "Absen out",
+                    labelText: "Time Absent",
                     contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
                     fillColor: Colors.white,
                     border: new OutlineInputBorder(
@@ -308,6 +282,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
           }
         });
       }).catchError((e) {print(e);});
+    return null;
   }
 
   void validateAlertGps(){
