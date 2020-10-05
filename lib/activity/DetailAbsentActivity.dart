@@ -1,5 +1,6 @@
 
 import 'package:absent_hris/model/ModelAbsensi.dart';
+import 'package:absent_hris/util/MessageUtil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -26,8 +27,10 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   DateTime selectedDate = DateTime.now();
   TimeOfDay timeOfDay = TimeOfDay.now();
+  MessageUtil messageUtil = MessageUtil();
   int intDateIn = 1;
   int intDateOut = 2;
+  int _groupValue = -1;
   var isHiddenButton = true;
 
   @override
@@ -36,9 +39,14 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
     if(widget.absensiModel != null){
       etDateAbsent.text = widget.absensiModel.dateAbsent;
       etInputTime.text = widget.absensiModel.transTime;
-      etLeaveTime.text = "";
+      etLeaveTime.text = '';
       etAddressAbsent.text = widget.absensiModel.addressAbsent;
       isHiddenButton = false;
+      if(widget.absensiModel.absentType == "Absent In"){
+        _groupValue = 1;
+      }else{
+        _groupValue = 2;
+      }
     }
     _gpsValidaton();
   }
@@ -105,6 +113,15 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                     fontFamily: "Poppins",
                   ),
                 ),
+                new Padding(padding: EdgeInsets.only(top: 5.0)),
+                _myRadioButton(
+                    title: "Absent In",
+                    value: 1,
+                    onChanged: (newValue) => setState(() => _groupValue = newValue)),
+                _myRadioButton(
+                    title: "Absent Out",
+                    value: 2,
+                    onChanged: (newValue) => setState(() => _groupValue = newValue)),
                 new Padding(padding: EdgeInsets.only(top: 30.0)),
                 new TextFormField(
                   controller: etAddressAbsent,
@@ -283,6 +300,15 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
         });
       }).catchError((e) {print(e);});
     return null;
+  }
+
+  Widget _myRadioButton({String title, int value, Function onChanged}) {
+    return RadioListTile(
+      value: value,
+      groupValue: _groupValue,
+      onChanged: onChanged,
+      title: Text(title),
+    );
   }
 
   void validateAlertGps(){
