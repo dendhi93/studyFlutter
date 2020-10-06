@@ -47,6 +47,9 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
       }else{
         _groupValue = 2;
       }
+    }else{
+      etInputTime.text = new DateFormat.Hm().format(new DateTime.now());
+      etDateAbsent.text = new DateFormat('y-M-dd').format(new DateTime.now());
     }
     _gpsValidaton();
   }
@@ -63,11 +66,12 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
               children: <Widget>[
                 new Padding(padding: EdgeInsets.only(top: 10.0)),
                 new TextFormField(
+                  enabled: false,
                   controller: etDateAbsent,
-                  onTap: (){
-                    FocusScope.of(context).requestFocus(new FocusNode());
-                      _selecDatePicker(context);
-                  },
+                  // onTap: (){
+                  //   FocusScope.of(context).requestFocus(new FocusNode());
+                  //     _selecDatePicker(context);
+                  // },
                   decoration: new InputDecoration(
                     labelText: "Date absent",
                     contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
@@ -89,11 +93,12 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
                 ),
                 new Padding(padding: EdgeInsets.only(top: 10.0)),
                 new TextFormField(
+                  enabled: false,
                   controller: etInputTime,
-                  onTap: (){
-                    FocusScope.of(context).requestFocus(new FocusNode());
-                    _selectTimeAbsent(context, intDateIn);
-                  },
+                  // onTap: (){
+                  //   FocusScope.of(context).requestFocus(new FocusNode());
+                  //   _selectTimeAbsent(context, intDateIn);
+                  // },
                   decoration: new InputDecoration(
                     labelText: "Time Absent",
                     contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
@@ -232,44 +237,44 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
     etLeaveTime.text = "";
   }
 
-  _selecDatePicker(BuildContext context) async{
-    final DateTime picked = await showDatePicker(
-      context: context,
-      helpText: 'Select Absent Date',
-      initialDate: selectedDate, // Refer step 1
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
-    );
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-        String selectedDateFormat = new DateFormat("yyyy-MM-dd").format(selectedDate);
-        etDateAbsent.text = selectedDateFormat;
-      });
-  }
+  // _selecDatePicker(BuildContext context) async{
+  //   final DateTime picked = await showDatePicker(
+  //     context: context,
+  //     helpText: 'Select Absent Date',
+  //     initialDate: selectedDate, // Refer step 1
+  //     firstDate: DateTime(2000),
+  //     lastDate: DateTime(2025),
+  //   );
+  //   if (picked != null && picked != selectedDate)
+  //     setState(() {
+  //       selectedDate = picked;
+  //       String selectedDateFormat = new DateFormat("yyyy-MM-dd").format(selectedDate);
+  //       etDateAbsent.text = selectedDateFormat;
+  //     });
+  // }
 
-  _selectTimeAbsent(BuildContext context, int optionText) async{
-    TimeOfDay t = await showTimePicker(
-        context: context,
-        initialTime: timeOfDay,
-    );
-    if(t != null)
-      setState(() {
-        timeOfDay = t;
-        int intHour = timeOfDay.hour.toInt();
-        String stHour = "";
-        int intMinutes = timeOfDay.minute.toInt();
-        String stMinutes = "";
-        if(intHour < 10){stHour = "0"+intHour.toString();}
-        else{stHour = intHour.toString();}
-        if(intMinutes < 10){stMinutes = "0"+intMinutes.toString();}
-        else{stMinutes = intMinutes.toString();}
-
-        if(optionText == intDateIn){etInputTime.text = "$stHour:$stMinutes";
-        }else{etLeaveTime.text = "$stHour:$stMinutes";}
-      });
-
-  }
+  // _selectTimeAbsent(BuildContext context, int optionText) async{
+  //   TimeOfDay t = await showTimePicker(
+  //       context: context,
+  //       initialTime: timeOfDay,
+  //   );
+  //   if(t != null)
+  //     setState(() {
+  //       timeOfDay = t;
+  //       int intHour = timeOfDay.hour.toInt();
+  //       String stHour = "";
+  //       int intMinutes = timeOfDay.minute.toInt();
+  //       String stMinutes = "";
+  //       if(intHour < 10){stHour = "0"+intHour.toString();}
+  //       else{stHour = intHour.toString();}
+  //       if(intMinutes < 10){stMinutes = "0"+intMinutes.toString();}
+  //       else{stMinutes = intMinutes.toString();}
+  //
+  //       if(optionText == intDateIn){etInputTime.text = "$stHour:$stMinutes";
+  //       }else{etLeaveTime.text = "$stHour:$stMinutes";}
+  //     });
+  //
+  // }
 
   Future _gpsValidaton() async {
     final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
