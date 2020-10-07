@@ -32,6 +32,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
   int intDateOut = 2;
   int _groupValue = -1;
   var isHiddenButton = true;
+  var isEnableRadio = true;
 
   @override
   void initState() {
@@ -41,7 +42,8 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
       etInputTime.text = widget.absensiModel.transTime;
       etLeaveTime.text = '';
       etAddressAbsent.text = widget.absensiModel.addressAbsent;
-      isHiddenButton = false;
+      isHiddenButton = !isHiddenButton;
+      isEnableRadio = !isEnableRadio;
       if(widget.absensiModel.absentType == "Absent In"){
         _groupValue = 1;
       }else{
@@ -311,7 +313,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
     return RadioListTile(
       value: value,
       groupValue: _groupValue,
-      onChanged: onChanged,
+      onChanged: isEnableRadio ? onChanged : null,
       title: Text(title),
     );
   }
