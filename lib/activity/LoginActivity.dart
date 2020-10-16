@@ -1,6 +1,7 @@
 
 import 'package:absent_hris/adapter/BottomMenuAdapter.dart';
 import 'package:absent_hris/util/HrisStore.dart';
+import 'package:absent_hris/util/LoadingUtils.dart';
 import 'package:absent_hris/util/MessageUtil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,13 +16,14 @@ class _LoginActivityState extends State<LoginActivity> {
   TextEditingController etLoginPass = new TextEditingController();
   bool _obscureText = true;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  HrisStore hrisStore = HrisStore();
-  MessageUtil messageUtil = MessageUtil();
+  HrisStore _hrisStore = HrisStore();
+  MessageUtil _messageUtil = MessageUtil();
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
   @override
   void initState() {
     super.initState();
-    Future<String> authUn = hrisStore.getAuthUsername();
+    Future<String> authUn = _hrisStore.getAuthUsername();
     authUn.then((data) {
       if(data != ""){
         Navigator.push(
@@ -30,7 +32,7 @@ class _LoginActivityState extends State<LoginActivity> {
         );
       }
     },onError: (e) {
-      messageUtil.toastMessage(e);
+      _messageUtil.toastMessage(e);
     });
   }
 
@@ -115,7 +117,7 @@ class _LoginActivityState extends State<LoginActivity> {
                           side: BorderSide(color: Colors.yellow)
                       ),
                       onPressed: () {
-                        if (_formKey.currentState.validate()){_submitLogin();}
+                        if (_formKey.currentState.validate()){_submitLogin(context);}
                       },
                       child: Text(
                         "LOG IN",
@@ -137,13 +139,22 @@ class _LoginActivityState extends State<LoginActivity> {
     });
   }
 
-  void _submitLogin(){
-      hrisStore.setAuthUsername(etLoginUsername.text);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => BottomMenuNavigationAdapter()),
-      );
+  Future<void> _submitLogin(BuildContext context) async {
+    try{
+        LoadingUtils.showLoadingDialog(context, _keyLoader);
+
+    }catch(error){
+      Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+      _messageUtil.toastMessage("err Login " +error.toString());
+    }
   }
+  // void _submitLogin(){
+  //     _hrisStore.setAuthUsername(etLoginUsername.text);
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => BottomMenuNavigationAdapter()),
+  //     );
+  // }
 
   @override
   Widget build(BuildContext context) {
