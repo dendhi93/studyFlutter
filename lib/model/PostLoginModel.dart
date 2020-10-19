@@ -10,7 +10,7 @@ class PostLoginModel{
     return {"id": username, "name": password};
   }
 
-  String profileToJson(PostLoginModel data) {
+  String postLoginToJson(PostLoginModel data) {
     final jsonData = data.toJson();
     return json.encode(jsonData);
   }

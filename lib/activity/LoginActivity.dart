@@ -1,5 +1,7 @@
 
 import 'package:absent_hris/adapter/BottomMenuAdapter.dart';
+import 'package:absent_hris/model/ResponseLoginModel.dart';
+import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/LoadingUtils.dart';
 import 'package:absent_hris/util/MessageUtil.dart';
@@ -19,6 +21,9 @@ class _LoginActivityState extends State<LoginActivity> {
   HrisStore _hrisStore = HrisStore();
   MessageUtil _messageUtil = MessageUtil();
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+  ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
+  String stToken;
+  String stName;
 
   @override
   void initState() {
@@ -117,7 +122,9 @@ class _LoginActivityState extends State<LoginActivity> {
                           side: BorderSide(color: Colors.yellow)
                       ),
                       onPressed: () {
-                        if (_formKey.currentState.validate()){_submitLogin(context);}
+                        if (_formKey.currentState.validate()){
+                          _submitLogin(context);
+                        }
                       },
                       child: Text(
                         "LOG IN",
@@ -139,21 +146,30 @@ class _LoginActivityState extends State<LoginActivity> {
     });
   }
 
-  Future<void> _submitLogin(BuildContext context) async {
+  Future<FutureBuilder<ResponseLoginModel>> _submitLogin(BuildContext context) async {
     try{
-        LoadingUtils.showLoadingDialog(context, _keyLoader);
-
+      LoadingUtils.showLoadingDialog(context, _keyLoader);
+        _apiServiceUtils.getLogin(etLoginUsername.text, etLoginPass.text).then((value) => {
+          Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop(),
+          if(value == null){
+            _messageUtil.toastMessage("Failed login")
+          }else{
+            stToken = value.modelDataLogin.token,
+            stName = value.modelDataLogin.nameUser,
+              _hrisStore.setAuthUsername(stName, stToken),
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => BottomMenuNavigationAdapter()),
+              )
+          }
+        });
     }catch(error){
       Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
       _messageUtil.toastMessage("err Login " +error.toString());
     }
   }
   // void _submitLogin(){
-  //     _hrisStore.setAuthUsername(etLoginUsername.text);
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(builder: (context) => BottomMenuNavigationAdapter()),
-  //     );
+
   // }
 
   @override
