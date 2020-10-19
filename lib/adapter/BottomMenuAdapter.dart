@@ -2,6 +2,7 @@
 import 'package:absent_hris/activity/ClaimActivity.dart';
 import 'package:absent_hris/activity/HomeActivity.dart';
 import 'package:absent_hris/activity/UnAttendancePlanningActivity.dart';
+import 'package:absent_hris/activity/UserActivity.dart';
 import 'package:absent_hris/util/MessageUtil.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class _BottomMenuNavigationAdapterState extends State<BottomMenuNavigationAdapte
   final HomeActivity _homeActivity = HomeActivity();
   final ClaimActivity _claimActivity = ClaimActivity();
   final UnAttendancePlanningActivity _attendancePlanningActivity = UnAttendancePlanningActivity();
+  final UserActivity _userActivity = UserActivity();
   DateTime currentBackPressTime;
 
   Widget _showPage = HomeActivity();
@@ -30,6 +32,9 @@ class _BottomMenuNavigationAdapterState extends State<BottomMenuNavigationAdapte
         break;
       case 2:
         return _attendancePlanningActivity;
+        break;
+      case 3:
+        return _userActivity;
         break;
     }
     return null;
@@ -60,6 +65,7 @@ class _BottomMenuNavigationAdapterState extends State<BottomMenuNavigationAdapte
             Icon(Icons.home, size: 30),
             Icon(Icons.monetization_on, size: 30),
             Icon(Icons.calendar_today, size: 30),
+            Icon(Icons.supervised_user_circle, size: 30),
           ],
           onTap: (index) {
             setState(() {

@@ -1,7 +1,11 @@
 
+import 'dart:convert';
+
 import 'package:absent_hris/adapter/BottomMenuAdapter.dart';
+import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/ResponseLoginModel.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
+import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/LoadingUtils.dart';
 import 'package:absent_hris/util/MessageUtil.dart';
@@ -24,6 +28,8 @@ class _LoginActivityState extends State<LoginActivity> {
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   String stToken;
   String stName;
+  String stResponseMessage;
+  int responseCode = 0;
 
   @override
   void initState() {
@@ -146,31 +152,31 @@ class _LoginActivityState extends State<LoginActivity> {
     });
   }
 
-  Future<FutureBuilder<ResponseLoginModel>> _submitLogin(BuildContext context) async {
+  Future<ResponseLoginModel> _submitLogin(BuildContext context) async {
     try{
       LoadingUtils.showLoadingDialog(context, _keyLoader);
         _apiServiceUtils.getLogin(etLoginUsername.text, etLoginPass.text).then((value) => {
           Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop(),
-          if(value == null){
-            _messageUtil.toastMessage("Failed login")
-          }else{
-            stToken = value.modelDataLogin.token,
-            stName = value.modelDataLogin.nameUser,
+          responseCode = ResponseLoginModel.fromJson(jsonDecode(value)).code,
+            if(responseCode == ConstanstVar.successCode){
+              stToken = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.token,
+              stName = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.nameUser,
               _hrisStore.setAuthUsername(stName, stToken),
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => BottomMenuNavigationAdapter()),
-              )
-          }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => BottomMenuNavigationAdapter()),
+                )
+            }else{
+              stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+              _messageUtil.toastMessage("$stResponseMessage")
+            }
         });
     }catch(error){
       Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
       _messageUtil.toastMessage("err Login " +error.toString());
     }
+    return null;
   }
-  // void _submitLogin(){
-
-  // }
 
   @override
   Widget build(BuildContext context) {
