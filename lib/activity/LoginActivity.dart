@@ -30,6 +30,7 @@ class _LoginActivityState extends State<LoginActivity> {
   String stName;
   String stResponseMessage;
   int responseCode = 0;
+  String stUId;
 
   @override
   void initState() {
@@ -156,20 +157,21 @@ class _LoginActivityState extends State<LoginActivity> {
     try{
       LoadingUtils.showLoadingDialog(context, _keyLoader);
         _apiServiceUtils.getLogin(etLoginUsername.text, etLoginPass.text).then((value) => {
-          Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop(),
-          responseCode = ResponseLoginModel.fromJson(jsonDecode(value)).code,
-            if(responseCode == ConstanstVar.successCode){
-              stToken = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.token,
-              stName = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.nameUser,
-              _hrisStore.setAuthUsername(stName, stToken),
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => BottomMenuNavigationAdapter()),
-                )
-            }else{
-              stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
-              _messageUtil.toastMessage("$stResponseMessage")
-            }
+        responseCode = ResponseLoginModel.fromJson(jsonDecode(value)).code,
+        Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop(),
+          if(responseCode == ConstanstVar.successCode){
+            stToken = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.token,
+            stName = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.nameUser,
+            stUId = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.userId.toString(),
+            _hrisStore.setAuthUsername(stName, stToken,stUId),
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => BottomMenuNavigationAdapter()),
+              )
+          }else{
+            stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+            _messageUtil.toastMessage("$stResponseMessage")
+          },
         });
     }catch(error){
       Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();

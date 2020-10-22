@@ -18,4 +18,12 @@ class ApiServiceUtils{
       //   return responseLogin.body;
       // }
     }
+
+    Future<String> getDataAbsen(String getuId, String getToken) async{
+      //post using form data
+      final http.Response responseAbsent = await http
+          .get(ConstanstVar.urlApi+"MasterAbsent.php?user_id="+getuId+"-"+getToken
+      );
+      return responseAbsent.body;
+    }
 }
