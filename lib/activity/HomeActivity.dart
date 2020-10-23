@@ -1,8 +1,17 @@
 
+import 'dart:convert';
+
 import 'package:absent_hris/activity/DetailAbsentActivity.dart';
+import 'package:absent_hris/activity/LoginActivity.dart';
 import 'package:absent_hris/adapter/list_absent_adapter.dart';
+import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/ModelAbsensi.dart';
+import 'package:absent_hris/model/ResponseDataAbsent.dart';
+import 'package:absent_hris/model/ResponseDtlAbsent.dart';
+import 'package:absent_hris/util/ApiServiceUtils.dart';
+import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:absent_hris/util/HrisStore.dart';
+import 'package:absent_hris/util/LoadingUtils.dart';
 import 'package:absent_hris/util/MessageUtil.dart';
 import 'package:flutter/material.dart';
 
@@ -25,18 +34,23 @@ class _HomeActivityState extends State<HomeActivity> {
       ModelAbsensi(dateAbsent: '2020-09-22', transTime: '08:30', absentType: "Absent In", reason: 'Late',addressAbsent :'Plaza Kuningan'),
       ModelAbsensi(dateAbsent: '2020-09-22', transTime: '17:41', absentType: "Absent Out", reason: '',addressAbsent :'Multivision Tower'),
     ];
-    MessageUtil messageUtil = MessageUtil();
-    HrisStore hrisStore = HrisStore();
-    DateTime currentBackPressTime;
+    MessageUtil _messageUtil = MessageUtil();
+    HrisStore _hrisStore = HrisStore();
+    DateTime _currentBackPressTime;
+    final GlobalKey<State> _keyHomeLoader = new GlobalKey<State>();
+    ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
+    int responseCode = 0;
+    String stResponseMessage;
+    List<ResponseDtlDataAbsent> list = List();
 
     @override
     void initState() {
       super.initState();
-      Future<String> authUn = hrisStore.getAuthUsername();
+      Future<String> authUn = _hrisStore.getAuthUsername();
       authUn.then((data) {
-        messageUtil.toastMessage("Welcome User " +data.trim());
+        _messageUtil.toastMessage("Welcome User " +data.trim());
       },onError: (e) {
-        messageUtil.toastMessage(e);
+        _messageUtil.toastMessage(e);
       });
     }
 
@@ -85,10 +99,10 @@ class _HomeActivityState extends State<HomeActivity> {
 
     Future<bool> onWillPop() {
       DateTime now = DateTime.now();
-      if (currentBackPressTime == null ||
-          now.difference(currentBackPressTime) > Duration(seconds: 2)) {
-        currentBackPressTime = now;
-        messageUtil.toastMessage("please tap again to exit");
+      if (_currentBackPressTime == null ||
+          now.difference(_currentBackPressTime) > Duration(seconds: 2)) {
+        _currentBackPressTime = now;
+        _messageUtil.toastMessage("please tap again to exit");
         return Future.value(false);
       }
       return SystemChannels.platform.invokeMethod('SystemNavigator.pop');
@@ -116,6 +130,35 @@ class _HomeActivityState extends State<HomeActivity> {
               ),
         ),
       );
+    }
+    Future<ResponseDataAbsent> _loadAbsent(BuildContext context) async {
+      try{
+        LoadingUtils.showLoadingDialog(context, _keyHomeLoader);
+        _apiServiceUtils.getDataAbsen(_hrisStore.getAuthUserId().toString(),
+            _hrisStore.getAuthToken().toString()).then((value) => {
+              responseCode = ResponseDataAbsent.fromJson(jsonDecode(value)).code,
+              Navigator.of(_keyHomeLoader.currentContext,rootNavigator: true).pop(),
+              if(responseCode == ConstanstVar.successCode){
+                  list = ResponseDataAbsent.fromJson(jsonDecode(value)).responseDtlDataAbsent,
+              }else if(responseCode == ConstanstVar.invalidTokenCode){
+                stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+                _messageUtil.toastMessage("$stResponseMessage"),
+                new Future.delayed(const Duration(seconds: 4), () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginActivity()),
+                    );
+                }),
+              }else{
+                stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+                _messageUtil.toastMessage("$stResponseMessage")
+              }
+        });
+      }catch(error){
+        Navigator.of(_keyHomeLoader.currentContext,rootNavigator: true).pop();
+        _messageUtil.toastMessage("err Login " +error.toString());
+      }
+      return null;
     }
 
 }

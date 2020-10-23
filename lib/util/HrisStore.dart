@@ -27,4 +27,11 @@ class HrisStore {
     uIdStore = pref.getString(this.userIDStore) ?? "";
     return uIdStore;
   }
+
+  Future<String> getAuthToken() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    String userToken;
+    userToken = pref.getString(this.tokenStore) ?? "";
+    return userToken;
+  }
 }

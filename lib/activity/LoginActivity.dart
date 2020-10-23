@@ -48,7 +48,6 @@ class _LoginActivityState extends State<LoginActivity> {
     });
   }
 
-
   Widget _initLogin(BuildContext context){
     return Form(
       key: _formKey,
