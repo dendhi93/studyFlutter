@@ -155,7 +155,8 @@ class _LoginActivityState extends State<LoginActivity> {
   Future<ResponseLoginModel> _submitLogin(BuildContext context) async {
     try{
       LoadingUtils.showLoadingDialog(context, _keyLoader);
-        _apiServiceUtils.getLogin(etLoginUsername.text, etLoginPass.text).then((value) => {
+        _apiServiceUtils.getLogin(etLoginUsername.text.trim(),
+            etLoginPass.text.trim()).then((value) => {
         responseCode = ResponseLoginModel.fromJson(jsonDecode(value)).code,
         Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop(),
           if(responseCode == ConstanstVar.successCode){

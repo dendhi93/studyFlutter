@@ -1,19 +1,18 @@
 
-import 'package:absent_hris/model/ModelAbsensi.dart';
+import 'package:absent_hris/model/ResponseDtlAbsent.dart';
 import 'package:absent_hris/util/MessageUtil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoder/geocoder.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:android_intent/android_intent.dart';
 import 'dart:io' show Platform;
 
 
 class DetailAbsentActivity extends StatefulWidget {
-  final ModelAbsensi absensiModel;
-  DetailAbsentActivity({Key key, @required this.absensiModel}) : super(key: key);
+  final ResponseDtlDataAbsent absentModel;
+  DetailAbsentActivity({Key key, @required this.absentModel}) : super(key: key);
   @override
   _DetailAbsentActivityState createState() => _DetailAbsentActivityState();
 }
@@ -22,7 +21,6 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
   Position _currentPosition;
   TextEditingController etDateAbsent = new TextEditingController();
   TextEditingController etInputTime = new TextEditingController();
-  TextEditingController etLeaveTime = new TextEditingController();
   TextEditingController etAddressAbsent = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   DateTime selectedDate = DateTime.now();
@@ -37,14 +35,13 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
   @override
   void initState() {
     super.initState();
-    if(widget.absensiModel != null){
-      etDateAbsent.text = widget.absensiModel.dateAbsent;
-      etInputTime.text = widget.absensiModel.transTime;
-      etLeaveTime.text = '';
-      etAddressAbsent.text = widget.absensiModel.addressAbsent;
+    if(widget.absentModel != null){
+      etDateAbsent.text = widget.absentModel.dateAbsent;
+      etInputTime.text = widget.absentModel.absentTime;
+      etAddressAbsent.text = widget.absentModel.addressAbsent;
       isHiddenButton = !isHiddenButton;
       isEnableRadio = !isEnableRadio;
-      if(widget.absensiModel.absentType == "Absent In"){
+      if(widget.absentModel.absentType == "Absent In"){
         _groupValue = 1;
       }else{
         _groupValue = 2;
@@ -236,7 +233,6 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
     etAddressAbsent.text = "";
     etDateAbsent.text = "";
     etInputTime.text = "";
-    etLeaveTime.text = "";
   }
 
   // _selecDatePicker(BuildContext context) async{
@@ -294,15 +290,15 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
           //manifest sama info.plist hrs copas manual
           if(_currentPosition != null){
             _getAddress(position);
-              Fluttertoast.showToast(
-                  msg: "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}",
-                  toastLength: Toast.LENGTH_LONG,
-                  gravity: ToastGravity.CENTER,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.blue,
-                  textColor: Colors.white,
-                  fontSize: 16.0
-              );
+              // Fluttertoast.showToast(
+              //     msg: "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}",
+              //     toastLength: Toast.LENGTH_LONG,
+              //     gravity: ToastGravity.CENTER,
+              //     timeInSecForIosWeb: 1,
+              //     backgroundColor: Colors.blue,
+              //     textColor: Colors.white,
+              //     fontSize: 16.0
+              // );
           }
         });
       }).catchError((e) {print(e);});
@@ -364,6 +360,6 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
       var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
       var first = addresses.first;
       print("${first.featureName} : ${first.addressLine}");
-      if(widget.absensiModel ==null){etAddressAbsent.text = "${first.addressLine}";}
+      if(widget.absentModel ==null){etAddressAbsent.text = "${first.addressLine}";}
     }
 }

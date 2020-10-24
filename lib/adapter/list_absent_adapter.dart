@@ -1,10 +1,12 @@
 
-import 'package:absent_hris/model/ModelAbsensi.dart';
+import 'package:absent_hris/model/ResponseDtlAbsent.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ListAdapter extends StatefulWidget{
-  final ModelAbsensi modelAbsensi;
+  // final ModelAbsensi modelAbsensi;
+  // ListAdapter({this.modelAbsensi});
+  final ResponseDtlDataAbsent modelAbsensi;
   ListAdapter({this.modelAbsensi});
 
   @override
@@ -31,7 +33,7 @@ class _ListAdapterState extends State<ListAdapter> {
           child: Column(
             children: <Widget>[
               ListTile(
-                title: Text(widget.modelAbsensi.absentType +"\nTime " +widget.modelAbsensi.transTime),
+                title: Text(widget.modelAbsensi.absentType +"\nTime " +widget.modelAbsensi.absentTime),
                 subtitle: Text(widget.modelAbsensi.addressAbsent+""+reasonAbsent),
                 trailing: Text(widget.modelAbsensi.dateAbsent),
               )

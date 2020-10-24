@@ -4,13 +4,15 @@ class ResponseDtlDataAbsent{
   String reason;
   String dateAbsent;
   String absentTime;
+  String addressAbsent;
 
   ResponseDtlDataAbsent(
       {this.userId,
         this.absentType,
         this.reason,
         this.dateAbsent,
-        this.absentTime});
+        this.absentTime,
+        this.addressAbsent});
 
   ResponseDtlDataAbsent.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
@@ -18,5 +20,6 @@ class ResponseDtlDataAbsent{
     reason = json['reason'];
     dateAbsent = json['date_absent'];
     absentTime = json['absent_time'];
+    addressAbsent = json['address_absent'];
   }
 }
