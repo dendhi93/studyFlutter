@@ -1,6 +1,6 @@
 
 import 'package:absent_hris/model/ResponseDtlAbsent.dart';
-import 'package:absent_hris/util/MessageUtil.dart';
+import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -25,7 +25,7 @@ class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   DateTime selectedDate = DateTime.now();
   TimeOfDay timeOfDay = TimeOfDay.now();
-  MessageUtil messageUtil = MessageUtil();
+  HrisUtil messageUtil = HrisUtil();
   int intDateIn = 1;
   int intDateOut = 2;
   int _groupValue = -1;

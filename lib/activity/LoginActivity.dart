@@ -8,7 +8,7 @@ import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/LoadingUtils.dart';
-import 'package:absent_hris/util/MessageUtil.dart';
+import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +23,7 @@ class _LoginActivityState extends State<LoginActivity> {
   bool _obscureText = true;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   HrisStore _hrisStore = HrisStore();
-  MessageUtil _messageUtil = MessageUtil();
+  HrisUtil _messageUtil = HrisUtil();
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   String stToken;

@@ -1,5 +1,5 @@
 
-import 'package:absent_hris/util/MessageUtil.dart';
+import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -10,7 +10,7 @@ class UserActivity extends StatefulWidget {
 
 class _UserActivityState extends State<UserActivity> {
   DateTime currentBackPressTime;
-  MessageUtil messageUtil = MessageUtil();
+  HrisUtil messageUtil = HrisUtil();
 
   Future<bool> onWillPop() {
     DateTime now = DateTime.now();

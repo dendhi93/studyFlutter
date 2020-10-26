@@ -10,7 +10,7 @@ import 'package:absent_hris/model/ResponseDtlAbsent.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:absent_hris/util/HrisStore.dart';
-import 'package:absent_hris/util/MessageUtil.dart';
+import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
@@ -32,7 +32,7 @@ class _HomeActivityState extends State<HomeActivity> {
     //   ModelAbsensi(dateAbsent: '2020-09-22', transTime: '08:30', absentType: "Absent In", reason: 'Late',addressAbsent :'Plaza Kuningan'),
     //   ModelAbsensi(dateAbsent: '2020-09-22', transTime: '17:41', absentType: "Absent Out", reason: '',addressAbsent :'Multivision Tower'),
     // ];
-    MessageUtil _messageUtil = MessageUtil();
+    HrisUtil _messageUtil = HrisUtil();
     HrisStore _hrisStore = HrisStore();
     DateTime _currentBackPressTime;
     ApiServiceUtils _apiServiceUtils = ApiServiceUtils();

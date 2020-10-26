@@ -3,7 +3,7 @@ import 'package:absent_hris/activity/ClaimActivity.dart';
 import 'package:absent_hris/activity/HomeActivity.dart';
 import 'package:absent_hris/activity/UnAttendancePlanningActivity.dart';
 import 'package:absent_hris/activity/UserActivity.dart';
-import 'package:absent_hris/util/MessageUtil.dart';
+import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +14,7 @@ class BottomMenuNavigationAdapter extends StatefulWidget {
 
 class _BottomMenuNavigationAdapterState extends State<BottomMenuNavigationAdapter> {
   GlobalKey _bottomNavigationKey = GlobalKey();
-  MessageUtil messageUtil = MessageUtil();
+  HrisUtil messageUtil = HrisUtil();
   final HomeActivity _homeActivity = HomeActivity();
   final ClaimActivity _claimActivity = ClaimActivity();
   final UnAttendancePlanningActivity _attendancePlanningActivity = UnAttendancePlanningActivity();

@@ -1,4 +1,4 @@
-import 'package:absent_hris/util/MessageUtil.dart';
+import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -9,7 +9,7 @@ class UnAttendancePlanningActivity extends StatefulWidget {
 
 class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActivity> {
   DateTime currentBackPressTime;
-  MessageUtil messageUtil = MessageUtil();
+  HrisUtil messageUtil = HrisUtil();
 
   Future<bool> onWillPop() {
     DateTime now = DateTime.now();
