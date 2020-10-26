@@ -171,12 +171,16 @@ class _HomeActivityState extends State<HomeActivity> {
             list = ResponseDataAbsent.fromJson(jsonDecode(value)).responseDtlDataAbsent,
           }else if(responseCode == ConstanstVar.invalidTokenCode){
                   stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
-                  _messageUtil.toastMessage("$stResponseMessage"),
-                  new Future.delayed(const Duration(seconds: 4), () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginActivity()),
-                      );
+                  _hrisStore.removeAllValues().then((isSuccess) =>{
+                      if(isSuccess){
+                        _messageUtil.toastMessage("$stResponseMessage"),
+                        new Future.delayed(const Duration(seconds: 4), () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => LoginActivity()),
+                          );
+                        }),
+                      }
                   }),
           }else{
                 stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
