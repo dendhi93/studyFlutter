@@ -24,15 +24,7 @@ class HomeActivity extends StatefulWidget {
 
 
 class _HomeActivityState extends State<HomeActivity> {
-    // List<ModelAbsensi> listAbsents = [
-    //   ModelAbsensi(dateAbsent: '2020-09-20', transTime: '08:30', absentType: "Absent In", reason: '', addressAbsent :'Multivision Tower'),
-    //   ModelAbsensi(dateAbsent: '2020-09-20', transTime: '17:40', absentType: "Absent Out", reason: '',addressAbsent :'Multivision Tower'),
-    //   ModelAbsensi(dateAbsent: '2020-09-21', transTime: '08:30', absentType: "Absent In", reason: 'Late',addressAbsent :'Plaza Kuningan'),
-    //   ModelAbsensi(dateAbsent: '2020-09-21', transTime: '17:41', absentType: "Absent Out", reason: 'Meetings',addressAbsent :'Multivision Tower'),
-    //   ModelAbsensi(dateAbsent: '2020-09-22', transTime: '08:30', absentType: "Absent In", reason: 'Late',addressAbsent :'Plaza Kuningan'),
-    //   ModelAbsensi(dateAbsent: '2020-09-22', transTime: '17:41', absentType: "Absent Out", reason: '',addressAbsent :'Multivision Tower'),
-    // ];
-    HrisUtil _messageUtil = HrisUtil();
+    HrisUtil _hrisUtil = HrisUtil();
     HrisStore _hrisStore = HrisStore();
     DateTime _currentBackPressTime;
     ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
@@ -52,7 +44,7 @@ class _HomeActivityState extends State<HomeActivity> {
       // },onError: (e) {
       //   _messageUtil.toastMessage(e);
       // });
-      initUIdToken(1);
+      validateConnection(context);
     }
 
     Widget _initListAbsent(){
@@ -103,7 +95,7 @@ class _HomeActivityState extends State<HomeActivity> {
       if (_currentBackPressTime == null ||
           now.difference(_currentBackPressTime) > Duration(seconds: 2)) {
         _currentBackPressTime = now;
-        _messageUtil.toastMessage("please tap again to exit");
+        _hrisUtil.toastMessage("please tap again to exit");
         return Future.value(false);
       }
       return SystemChannels.platform.invokeMethod('SystemNavigator.pop');
@@ -173,7 +165,7 @@ class _HomeActivityState extends State<HomeActivity> {
                   stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
                   _hrisStore.removeAllValues().then((isSuccess) =>{
                       if(isSuccess){
-                        _messageUtil.toastMessage("$stResponseMessage"),
+                        _hrisUtil.toastMessage("$stResponseMessage"),
                         new Future.delayed(const Duration(seconds: 4), () {
                           Navigator.push(
                             context,
@@ -184,7 +176,7 @@ class _HomeActivityState extends State<HomeActivity> {
                   }),
           }else{
                 stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
-                _messageUtil.toastMessage("$stResponseMessage")
+                _hrisUtil.toastMessage("$stResponseMessage")
           }
       });
       return null;
@@ -201,15 +193,26 @@ class _HomeActivityState extends State<HomeActivity> {
         authUid.then((data) {
           stUid = data.trim();
           initUIdToken(2);
-        },onError: (e) {_messageUtil.toastMessage(e);});
+        },onError: (e) {_hrisUtil.toastMessage(e);});
       }else{
         Future<String> authUToken = _hrisStore.getAuthToken();
         authUToken.then((data) {
           stToken = data.trim();
           futureAbsent = _loadAbsent(stUid, stToken);
-        },onError: (e) {_messageUtil.toastMessage(e);});
+        },onError: (e) {_hrisUtil.toastMessage(e);});
 
       }
+    }
+
+    void validateConnection(BuildContext context){
+      HrisUtil.checkConnection().then((isConnected) => {
+        if(isConnected){
+          initUIdToken(1),
+        }else{
+          disableLoading(),
+          _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
+        }
+      });
     }
 }
 
