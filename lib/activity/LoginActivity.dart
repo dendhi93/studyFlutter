@@ -23,7 +23,7 @@ class _LoginActivityState extends State<LoginActivity> {
   bool _obscureText = true;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   HrisStore _hrisStore = HrisStore();
-  HrisUtil _messageUtil = HrisUtil();
+  HrisUtil _hrisUtil = HrisUtil();
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   String stToken;
@@ -44,7 +44,7 @@ class _LoginActivityState extends State<LoginActivity> {
         );
       }
     },onError: (e) {
-      _messageUtil.toastMessage(e);
+      _hrisUtil.toastMessage(e);
     });
   }
 
@@ -129,7 +129,7 @@ class _LoginActivityState extends State<LoginActivity> {
                       ),
                       onPressed: () {
                         if (_formKey.currentState.validate()){
-                          _submitLogin(context);
+                          _validateConnection(context);
                         }
                       },
                       child: Text(
@@ -170,14 +170,25 @@ class _LoginActivityState extends State<LoginActivity> {
               )
           }else{
             stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
-            _messageUtil.toastMessage("$stResponseMessage")
+            _hrisUtil.toastMessage("$stResponseMessage")
           },
         });
     }catch(error){
       Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
-      _messageUtil.toastMessage("err Login " +error.toString());
+      _hrisUtil.toastMessage("err Login " +error.toString());
     }
     return null;
+  }
+
+  void _validateConnection(BuildContext context) {
+    HrisUtil.checkConnection().then((isConnected) => {
+        if(isConnected){
+          _submitLogin(context),
+        }else{
+            _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle,
+                ConstanstVar.noConnectionMessage, context),
+        }
+    });
   }
 
   @override

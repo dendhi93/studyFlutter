@@ -21,7 +21,7 @@ class ApiServiceUtils{
 
     Future<String> getDataAbsen(String getuId, String getToken) async{
       //String urlAbsent ='http://192.168.1.123/coreHris/MasterAbsent2.php?user_id=$getuId-$getToken';
-      String urlAbsent ='http://10.7.11.224/coreHris/MasterAbsent2.php?user_id=$getuId-$getToken';
+      String urlAbsent ='http://10.7.11.195/coreHris/MasterAbsent2.php?user_id=$getuId-$getToken';
       //String urlAbsent ='http://192.168.1.123/coreHris/MasterAbsent.php?user_id=$getuId';
       print('urlnya $urlAbsent');
       final http.Response responseAbsent = await http
