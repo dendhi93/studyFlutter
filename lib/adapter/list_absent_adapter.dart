@@ -4,8 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ListAdapter extends StatefulWidget{
-  // final ModelAbsensi modelAbsensi;
-  // ListAdapter({this.modelAbsensi});
   final ResponseDtlDataAbsent modelAbsensi;
   ListAdapter({this.modelAbsensi});
 
