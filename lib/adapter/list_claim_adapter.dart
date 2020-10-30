@@ -23,6 +23,11 @@ class _ListClaimdapterState extends State<ListClaimdapter> {
           child: Column(
             children: <Widget>[
               ListTile(
+                leading: new Image.asset(
+                  "assets/ic_ok_24.png" ,
+                  fit: BoxFit.cover,
+                  width: 24.0,
+                ),
                 title: Text(""),
                 subtitle: Text(""),
                 trailing: Text(""),
