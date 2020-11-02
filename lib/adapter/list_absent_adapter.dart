@@ -1,10 +1,10 @@
 
-import 'package:absent_hris/model/ResponseDtlAbsent.dart';
+import 'package:absent_hris/model/ResponseDtlAbsentModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ListAdapter extends StatefulWidget{
-  final ResponseDtlDataAbsent modelAbsensi;
+  final ResponseDtlDataAbsentModel modelAbsensi;
   ListAdapter({this.modelAbsensi});
 
   @override

@@ -12,6 +12,12 @@ class _ClaimActivityState extends State<ClaimActivity> {
   DateTime currentBackPressTime;
   HrisUtil messageUtil = HrisUtil();
 
+  @override
+  void initState() {
+    super.initState();
+    validateConnection(context);
+  }
+
   Future<bool> onWillPop() {
     DateTime now = DateTime.now();
     if (currentBackPressTime == null ||
@@ -39,5 +45,15 @@ class _ClaimActivityState extends State<ClaimActivity> {
         ),
       ),
     );
+  }
+
+  void validateConnection(BuildContext context){
+    HrisUtil.checkConnection().then((isConnected) => {
+      if(isConnected){
+
+      }else{
+
+      }
+    });
   }
 }

@@ -1,5 +1,5 @@
 
-import 'package:absent_hris/model/ResponseDtlAbsent.dart';
+import 'package:absent_hris/model/ResponseDtlAbsentModel.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ import 'dart:io' show Platform;
 
 
 class DetailAbsentActivity extends StatefulWidget {
-  final ResponseDtlDataAbsent absentModel;
+  final ResponseDtlDataAbsentModel absentModel;
   DetailAbsentActivity({Key key, @required this.absentModel}) : super(key: key);
   @override
   _DetailAbsentActivityState createState() => _DetailAbsentActivityState();

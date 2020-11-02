@@ -5,8 +5,8 @@ import 'package:absent_hris/activity/DetailAbsentActivity.dart';
 import 'package:absent_hris/activity/LoginActivity.dart';
 import 'package:absent_hris/adapter/list_absent_adapter.dart';
 import 'package:absent_hris/model/ErrorResponse.dart';
-import 'package:absent_hris/model/ResponseDataAbsent.dart';
-import 'package:absent_hris/model/ResponseDtlAbsent.dart';
+import 'package:absent_hris/model/ResponseDataAbsentModel.dart';
+import 'package:absent_hris/model/ResponseDtlAbsentModel.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:absent_hris/util/HrisStore.dart';
@@ -30,8 +30,8 @@ class _HomeActivityState extends State<HomeActivity> {
     ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
     int responseCode = 0;
     String stResponseMessage, stUid,stToken;
-    List<ResponseDtlDataAbsent> list = List();
-    Future<ResponseDataAbsent> futureAbsent;
+    List<ResponseDtlDataAbsentModel> list = List();
+    Future<ResponseDataAbsentModel> futureAbsent;
     var isLoading = false;
 
     @override
@@ -152,15 +152,15 @@ class _HomeActivityState extends State<HomeActivity> {
       );
     }
 
-    Future<ResponseDataAbsent> _loadAbsent(String uId,String userToken) async{
+    Future<ResponseDataAbsentModel> _loadAbsent(String uId,String userToken) async{
       setState(() {
         isLoading = true;
       });
       _apiServiceUtils.getDataAbsen(uId, userToken).then((value) => {
-        responseCode = ResponseDataAbsent.fromJson(jsonDecode(value)).code,
+        responseCode = ResponseDataAbsentModel.fromJson(jsonDecode(value)).code,
         disableLoading(),
           if(responseCode == ConstanstVar.successCode){
-            list = ResponseDataAbsent.fromJson(jsonDecode(value)).responseDtlDataAbsent,
+            list = ResponseDataAbsentModel.fromJson(jsonDecode(value)).responseDtlDataAbsent,
           }else if(responseCode == ConstanstVar.invalidTokenCode){
                   stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
                   _hrisStore.removeAllValues().then((isSuccess) =>{
