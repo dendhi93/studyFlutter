@@ -31,7 +31,6 @@ class _HomeActivityState extends State<HomeActivity> {
     int responseCode = 0;
     String stResponseMessage, stUid,stToken;
     List<ResponseDtlDataAbsentModel> list = List();
-    Future<ResponseDataAbsentModel> futureAbsent;
     var isLoading = false;
 
     @override
@@ -60,9 +59,6 @@ class _HomeActivityState extends State<HomeActivity> {
                         builder: (context) => DetailAbsentActivity(absentModel: list[index]),
                       ),
                     );
-  //                  Scaffold.of(context).showSnackBar(SnackBar(
-  //                    content: Text(listAbsents[index].dateAbsent),
-  //                  ));
                   },
                 );
   //              return Dismissible(
@@ -198,9 +194,8 @@ class _HomeActivityState extends State<HomeActivity> {
         Future<String> authUToken = _hrisStore.getAuthToken();
         authUToken.then((data) {
           stToken = data.trim();
-          futureAbsent = _loadAbsent(stUid, stToken);
+          _loadAbsent(stUid, stToken);
         },onError: (e) {_hrisUtil.toastMessage(e);});
-
       }
     }
 

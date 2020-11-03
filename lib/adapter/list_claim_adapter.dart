@@ -7,12 +7,13 @@ class ListClaimdapter extends StatefulWidget{
   ListClaimdapter({this.responseClaimDataModel});
 
   @override
-  _ListClaimdapterState createState() => _ListClaimdapterState();
+  ListClaimdapterState createState() => ListClaimdapterState();
 }
 
-class _ListClaimdapterState extends State<ListClaimdapter> {
+class ListClaimdapterState extends State<ListClaimdapter> {
   int statusClaim = 0;
   String imageClaim = "";
+
   @override
   void initState() {
     statusClaim = widget.responseClaimDataModel.statusId;

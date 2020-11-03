@@ -20,19 +20,32 @@ class ApiServiceUtils{
     }
 
     Future<String> getDataAbsen(String getuId, String getToken) async{
-      //String urlAbsent ='http://192.168.1.123/coreHris/MasterAbsent2.php?user_id=$getuId-$getToken';
-      String urlAbsent ='http://10.7.11.195/coreHris/MasterAbsent2.php?user_id=$getuId-$getToken';
+      String urlAbsent ='http://192.168.43.165/coreHris/MasterAbsent2.php?user_id=$getuId-$getToken';
       //String urlAbsent ='http://192.168.1.123/coreHris/MasterAbsent.php?user_id=$getuId';
       print('urlnya $urlAbsent');
       final http.Response responseAbsent = await http
           .get(urlAbsent,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': '$getToken',
+          //'Authorization': '$getToken',
         }
       );
 
       print('$responseAbsent.body');
       return responseAbsent.body;
+    }
+
+    Future<String> getDataClaim(String getuId, String getToken) async{
+      String urlClaim ='http://192.168.43.165/coreHris/MasterClaimTrans.php?user_id=$getuId-$getToken';
+      print('urlnya $urlClaim');
+      final http.Response responseClaim = await http
+          .get(urlClaim,
+          headers: {
+            'Content-Type': 'application/json',
+          }
+      );
+
+      print('$responseClaim.body');
+      return responseClaim.body;
     }
 }
