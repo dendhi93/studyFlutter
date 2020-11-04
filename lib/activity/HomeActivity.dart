@@ -149,12 +149,10 @@ class _HomeActivityState extends State<HomeActivity> {
     }
 
     Future<ResponseDataAbsentModel> _loadAbsent(String uId,String userToken) async{
-      setState(() {
-        isLoading = true;
-      });
+     loadingOption();
       _apiServiceUtils.getDataAbsen(uId, userToken).then((value) => {
         responseCode = ResponseDataAbsentModel.fromJson(jsonDecode(value)).code,
-        disableLoading(),
+        loadingOption(),
           if(responseCode == ConstanstVar.successCode){
             list = ResponseDataAbsentModel.fromJson(jsonDecode(value)).responseDtlDataAbsent,
           }else if(responseCode == ConstanstVar.invalidTokenCode){
@@ -177,9 +175,10 @@ class _HomeActivityState extends State<HomeActivity> {
       });
       return null;
     }
-    void disableLoading(){
+
+    void loadingOption(){
       setState(() {
-        isLoading = false;
+        isLoading = !isLoading;
       });
     }
 
@@ -204,7 +203,7 @@ class _HomeActivityState extends State<HomeActivity> {
         if(isConnected){
           initUIdToken(1),
         }else{
-          disableLoading(),
+          loadingOption(),
           _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
         }
       });

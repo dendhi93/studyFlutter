@@ -41,7 +41,7 @@ class ListClaimdapterState extends State<ListClaimdapter> {
             children: <Widget>[
               ListTile(
                 leading: new Image.asset(
-                  "assets/"+imageClaim ,
+                  "assets/images/"+imageClaim ,
                   fit: BoxFit.cover,
                   width: 24.0,
                 ),

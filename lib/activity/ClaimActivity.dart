@@ -1,6 +1,12 @@
 
+import 'dart:convert';
+
+import 'package:absent_hris/activity/LoginActivity.dart';
 import 'package:absent_hris/adapter/list_claim_adapter.dart';
+import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/ResponseClaimDataModel.dart';
+import 'package:absent_hris/model/ResponseClaimModel.dart';
+import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
@@ -18,9 +24,12 @@ class _ClaimActivityState extends State<ClaimActivity> {
   var isLoading = false;
   HrisUtil _hrisUtil = HrisUtil();
   HrisStore _hrisStore = HrisStore();
-  List<ResponseClaimDataModel> list = List();
+  List<ResponseClaimDataModel> listClaim = List();
   String stUid = "";
   String stToken = "";
+  String stResponseMessage;
+  ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
+  int responseCode = 0;
 
   @override
   void initState() {
@@ -50,9 +59,9 @@ class _ClaimActivityState extends State<ClaimActivity> {
             style: new TextStyle(color: Colors.white),
           ),
         ),
-        body: new Center(
-            child: new Text("Claim"),
-        ),
+        body:isLoading ? Center(
+          child: CircularProgressIndicator(),
+        ) : _initListClaim(),
       ),
     );
   }
@@ -60,18 +69,18 @@ class _ClaimActivityState extends State<ClaimActivity> {
   void validateConnection(BuildContext context){
     HrisUtil.checkConnection().then((isConnected) => {
       if(isConnected){
-        hrisUtil.snackBarMessage("Test", context)
+        initUIdToken(1)
       }else{
-        disableLoading(),
+        loadingOption(),
         hrisUtil.snackBarMessage(ConstanstVar.noConnectionMessage, context)
       }
     });
   }
 
-  void disableLoading(){
-    setState(() {
-      isLoading = false;
-    });
+  void loadingOption(){
+      setState(() {
+        isLoading = !isLoading;
+      });
   }
 
   void initUIdToken(int intType){
@@ -85,18 +94,19 @@ class _ClaimActivityState extends State<ClaimActivity> {
       Future<String> authUToken = _hrisStore.getAuthToken();
       authUToken.then((data) {
         stToken = data.trim();
+        _loadClaim(stUid, stToken);
       },onError: (e) {_hrisUtil.toastMessage(e);});
     }
   }
 
   Widget _initListClaim(){
     return Container(
-      child: list.length > 0  ?
+      child: listClaim.length > 0  ?
       ListView.builder(
-          itemCount: list.length,
+          itemCount: listClaim.length,
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
-              child: ListClaimdapter(responseClaimDataModel: list[index]),
+              child: ListClaimdapter(responseClaimDataModel: listClaim[index]),
               onTap: () {
                   // Navigator.push(context, MaterialPageRoute(
                   //   builder: (context) => DetailAbsentActivity(absentModel: list[index]),
@@ -107,5 +117,33 @@ class _ClaimActivityState extends State<ClaimActivity> {
           }
       ) : Center(child: Text('No Data Found')),
     );
+  }
+
+  Future<ResponseClaimModel> _loadClaim(String uId,String userToken) async{
+    loadingOption();
+    _apiServiceUtils.getDataClaim(uId, userToken).then((value) => {
+      responseCode = ResponseClaimModel.fromJson(jsonDecode(value)).code,
+      loadingOption(),
+      if(responseCode == ConstanstVar.successCode){
+        listClaim = ResponseClaimModel.fromJson(jsonDecode(value)).responseClaimDataModel,
+      }else if(responseCode == ConstanstVar.invalidTokenCode){
+        stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+        _hrisStore.removeAllValues().then((isSuccess) =>{
+          if(isSuccess){
+            _hrisUtil.toastMessage("$stResponseMessage"),
+            new Future.delayed(const Duration(seconds: 4), () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginActivity()),
+              );
+            }),
+          }
+        }),
+      }else{
+        stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+        _hrisUtil.toastMessage("$stResponseMessage")
+      }
+    });
+    return null;
   }
 }
