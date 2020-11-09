@@ -53,6 +53,4 @@ class ListClaimdapterState extends State<ListClaimdapter> {
         )
     );
   }
-
-
 }
