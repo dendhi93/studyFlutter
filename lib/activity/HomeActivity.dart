@@ -1,7 +1,7 @@
 
 import 'dart:convert';
 
-import 'package:absent_hris/activity/DetailAbsentActivity.dart';
+import 'package:absent_hris/activity/AbsentTransActivity.dart';
 import 'package:absent_hris/activity/LoginActivity.dart';
 import 'package:absent_hris/adapter/list_absent_adapter.dart';
 import 'package:absent_hris/model/ErrorResponse.dart';
@@ -56,7 +56,7 @@ class _HomeActivityState extends State<HomeActivity> {
                   child: ListAdapter(modelAbsensi: list[index]),
                   onTap: () {
                       Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => DetailAbsentActivity(absentModel: list[index]),
+                        builder: (context) => AbsentTransActivity(absentModel: list[index]),
                       ),
                     );
                   },
@@ -139,7 +139,7 @@ class _HomeActivityState extends State<HomeActivity> {
                 child: Icon(Icons.add),
                 onPressed: () {
                       Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => DetailAbsentActivity(absentModel: null),
+                        builder: (context) => AbsentTransActivity(absentModel: null),
                       ),
                     );
                 },

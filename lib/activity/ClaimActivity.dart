@@ -13,6 +13,8 @@ import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'ClaimTransActivity.dart';
+
 class ClaimActivity extends StatefulWidget {
   @override
   _ClaimActivityState createState() => _ClaimActivityState();
@@ -62,6 +64,15 @@ class _ClaimActivityState extends State<ClaimActivity> {
         body:isLoading ? Center(
           child: CircularProgressIndicator(),
         ) : _initListClaim(),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(
+                builder: (context) => ClaimTransActivity(),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -108,10 +119,10 @@ class _ClaimActivityState extends State<ClaimActivity> {
             return GestureDetector(
               child: ListClaimdapter(responseClaimDataModel: listClaim[index]),
               onTap: () {
-                  // Navigator.push(context, MaterialPageRoute(
-                  //   builder: (context) => DetailAbsentActivity(absentModel: list[index]),
-                  // ),
-                //);
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => ClaimTransActivity(),
+                  ),
+                );
               },
             );
           }

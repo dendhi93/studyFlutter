@@ -10,14 +10,14 @@ import 'package:android_intent/android_intent.dart';
 import 'dart:io' show Platform;
 
 
-class DetailAbsentActivity extends StatefulWidget {
+class AbsentTransActivity extends StatefulWidget {
   final ResponseDtlDataAbsentModel absentModel;
-  DetailAbsentActivity({Key key, @required this.absentModel}) : super(key: key);
+  AbsentTransActivity({Key key, @required this.absentModel}) : super(key: key);
   @override
-  _DetailAbsentActivityState createState() => _DetailAbsentActivityState();
+  _AbsentTransActivityState createState() => _AbsentTransActivityState();
 }
 
-class _DetailAbsentActivityState extends State<DetailAbsentActivity> {
+class _AbsentTransActivityState extends State<AbsentTransActivity> {
   Position _currentPosition;
   TextEditingController etDateAbsent = new TextEditingController();
   TextEditingController etInputTime = new TextEditingController();
