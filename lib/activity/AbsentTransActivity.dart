@@ -23,7 +23,6 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   TextEditingController etInputTime = new TextEditingController();
   TextEditingController etAddressAbsent = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  DateTime selectedDate = DateTime.now();
   TimeOfDay timeOfDay = TimeOfDay.now();
   HrisUtil messageUtil = HrisUtil();
   int intDateIn = 1;
@@ -222,7 +221,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detail Absent'),
+        title: Text('Absent'),
       ),
       body: _initDetail(context),
     );
@@ -235,21 +234,6 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
     etInputTime.text = "";
   }
 
-  // _selecDatePicker(BuildContext context) async{
-  //   final DateTime picked = await showDatePicker(
-  //     context: context,
-  //     helpText: 'Select Absent Date',
-  //     initialDate: selectedDate, // Refer step 1
-  //     firstDate: DateTime(2000),
-  //     lastDate: DateTime(2025),
-  //   );
-  //   if (picked != null && picked != selectedDate)
-  //     setState(() {
-  //       selectedDate = picked;
-  //       String selectedDateFormat = new DateFormat("yyyy-MM-dd").format(selectedDate);
-  //       etDateAbsent.text = selectedDateFormat;
-  //     });
-  // }
 
   // _selectTimeAbsent(BuildContext context, int optionText) async{
   //   TimeOfDay t = await showTimePicker(
