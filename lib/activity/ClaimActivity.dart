@@ -68,7 +68,7 @@ class _ClaimActivityState extends State<ClaimActivity> {
           child: Icon(Icons.add),
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(
-                builder: (context) => ClaimTransActivity(),
+                builder: (context) => ClaimTransActivity(claimModel: null),
               ),
             );
           },
@@ -120,7 +120,7 @@ class _ClaimActivityState extends State<ClaimActivity> {
               child: ListClaimdapter(responseClaimDataModel: listClaim[index]),
               onTap: () {
                   Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => ClaimTransActivity(),
+                    builder: (context) => ClaimTransActivity(claimModel: listClaim[index],),
                   ),
                 );
               },

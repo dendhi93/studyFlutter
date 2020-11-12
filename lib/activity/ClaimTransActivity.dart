@@ -1,10 +1,13 @@
 
+import 'package:absent_hris/model/ResponseClaimDataModel.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class ClaimTransActivity extends StatefulWidget{
+  final ResponseClaimDataModel claimModel;
+  ClaimTransActivity({Key key, @required this.claimModel}) : super(key: key);
 
   @override
   _ClaimTransActivityState createState() => _ClaimTransActivityState();
@@ -16,7 +19,18 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController etDateClaim = new TextEditingController();
   DateTime selectedDate = DateTime.now();
-  var isEnableText = true;
+  var isEnableText = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.claimModel != null){
+      isEnableText = false;
+      etDateClaim.text = widget.claimModel.transDate;
+    }else{
+      isEnableText = true;
+    }
+  }
 
   Future<bool> onWillPop() {
     DateTime now = DateTime.now();
