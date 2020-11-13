@@ -21,7 +21,7 @@ class ApiServiceUtils{
 
     Future<String> getDataAbsen(String getuId, String getToken) async{
       String urlAbsent = ConstanstVar.urlApi +'MasterAbsent2.php?user_id=$getuId-$getToken';
-      //String urlAbsent ='http://192.168.122.1/coreHris/MasterAbsent.php?user_id=$getuId';
+      //String urlAbsent = ConstanstVar.urlApi +'MasterAbsent.php?user_id=$getuId';
       print('urlnya $urlAbsent');
       final http.Response responseAbsent = await http
           .get(urlAbsent,
@@ -50,7 +50,7 @@ class ApiServiceUtils{
     }
 
     Future<String> getMasterClaim() async{
-      String urlMasterClaim =ConstanstVar.urlApi+'MasterClaimTrans.php';
+      String urlMasterClaim = ConstanstVar.urlApi+'MasterClaimData.php';
       print('url $urlMasterClaim');
       final http.Response responseClaim = await http
           .get(urlMasterClaim,

@@ -1,5 +1,11 @@
 
+import 'dart:convert';
+import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/ResponseClaimDataModel.dart';
+import 'package:absent_hris/model/ResponseDetailMasterClaim.dart';
+import 'package:absent_hris/model/ResponseMasterClaim.dart';
+import 'package:absent_hris/util/ApiServiceUtils.dart';
+import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,7 +25,13 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController etDateClaim = new TextEditingController();
   DateTime selectedDate = DateTime.now();
+  ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   var isEnableText = false;
+  HrisUtil _hrisUtil = HrisUtil();
+  int responseCode = 0;
+  List<ResponseDetailMasterClaim> listMasterClaim = List();
+  String stResponseMessage,_selectedMasterClaim;
+  var isLoading = false;
 
   @override
   void initState() {
@@ -27,9 +39,8 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
     if(widget.claimModel != null){
       isEnableText = false;
       etDateClaim.text = widget.claimModel.transDate;
-    }else{
-      isEnableText = true;
-    }
+    }else{isEnableText = true;}
+    validateConnection(context);
   }
 
   Future<bool> onWillPop() {
@@ -80,6 +91,14 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                             fontFamily: "Poppins",
                           ),
                         ),
+                        new Padding(padding: EdgeInsets.only(top: 10.0)),
+                          DropdownButton(
+                            hint: Text("Select Your Friends"),
+                            value: _selectedMasterClaim,
+                            items: [],
+                            onChanged: (value) {  },
+
+                          ),
                       ],
                   ),
               ),
@@ -104,13 +123,44 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
       });
   }
 
+  void validateConnection(BuildContext context){
+    HrisUtil.checkConnection().then((isConnected) => {
+      if(isConnected){
+        _loadMasterClaim(),
+      }else{
+        _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
+      }
+    });
+  }
+
+  Future<ResponseMasterClaim> _loadMasterClaim() async{
+      _apiServiceUtils.getMasterClaim().then((value) => {
+          responseCode = ResponseMasterClaim.fromJson(jsonDecode(value)).code,
+        if(responseCode == ConstanstVar.successCode){
+           listMasterClaim = ResponseMasterClaim.fromJson(jsonDecode(value)).masterClaim,
+          _hrisUtil.toastMessage("Success Master Claim"),
+        }else{
+          stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+          _hrisUtil.toastMessage("$stResponseMessage")
+        }
+      });
+  }
+
+  void loadingOption(){
+    setState(() {
+      isLoading = !isLoading;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Claim'),
       ),
-      body: _initClaim(context),
+      body: isLoading ? Center(
+        child: CircularProgressIndicator(),
+      ) : _initClaim(context),
     );
   }
 }
