@@ -29,7 +29,8 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   var isEnableText = false;
   HrisUtil _hrisUtil = HrisUtil();
   int responseCode = 0;
-  List<ResponseDetailMasterClaim> listMasterClaim = List();
+  List<ResponseDetailMasterClaim> listDtlMasterClaim = List();
+  List<String> arrDtlMasterClaim = [];
   String stResponseMessage,_selectedMasterClaim;
   var isLoading = false;
 
@@ -93,11 +94,20 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                         ),
                         new Padding(padding: EdgeInsets.only(top: 10.0)),
                           DropdownButton(
-                            hint: Text("Select Your Friends"),
+                            hint: Text("Select Claim Type"),
                             value: _selectedMasterClaim,
-                            items: [],
-                            onChanged: (value) {  },
-
+                            items: arrDtlMasterClaim.map((value) {
+                              return DropdownMenuItem(
+                                child: Text(value),
+                                value: value,
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedMasterClaim = value;
+                                _hrisUtil.toastMessage(_selectedMasterClaim);
+                              });
+                            },
                           ),
                       ],
                   ),
@@ -134,22 +144,38 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   }
 
   Future<ResponseMasterClaim> _loadMasterClaim() async{
+    loadingOption(1);
       _apiServiceUtils.getMasterClaim().then((value) => {
           responseCode = ResponseMasterClaim.fromJson(jsonDecode(value)).code,
         if(responseCode == ConstanstVar.successCode){
-           listMasterClaim = ResponseMasterClaim.fromJson(jsonDecode(value)).masterClaim,
-          _hrisUtil.toastMessage("Success Master Claim"),
+           listDtlMasterClaim = ResponseMasterClaim.fromJson(jsonDecode(value)).masterClaim,
+           if(listDtlMasterClaim.length > 0){
+             // _responseDetailMasterClaim = listDtlMasterClaim[0],
+             // print(_responseDetailMasterClaim.claimDesc),
+             for(var i = 0; i < listDtlMasterClaim.length; i++){
+               arrDtlMasterClaim.add(listDtlMasterClaim[i].claimDesc),
+               print(listDtlMasterClaim[i].claimDesc),
+             }
+           },
         }else{
           stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
           _hrisUtil.toastMessage("$stResponseMessage")
         }
       });
+    loadingOption(2);
+    return null;
   }
 
-  void loadingOption(){
-    setState(() {
-      isLoading = !isLoading;
-    });
+  void loadingOption(int typeLoading){
+    if(typeLoading == 1){
+      setState(() {
+        isLoading = true;
+      });
+    }else{
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override

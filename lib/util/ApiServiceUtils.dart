@@ -49,15 +49,30 @@ class ApiServiceUtils{
       return responseClaim.body;
     }
 
+    //ganti jgn string
+    // Future<List<ResponseDetailMasterClaim>> getMasterClaim() async{
+    //   List<ResponseDetailMasterClaim> list = [];
+    //   String urlMasterClaim = ConstanstVar.urlApi+'MasterClaimData.php';
+    //   print('url $urlMasterClaim');
+    //   try{
+    //     // final http.Response responseClaim = await http.get(urlMasterClaim, headers: {'Content-Type': 'application/json',});
+    //     // return responseClaim;
+    //     // for(var i=0; i < responseClaim["master_claim"].length; i++){
+    //     //
+    //     // }
+    //
+    //   }catch (e) {
+    //       return null;
+    //   }
+    //   // print('$responseClaim.body');
+    //   // return responseClaim.body;
+    //
+    // }
+
     Future<String> getMasterClaim() async{
       String urlMasterClaim = ConstanstVar.urlApi+'MasterClaimData.php';
       print('url $urlMasterClaim');
-      final http.Response responseClaim = await http
-          .get(urlMasterClaim,
-          headers: {
-            'Content-Type': 'application/json',
-          }
-      );
+      final http.Response responseClaim = await http.get(urlMasterClaim, headers: {'Content-Type': 'application/json',});
 
       print('$responseClaim.body');
       return responseClaim.body;
