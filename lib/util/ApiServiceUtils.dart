@@ -11,12 +11,15 @@ class ApiServiceUtils{
       final http.Response responseLogin = await http.post(ConstanstVar.urlApi+'loginUser.php',
           body: map,
       );
-      return responseLogin.body;
-      // if(responseLogin.statusCode == 200){
-      //   return responseLogin.body;
-      // }else{
-      //   return responseLogin.body;
-      // }
+
+      if(responseLogin.statusCode == ConstanstVar.successCode
+          || responseLogin.statusCode == ConstanstVar.invalidTokenCode
+          || responseLogin.statusCode == ConstanstVar.failedHttp){
+        print(responseLogin.body);
+        return responseLogin.body;
+      }else{
+        throw new Exception("Error login");
+      }
     }
 
     Future<String> getDataAbsen(String getuId, String getToken) async{
@@ -31,8 +34,15 @@ class ApiServiceUtils{
         }
       );
 
-      print('$responseAbsent.body');
-      return responseAbsent.body;
+      if(responseAbsent.statusCode == ConstanstVar.successCode
+          || responseAbsent.statusCode == ConstanstVar.invalidTokenCode
+          || responseAbsent.statusCode == ConstanstVar.failedHttp){
+          print('$responseAbsent.body');
+          return responseAbsent.body;
+      }else{
+        throw new Exception("Error Absent");
+      }
+
     }
 
     Future<String> getDataClaim(String getuId, String getToken) async{
@@ -44,37 +54,28 @@ class ApiServiceUtils{
             'Content-Type': 'application/json',
           }
       );
+      if(responseClaim.statusCode == ConstanstVar.successCode
+          || responseClaim.statusCode == ConstanstVar.invalidTokenCode
+          || responseClaim.statusCode == ConstanstVar.failedHttp){
+            print('$responseClaim.body');
+            return responseClaim.body;
+      }else{
+        throw new Exception("Error Claim");
+      }
 
-      print('$responseClaim.body');
-      return responseClaim.body;
     }
-
-    //ganti jgn string
-    // Future<List<ResponseDetailMasterClaim>> getMasterClaim() async{
-    //   List<ResponseDetailMasterClaim> list = [];
-    //   String urlMasterClaim = ConstanstVar.urlApi+'MasterClaimData.php';
-    //   print('url $urlMasterClaim');
-    //   try{
-    //     // final http.Response responseClaim = await http.get(urlMasterClaim, headers: {'Content-Type': 'application/json',});
-    //     // return responseClaim;
-    //     // for(var i=0; i < responseClaim["master_claim"].length; i++){
-    //     //
-    //     // }
-    //
-    //   }catch (e) {
-    //       return null;
-    //   }
-    //   // print('$responseClaim.body');
-    //   // return responseClaim.body;
-    //
-    // }
 
     Future<String> getMasterClaim() async{
       String urlMasterClaim = ConstanstVar.urlApi+'MasterClaimData.php';
       print('url $urlMasterClaim');
-      final http.Response responseClaim = await http.get(urlMasterClaim, headers: {'Content-Type': 'application/json',});
+      final http.Response responseMasterClaim = await http.get(urlMasterClaim, headers: {'Content-Type': 'application/json',});
 
-      print('$responseClaim.body');
-      return responseClaim.body;
+      if(responseMasterClaim.statusCode == ConstanstVar.successCode
+          || responseMasterClaim.statusCode == ConstanstVar.failedHttp){
+        print('$responseMasterClaim.body');
+        return responseMasterClaim.body;
+      }else{
+        throw new Exception("Error Master Claim");
+      }
     }
 }

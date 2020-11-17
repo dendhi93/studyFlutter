@@ -144,14 +144,12 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   }
 
   Future<ResponseMasterClaim> _loadMasterClaim() async{
-    loadingOption(1);
+    loadingOption();
       _apiServiceUtils.getMasterClaim().then((value) => {
           responseCode = ResponseMasterClaim.fromJson(jsonDecode(value)).code,
         if(responseCode == ConstanstVar.successCode){
            listDtlMasterClaim = ResponseMasterClaim.fromJson(jsonDecode(value)).masterClaim,
            if(listDtlMasterClaim.length > 0){
-             // _responseDetailMasterClaim = listDtlMasterClaim[0],
-             // print(_responseDetailMasterClaim.claimDesc),
              for(var i = 0; i < listDtlMasterClaim.length; i++){
                arrDtlMasterClaim.add(listDtlMasterClaim[i].claimDesc),
                print(listDtlMasterClaim[i].claimDesc),
@@ -162,20 +160,16 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
           _hrisUtil.toastMessage("$stResponseMessage")
         }
       });
-    loadingOption(2);
+    new Future.delayed(const Duration(seconds: 2), () {
+      loadingOption();
+    });
     return null;
   }
 
-  void loadingOption(int typeLoading){
-    if(typeLoading == 1){
-      setState(() {
-        isLoading = true;
-      });
-    }else{
-      setState(() {
-        isLoading = false;
-      });
-    }
+  void loadingOption(){
+    setState(() {
+      isLoading = !isLoading;
+    });
   }
 
   @override

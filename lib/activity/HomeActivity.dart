@@ -149,30 +149,35 @@ class _HomeActivityState extends State<HomeActivity> {
     }
 
     Future<ResponseDataAbsentModel> _loadAbsent(String uId,String userToken) async{
-     loadingOption();
-      _apiServiceUtils.getDataAbsen(uId, userToken).then((value) => {
-        responseCode = ResponseDataAbsentModel.fromJson(jsonDecode(value)).code,
-        loadingOption(),
-          if(responseCode == ConstanstVar.successCode){
-            list = ResponseDataAbsentModel.fromJson(jsonDecode(value)).responseDtlDataAbsent,
-          }else if(responseCode == ConstanstVar.invalidTokenCode){
-                  stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
-                  _hrisStore.removeAllValues().then((isSuccess) =>{
-                      if(isSuccess){
-                        _hrisUtil.toastMessage("$stResponseMessage"),
-                        new Future.delayed(const Duration(seconds: 4), () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => LoginActivity()),
-                          );
-                        }),
-                      }
+      try{
+          loadingOption();
+          _apiServiceUtils.getDataAbsen(uId, userToken).then((value) => {
+            responseCode = ResponseDataAbsentModel.fromJson(jsonDecode(value)).code,
+            loadingOption(),
+            if(responseCode == ConstanstVar.successCode){
+              list = ResponseDataAbsentModel.fromJson(jsonDecode(value)).responseDtlDataAbsent,
+            }else if(responseCode == ConstanstVar.invalidTokenCode){
+              stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+              _hrisStore.removeAllValues().then((isSuccess) =>{
+                if(isSuccess){
+                  _hrisUtil.toastMessage("$stResponseMessage"),
+                  new Future.delayed(const Duration(seconds: 4), () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginActivity()),
+                    );
                   }),
-          }else{
-                stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
-                _hrisUtil.toastMessage("$stResponseMessage")
-          }
-      });
+                }
+              }),
+            }else{
+              stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+              _hrisUtil.toastMessage("$stResponseMessage")
+            }
+          });
+      }catch(error){
+        loadingOption();
+        _hrisUtil.toastMessage("err load Absent " +error.toString());
+      }
       return null;
     }
 

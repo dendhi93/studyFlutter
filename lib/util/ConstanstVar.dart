@@ -5,6 +5,7 @@ class ConstanstVar{
   static String noConnectionTitle = "No Network";
   static int successCode = 200;
   static int invalidTokenCode = 402;
+  static int failedHttp = 401;
   static int unPrefType = 11;
   static int tokenPrefType = 22;
   static int uIdPrefType = 33;
