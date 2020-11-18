@@ -24,13 +24,17 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   HrisUtil messageUtil = HrisUtil();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController etDateClaim = new TextEditingController();
+  TextEditingController etOtherClaim = new TextEditingController();
+  TextEditingController etSelectedClaimType = new TextEditingController();
   DateTime selectedDate = DateTime.now();
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   var isEnableText = false;
+  var isHideDetailText = false;
+  var isShowDropDown = true;
   HrisUtil _hrisUtil = HrisUtil();
   int responseCode = 0;
   List<ResponseDetailMasterClaim> listDtlMasterClaim = List();
-  List<String> arrDtlMasterClaim = [];
+  List<ResponseDetailMasterClaim> arrDtlMasterClaim = [];
   String stResponseMessage,_selectedMasterClaim;
   var isLoading = false;
 
@@ -39,7 +43,9 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
     super.initState();
     if(widget.claimModel != null){
       isEnableText = false;
+      isShowDropDown = false;
       etDateClaim.text = widget.claimModel.transDate;
+      etSelectedClaimType.text = widget.claimModel.claimDesc;
     }else{isEnableText = true;}
     validateConnection(context);
   }
@@ -93,22 +99,72 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                           ),
                         ),
                         new Padding(padding: EdgeInsets.only(top: 10.0)),
+                        isShowDropDown ?
                           DropdownButton(
                             hint: Text("Select Claim Type"),
                             value: _selectedMasterClaim,
                             items: arrDtlMasterClaim.map((value) {
                               return DropdownMenuItem(
-                                child: Text(value),
-                                value: value,
+                                child: Text(value.claimDesc),
+                                value: value.id,
                               );
                             }).toList(),
                             onChanged: (value) {
                               setState(() {
                                 _selectedMasterClaim = value;
+                                if(_selectedMasterClaim == "Lainnya"){
+                                    setState(() {
+                                      isHideDetailText = true;
+                                    });
+                                }else{
+                                  setState(() {
+                                    isHideDetailText = false;
+                                  });
+                                }
                                 _hrisUtil.toastMessage(_selectedMasterClaim);
                               });
                             },
+                          ) : new TextFormField(
+                          enabled: false,
+                          controller: etSelectedClaimType,
+                          decoration: new InputDecoration(
+                            contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                            fillColor: Colors.white,
+                            border: new OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(15.0),
+                              borderSide: new BorderSide(
+                              ),
+                            ),
                           ),
+                          keyboardType: TextInputType.text,
+                          style: new TextStyle(
+                            fontFamily: "Poppins",
+                          ),
+                        ),
+                        new Padding(padding: EdgeInsets.only(top: 10.0)),
+                        isHideDetailText ?
+                        new TextFormField(
+                          enabled: isEnableText,
+                          controller: etOtherClaim,
+                          decoration: new InputDecoration(
+                            labelText: "type Claim",
+                            contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                            fillColor: Colors.white,
+                            border: new OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(15.0),
+                              borderSide: new BorderSide(
+                              ),
+                            ),
+                          ),
+                          validator: (val) {
+                            if(val.length==0 && _selectedMasterClaim == "Lainnya") {return "Type Claim cannot be empty";
+                            }else{return null;}
+                          },
+                          keyboardType: TextInputType.text,
+                          style: new TextStyle(
+                            fontFamily: "Poppins",
+                          ),
+                        ) : Text(''),
                       ],
                   ),
               ),
@@ -135,11 +191,8 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
 
   void validateConnection(BuildContext context){
     HrisUtil.checkConnection().then((isConnected) => {
-      if(isConnected){
-        _loadMasterClaim(),
-      }else{
-        _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
-      }
+      isConnected ? _loadMasterClaim()
+          : _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
     });
   }
 
@@ -150,17 +203,14 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
         if(responseCode == ConstanstVar.successCode){
            listDtlMasterClaim = ResponseMasterClaim.fromJson(jsonDecode(value)).masterClaim,
            if(listDtlMasterClaim.length > 0){
-             for(var i = 0; i < listDtlMasterClaim.length; i++){
-               arrDtlMasterClaim.add(listDtlMasterClaim[i].claimDesc),
-               print(listDtlMasterClaim[i].claimDesc),
-             }
+             arrDtlMasterClaim.addAll(listDtlMasterClaim)
            },
         }else{
           stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
           _hrisUtil.toastMessage("$stResponseMessage")
         }
       });
-    new Future.delayed(const Duration(seconds: 2), () {
+    new Future.delayed(const Duration(seconds: 1), () {
       loadingOption();
     });
     return null;
