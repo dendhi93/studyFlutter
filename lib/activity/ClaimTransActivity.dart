@@ -26,6 +26,8 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   TextEditingController etDateClaim = new TextEditingController();
   TextEditingController etOtherClaim = new TextEditingController();
   TextEditingController etSelectedClaimType = new TextEditingController();
+  TextEditingController etAvailableClaimTotal = new TextEditingController();
+  TextEditingController etPaidClaim = new TextEditingController();
   DateTime selectedDate = DateTime.now();
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   var isEnableText = false;
@@ -46,8 +48,11 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
       isShowDropDown = false;
       etDateClaim.text = widget.claimModel.transDate;
       etSelectedClaimType.text = widget.claimModel.claimDesc;
-    }else{isEnableText = true;}
-    validateConnection(context);
+
+    }else{
+      isEnableText = true;
+      validateConnection(context);
+    }
   }
 
   Future<bool> onWillPop() {
@@ -112,7 +117,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                             onChanged: (value) {
                               setState(() {
                                 _selectedMasterClaim = value;
-                                if(_selectedMasterClaim == "Lainnya"){
+                                if(_selectedMasterClaim == "7"){
                                     setState(() {
                                       isHideDetailText = true;
                                     });
@@ -160,6 +165,26 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                             if(val.length==0 && _selectedMasterClaim == "Lainnya") {return "Type Claim cannot be empty";
                             }else{return null;}
                           },
+                          keyboardType: TextInputType.text,
+                          style: new TextStyle(
+                            fontFamily: "Poppins",
+                          ),
+                        ) : Text(''),
+                        new Padding(padding: EdgeInsets.only(top: 10.0)),
+                        isShowDropDown ?
+                        new TextFormField(
+                          enabled: false,
+                          controller: etAvailableClaimTotal,
+                          decoration: new InputDecoration(
+                            labelText: "Available Claimed",
+                            contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                            fillColor: Colors.white,
+                            border: new OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(15.0),
+                              borderSide: new BorderSide(
+                              ),
+                            ),
+                          ),
                           keyboardType: TextInputType.text,
                           style: new TextStyle(
                             fontFamily: "Poppins",

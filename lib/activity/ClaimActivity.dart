@@ -131,30 +131,35 @@ class _ClaimActivityState extends State<ClaimActivity> {
   }
 
   Future<ResponseClaimModel> _loadClaim(String uId,String userToken) async{
-    loadingOption();
-    _apiServiceUtils.getDataClaim(uId, userToken).then((value) => {
-      responseCode = ResponseClaimModel.fromJson(jsonDecode(value)).code,
-      loadingOption(),
-      if(responseCode == ConstanstVar.successCode){
-        listClaim = ResponseClaimModel.fromJson(jsonDecode(value)).responseClaimDataModel,
-      }else if(responseCode == ConstanstVar.invalidTokenCode){
-        stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
-        _hrisStore.removeAllValues().then((isSuccess) =>{
-          if(isSuccess){
-            _hrisUtil.toastMessage("$stResponseMessage"),
-            new Future.delayed(const Duration(seconds: 4), () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginActivity()),
-              );
-            }),
-          }
-        }),
-      }else{
-        stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
-        _hrisUtil.toastMessage("$stResponseMessage")
-      }
-    });
+    try{
+      loadingOption();
+      _apiServiceUtils.getDataClaim(uId, userToken).then((value) => {
+        responseCode = ResponseClaimModel.fromJson(jsonDecode(value)).code,
+        loadingOption(),
+        if(responseCode == ConstanstVar.successCode){
+          listClaim = ResponseClaimModel.fromJson(jsonDecode(value)).responseClaimDataModel,
+        }else if(responseCode == ConstanstVar.invalidTokenCode){
+          stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+          _hrisStore.removeAllValues().then((isSuccess) =>{
+            if(isSuccess){
+              _hrisUtil.toastMessage("$stResponseMessage"),
+              new Future.delayed(const Duration(seconds: 4), () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginActivity()),
+                );
+              }),
+            }
+          }),
+        }else{
+          stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+          _hrisUtil.toastMessage("$stResponseMessage")
+        }
+      });
+    }catch(error){
+      loadingOption();
+      _hrisUtil.toastMessage("err load claim " +error.toString());
+    }
     return null;
   }
 }
