@@ -37,7 +37,8 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   int responseCode = 0;
   List<ResponseDetailMasterClaim> listDtlMasterClaim = List();
   List<ResponseDetailMasterClaim> arrDtlMasterClaim = [];
-  String stResponseMessage,_selectedMasterClaim;
+  ResponseDetailMasterClaim _selectedResponseDtlMasterClaim;
+  String stResponseMessage,_selectedMasterClaim,_selectedPaidClaim;
   var isLoading = false;
 
   @override
@@ -48,7 +49,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
       isShowDropDown = false;
       etDateClaim.text = widget.claimModel.transDate;
       etSelectedClaimType.text = widget.claimModel.claimDesc;
-
+      etPaidClaim.text = widget.claimModel.paidClaim.toString();
     }else{
       isEnableText = true;
       validateConnection(context);
@@ -103,56 +104,124 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                             fontFamily: "Poppins",
                           ),
                         ),
-                        new Padding(padding: EdgeInsets.only(top: 10.0)),
                         isShowDropDown ?
-                          DropdownButton(
-                            hint: Text("Select Claim Type"),
-                            value: _selectedMasterClaim,
-                            items: arrDtlMasterClaim.map((value) {
-                              return DropdownMenuItem(
-                                child: Text(value.claimDesc),
-                                value: value.id,
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedMasterClaim = value;
-                                if(_selectedMasterClaim == "7"){
+                        new Column(
+                          children: <Widget>[
+                            new Padding(padding: EdgeInsets.only(top: 3.0)),
+                            DropdownButton(
+                              hint: Text("Select Claim Type"),
+                              value: _selectedResponseDtlMasterClaim,
+                              items: arrDtlMasterClaim.map((value) {
+                                return DropdownMenuItem(
+                                  child: Text(value.claimDesc),
+                                  value: value.id+'-'+value.paidClaim.toString()
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  var splitValue = value.split("-");
+                                  _selectedMasterClaim = splitValue[0];
+                                  _selectedPaidClaim = splitValue[1];
+                                  if(_selectedMasterClaim == "7"){
                                     setState(() {
                                       isHideDetailText = true;
                                     });
-                                }else{
-                                  setState(() {
-                                    isHideDetailText = false;
-                                  });
-                                }
-                                _hrisUtil.toastMessage(_selectedMasterClaim);
-                              });
-                            },
-                          ) : new TextFormField(
-                          enabled: false,
-                          controller: etSelectedClaimType,
-                          decoration: new InputDecoration(
-                            contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
-                            fillColor: Colors.white,
-                            border: new OutlineInputBorder(
-                              borderRadius: new BorderRadius.circular(15.0),
-                              borderSide: new BorderSide(
+                                  }else{
+                                    setState(() {
+                                      isHideDetailText = false;
+                                    });
+                                  }
+                                  etAvailableClaimTotal.text = _selectedPaidClaim.trim();
+                                  _hrisUtil.toastMessage(_selectedMasterClaim);
+                                });
+                              },
+                            )
+                          ],
+                        ): new Column(
+                              children: <Widget>[
+                                new Padding(padding: EdgeInsets.only(top: 10.0)),
+                                new TextFormField(
+                                  enabled: false,
+                                  controller: etSelectedClaimType,
+                                  decoration: new InputDecoration(
+                                    contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                                    fillColor: Colors.white,
+                                    border: new OutlineInputBorder(
+                                      borderRadius: new BorderRadius.circular(15.0),
+                                      borderSide: new BorderSide(
+                                      ),
+                                    ),
+                                  ),
+                                  keyboardType: TextInputType.text,
+                                  style: new TextStyle(
+                                    fontFamily: "Poppins",
+                                  ),
+                                ),
+                              ],
+                        ),
+                        isHideDetailText ?
+                        new Column(
+                          children: <Widget>[
+                            new Padding(padding: EdgeInsets.only(top: 10.0)),
+                            new TextFormField(
+                              enabled: isEnableText,
+                              controller: etOtherClaim,
+                              decoration: new InputDecoration(
+                                labelText: "type Claim",
+                                contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                                fillColor: Colors.white,
+                                border: new OutlineInputBorder(
+                                  borderRadius: new BorderRadius.circular(15.0),
+                                  borderSide: new BorderSide(
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          keyboardType: TextInputType.text,
-                          style: new TextStyle(
-                            fontFamily: "Poppins",
-                          ),
+                              validator: (val) {
+                                if(val.length==0 && _selectedMasterClaim == "Lainnya") {return "Type Claim cannot be empty";
+                                }else{return null;}
+                              },
+                              keyboardType: TextInputType.text,
+                              style: new TextStyle(
+                                fontFamily: "Poppins",
+                              ),
+                            )
+                          ],
+                        ): Container(
+                            color: Colors.white // This is optional
+                        ),
+                        isShowDropDown ?
+                        new Column(
+                          children: <Widget>[
+                            new Padding(padding: EdgeInsets.only(top: 1.0)),
+                            new TextFormField(
+                              enabled: false,
+                              controller: etAvailableClaimTotal,
+                              decoration: new InputDecoration(
+                                labelText: "Available Claimed",
+                                contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                                fillColor: Colors.white,
+                                border: new OutlineInputBorder(
+                                  borderRadius: new BorderRadius.circular(15.0),
+                                  borderSide: new BorderSide(
+                                  ),
+                                ),
+                              ),
+                              keyboardType: TextInputType.text,
+                              style: new TextStyle(
+                                fontFamily: "Poppins",
+                              ),
+                            )
+                          ],
+                        ): Container(
+                            color: Colors.white
                         ),
                         new Padding(padding: EdgeInsets.only(top: 10.0)),
-                        isHideDetailText ?
+                        new Padding(padding: EdgeInsets.only(top: 10.0)),
                         new TextFormField(
                           enabled: isEnableText,
-                          controller: etOtherClaim,
+                          controller: etPaidClaim,
                           decoration: new InputDecoration(
-                            labelText: "type Claim",
+                            labelText: "Paid Claim",
                             contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
                             fillColor: Colors.white,
                             border: new OutlineInputBorder(
@@ -162,34 +231,15 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                             ),
                           ),
                           validator: (val) {
-                            if(val.length==0 && _selectedMasterClaim == "Lainnya") {return "Type Claim cannot be empty";
+                            if(val.length==0) {return "Claim cannot be empty";
                             }else{return null;}
                           },
-                          keyboardType: TextInputType.text,
+                          maxLength: 8,
+                          keyboardType: TextInputType.number,
                           style: new TextStyle(
                             fontFamily: "Poppins",
                           ),
-                        ) : Text(''),
-                        new Padding(padding: EdgeInsets.only(top: 10.0)),
-                        isShowDropDown ?
-                        new TextFormField(
-                          enabled: false,
-                          controller: etAvailableClaimTotal,
-                          decoration: new InputDecoration(
-                            labelText: "Available Claimed",
-                            contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
-                            fillColor: Colors.white,
-                            border: new OutlineInputBorder(
-                              borderRadius: new BorderRadius.circular(15.0),
-                              borderSide: new BorderSide(
-                              ),
-                            ),
-                          ),
-                          keyboardType: TextInputType.text,
-                          style: new TextStyle(
-                            fontFamily: "Poppins",
-                          ),
-                        ) : Text(''),
+                        ),
                       ],
                   ),
               ),
@@ -228,7 +278,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
         if(responseCode == ConstanstVar.successCode){
            listDtlMasterClaim = ResponseMasterClaim.fromJson(jsonDecode(value)).masterClaim,
            if(listDtlMasterClaim.length > 0){
-             arrDtlMasterClaim.addAll(listDtlMasterClaim)
+             arrDtlMasterClaim.addAll(listDtlMasterClaim),
            },
         }else{
           stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
