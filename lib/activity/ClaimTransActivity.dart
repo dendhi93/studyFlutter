@@ -40,6 +40,9 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   ResponseDetailMasterClaim _selectedResponseDtlMasterClaim;
   String stResponseMessage,_selectedMasterClaim,_selectedPaidClaim;
   var isLoading = false;
+  List cameras;
+  int selectedCameraIdx;
+  String imagePath;
 
   @override
   void initState() {
@@ -231,7 +234,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                             ),
                           ),
                           validator: (val) {
-                            if(val.length==0) {return "Claim cannot be empty";
+                            if(val.length==0) {return "Paid claim cannot be empty";
                             }else{return null;}
                           },
                           maxLength: 8,
@@ -240,6 +243,26 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                             fontFamily: "Poppins",
                           ),
                         ),
+                        new Padding(padding: EdgeInsets.only(top: 10.0)),
+                        new FlatButton(
+                          color: Colors.blue,
+                          textColor: Colors.white,
+                          disabledColor: Colors.blueGrey,
+                          disabledTextColor: Colors.black,
+                          padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
+                          splashColor: Colors.blueAccent,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(color: Colors.yellow)
+                          ),
+                          onPressed: () {
+                              _hrisUtil.toastMessage("Coba");
+                          },
+                          child: Text(
+                            "Capture Camera",
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                        )
                       ],
                   ),
               ),
