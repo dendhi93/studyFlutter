@@ -9,7 +9,10 @@ import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:camera/camera.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' show join;
 
 class ClaimTransActivity extends StatefulWidget{
   final ResponseClaimDataModel claimModel;
@@ -40,9 +43,11 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   ResponseDetailMasterClaim _selectedResponseDtlMasterClaim;
   String stResponseMessage,_selectedMasterClaim,_selectedPaidClaim;
   var isLoading = false;
-  List cameras;
-  int selectedCameraIdx;
-  String imagePath;
+  CameraController _cameraController;
+  Future<void> _initializeControllerFuture;
+  var isCameraReady = false;
+  var showCapturedPhoto = false;
+  var ImagePath;
 
   @override
   void initState() {
@@ -256,7 +261,8 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                               side: BorderSide(color: Colors.yellow)
                           ),
                           onPressed: () {
-                              _hrisUtil.toastMessage("Coba");
+                              // _hrisUtil.toastMessage("Coba");
+                            displayCamera();
                           },
                           child: Text(
                             "Capture Camera",
@@ -303,6 +309,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
            if(listDtlMasterClaim.length > 0){
              arrDtlMasterClaim.addAll(listDtlMasterClaim),
            },
+          _initializeCamera(),
         }else{
           stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
           _hrisUtil.toastMessage("$stResponseMessage")
@@ -319,6 +326,70 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
       isLoading = !isLoading;
     });
   }
+
+  Future<void> _initializeCamera() async {
+    final cameras = await availableCameras();
+    final firstCamera = cameras.first;
+    _cameraController = CameraController(firstCamera,ResolutionPreset.high);
+    _initializeControllerFuture = _cameraController.initialize();
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      isCameraReady = true;
+    });
+  }
+
+  @override
+  void dispose() {
+    // implement dispose
+    _cameraController?.dispose();
+    super.dispose();
+  }
+
+  void displayCamera(){
+    FutureBuilder<void>(
+      future: _initializeControllerFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          // If the Future is complete, display the preview.
+          return CameraPreview(_cameraController);
+        } else {
+          // Otherwise, display a loading indicator.
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+    FloatingActionButton(
+      child: Icon(Icons.camera_alt),
+      // Provide an onPressed callback.
+      onPressed: () async {
+        // Take the Picture in a try / catch block. If anything goes wrong,
+        // catch the error.
+        try {
+          // Ensure that the camera is initialized.
+          await _initializeControllerFuture;
+
+          // Construct the path where the image should be saved using the path
+          // package.
+          final path = join(
+            // Store the picture in the temp directory.
+            // Find the temp directory using the `path_provider` plugin.
+            (await getTemporaryDirectory()).path,
+            '${DateTime.now()}.png',
+          );
+
+          // Attempt to take a picture and log where it's been saved.
+          await _cameraController.takePicture(path);
+        } catch (e) {
+          // If an error occurs, log the error to the console.
+          print(e);
+        }
+      },
+    );
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
