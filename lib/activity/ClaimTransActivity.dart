@@ -43,11 +43,11 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   ResponseDetailMasterClaim _selectedResponseDtlMasterClaim;
   String stResponseMessage,_selectedMasterClaim,_selectedPaidClaim;
   var isLoading = false;
-  CameraController _cameraController;
-  Future<void> _initializeControllerFuture;
-  var isCameraReady = false;
-  var showCapturedPhoto = false;
-  var ImagePath;
+  // CameraController _cameraController;
+  // Future<void> _initializeControllerFuture;
+  // var isCameraReady = false;
+  // var showCapturedPhoto = false;
+  // var ImagePath;
 
   @override
   void initState() {
@@ -140,7 +140,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                                     });
                                   }
                                   etAvailableClaimTotal.text = _selectedPaidClaim.trim();
-                                  _hrisUtil.toastMessage(_selectedMasterClaim);
+                                  // _hrisUtil.toastMessage(_selectedMasterClaim);
                                 });
                               },
                             )
@@ -248,27 +248,27 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                             fontFamily: "Poppins",
                           ),
                         ),
-                        new Padding(padding: EdgeInsets.only(top: 10.0)),
-                        new FlatButton(
-                          color: Colors.blue,
-                          textColor: Colors.white,
-                          disabledColor: Colors.blueGrey,
-                          disabledTextColor: Colors.black,
-                          padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
-                          splashColor: Colors.blueAccent,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(color: Colors.yellow)
-                          ),
-                          onPressed: () {
-                              // _hrisUtil.toastMessage("Coba");
-                            displayCamera();
-                          },
-                          child: Text(
-                            "Capture Camera",
-                            style: TextStyle(fontSize: 20.0),
-                          ),
-                        )
+                        // new Padding(padding: EdgeInsets.only(top: 10.0)),
+                        // new FlatButton(
+                        //   color: Colors.blue,
+                        //   textColor: Colors.white,
+                        //   disabledColor: Colors.blueGrey,
+                        //   disabledTextColor: Colors.black,
+                        //   padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
+                        //   splashColor: Colors.blueAccent,
+                        //   shape: RoundedRectangleBorder(
+                        //       borderRadius: BorderRadius.circular(18.0),
+                        //       side: BorderSide(color: Colors.yellow)
+                        //   ),
+                        //   onPressed: () {
+                        //       // _hrisUtil.toastMessage("Coba");
+                        //     displayCamera();
+                        //   },
+                        //   child: Text(
+                        //     "Capture Camera",
+                        //     style: TextStyle(fontSize: 20.0),
+                        //   ),
+                        //)
                       ],
                   ),
               ),
@@ -309,7 +309,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
            if(listDtlMasterClaim.length > 0){
              arrDtlMasterClaim.addAll(listDtlMasterClaim),
            },
-          _initializeCamera(),
+          // _initializeCamera(),
         }else{
           stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
           _hrisUtil.toastMessage("$stResponseMessage")
@@ -327,69 +327,71 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
     });
   }
 
-  Future<void> _initializeCamera() async {
-    final cameras = await availableCameras();
-    final firstCamera = cameras.first;
-    _cameraController = CameraController(firstCamera,ResolutionPreset.high);
-    _initializeControllerFuture = _cameraController.initialize();
-    if (!mounted) {
-      return;
-    }
-    setState(() {
-      isCameraReady = true;
-    });
-  }
+  // Future<void> _initializeCamera() async {
+  //   WidgetsFlutterBinding.ensureInitialized();
+  //   final cameras = await availableCameras();
+  //   final firstCamera = cameras.first;
+  //   _cameraController = CameraController(firstCamera,ResolutionPreset.high);
+  //   _initializeControllerFuture = _cameraController.initialize();
+  //   if (!mounted) {
+  //     return;
+  //   }
+  //   setState(() {
+  //     isCameraReady = true;
+  //   });
+  // }
 
-  @override
-  void dispose() {
-    // implement dispose
-    _cameraController?.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // implement dispose
+  //   _cameraController?.dispose();
+  //   super.dispose();
+  // }
 
-  void displayCamera(){
-    FutureBuilder<void>(
-      future: _initializeControllerFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          // If the Future is complete, display the preview.
-          return CameraPreview(_cameraController);
-        } else {
-          // Otherwise, display a loading indicator.
-          return Center(child: CircularProgressIndicator());
-        }
-      },
-    );
-    FloatingActionButton(
-      child: Icon(Icons.camera_alt),
-      // Provide an onPressed callback.
-      onPressed: () async {
-        // Take the Picture in a try / catch block. If anything goes wrong,
-        // catch the error.
-        try {
-          // Ensure that the camera is initialized.
-          await _initializeControllerFuture;
-
-          // Construct the path where the image should be saved using the path
-          // package.
-          final path = join(
-            // Store the picture in the temp directory.
-            // Find the temp directory using the `path_provider` plugin.
-            (await getTemporaryDirectory()).path,
-            '${DateTime.now()}.png',
-          );
-
-          // Attempt to take a picture and log where it's been saved.
-          await _cameraController.takePicture(path);
-        } catch (e) {
-          // If an error occurs, log the error to the console.
-          print(e);
-        }
-      },
-    );
-  }
-
-
+  // void displayCamera(){
+  //   print('1');
+  //   FutureBuilder<void>(
+  //     future: _initializeControllerFuture,
+  //     builder: (context, snapshot) {
+  //       if (snapshot.connectionState == ConnectionState.done) {
+  //         // If the Future is complete, display the preview.
+  //         print('on snapshot');
+  //         return CameraPreview(_cameraController);
+  //       } else {
+  //         print('on else');
+  //         // Otherwise, display a loading indicator.
+  //         return Center(child: CircularProgressIndicator());
+  //       }
+  //     },
+  //   );
+  //   FloatingActionButton(
+  //     child: Icon(Icons.camera_alt),
+  //     // Provide an onPressed callback.
+  //     onPressed: () async {
+  //       // Take the Picture in a try / catch block. If anything goes wrong,
+  //       // catch the error.
+  //       try {
+  //         // Ensure that the camera is initialized.
+  //         await _initializeControllerFuture;
+  //
+  //         // Construct the path where the image should be saved using the path
+  //         // package.
+  //         final path = join(
+  //           // Store the picture in the temp directory.
+  //           // Find the temp directory using the `path_provider` plugin.
+  //           (await getTemporaryDirectory()).path,
+  //           '${DateTime.now()}.png',
+  //         );
+  //
+  //         // Attempt to take a picture and log where it's been saved.
+  //         await _cameraController.takePicture(path);
+  //       } catch (e) {
+  //         // If an error occurs, log the error to the console.
+  //         print(e);
+  //       }
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
