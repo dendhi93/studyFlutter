@@ -31,11 +31,13 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   TextEditingController etSelectedClaimType = new TextEditingController();
   TextEditingController etAvailableClaimTotal = new TextEditingController();
   TextEditingController etPaidClaim = new TextEditingController();
+  TextEditingController etDescClaim = new TextEditingController();
   DateTime selectedDate = DateTime.now();
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   var isEnableText = false;
   var isHideDetailText = false;
   var isShowDropDown = true;
+  var isHiddenButton = true;
   HrisUtil _hrisUtil = HrisUtil();
   int responseCode = 0;
   List<ResponseDetailMasterClaim> listDtlMasterClaim = List();
@@ -58,6 +60,8 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
       etDateClaim.text = widget.claimModel.transDate;
       etSelectedClaimType.text = widget.claimModel.claimDesc;
       etPaidClaim.text = widget.claimModel.paidClaim.toString();
+      etDescClaim.text = widget.claimModel.descClaim;
+      isHiddenButton = !isHiddenButton;
     }else{
       isEnableText = true;
       validateConnection(context);
@@ -223,8 +227,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                         ): Container(
                             color: Colors.white
                         ),
-                        new Padding(padding: EdgeInsets.only(top: 10.0)),
-                        new Padding(padding: EdgeInsets.only(top: 10.0)),
+                        new Padding(padding: EdgeInsets.only(top: 20.0)),
                         new TextFormField(
                           enabled: isEnableText,
                           controller: etPaidClaim,
@@ -244,6 +247,29 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                           },
                           maxLength: 8,
                           keyboardType: TextInputType.number,
+                          style: new TextStyle(
+                            fontFamily: "Poppins",
+                          ),
+                        ),
+                        new TextFormField(
+                          enabled: isEnableText,
+                          controller: etDescClaim,
+                          decoration: new InputDecoration(
+                            labelText: "Desc Claim",
+                            contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                            fillColor: Colors.white,
+                            border: new OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(15.0),
+                              borderSide: new BorderSide(
+                              ),
+                            ),
+                          ),
+                          validator: (val) {
+                            if(val.length==0) {return "desc claim cannot be empty";
+                            }else{return null;}
+                          },
+                          maxLength: 100,
+                          keyboardType: TextInputType.text,
                           style: new TextStyle(
                             fontFamily: "Poppins",
                           ),
@@ -268,7 +294,69 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                         //     "Capture Camera",
                         //     style: TextStyle(fontSize: 20.0),
                         //   ),
-                        //)
+                        //),
+                        new Padding(padding: EdgeInsets.only(top: 50.0)),
+                        new Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            isHiddenButton ? new FlatButton(
+                              color: Colors.blue,
+                              textColor: Colors.white,
+                              disabledColor: Colors.blueGrey,
+                              disabledTextColor: Colors.black,
+                              padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
+                              splashColor: Colors.blueAccent,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  side: BorderSide(color: Colors.yellow)
+                              ),
+                              onPressed: () {
+                                if (_formKey.currentState.validate()){
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        content: Text("Transaction Success"),
+                                        actions: <Widget>[
+                                          FlatButton(child: Text('OK'),
+                                            onPressed: (){
+                                              Navigator.of(context, rootNavigator: true).pop();
+                                              Navigator.pop(context, '');
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
+                              },
+                              child: Text(
+                                "Save",
+                                style: TextStyle(fontSize: 20.0),
+                              ),
+                            ) : Text(""),
+
+                            isHiddenButton ? new FlatButton(
+                              color: Colors.white,
+                              textColor: Colors.black,
+                              disabledColor: Colors.grey,
+                              disabledTextColor: Colors.grey,
+                              padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
+                              splashColor: Colors.blueAccent,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  side: BorderSide(color: Colors.grey)
+                              ),
+                              onPressed: () {
+                                _clearText();
+                              },
+                              child: Text(
+                                "Clear",
+                                style: TextStyle(fontSize: 20.0),
+                              ),
+                            ) : Text(""),
+                          ],
+                        ),
                       ],
                   ),
               ),
@@ -325,6 +413,15 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
     setState(() {
       isLoading = !isLoading;
     });
+  }
+
+  void _clearText() {
+    etDateClaim.text = "";
+    etOtherClaim.text = "";
+    etSelectedClaimType.text = "";
+    etAvailableClaimTotal.text = "";
+    etPaidClaim.text = "";
+    etDescClaim.text = "";
   }
 
   // Future<void> _initializeCamera() async {
