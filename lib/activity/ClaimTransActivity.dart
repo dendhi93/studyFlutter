@@ -55,11 +55,13 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   void initState() {
     super.initState();
     if(widget.claimModel != null){
+
       isEnableText = false;
       isShowDropDown = false;
       etDateClaim.text = widget.claimModel.transDate;
       etSelectedClaimType.text = widget.claimModel.claimDesc;
-      etPaidClaim.text = widget.claimModel.paidClaim.toString();
+      String moneyIdr = _hrisUtil.idrFormating(widget.claimModel.paidClaim.toString());
+      etPaidClaim.text = moneyIdr.trim();
       etDescClaim.text = widget.claimModel.descClaim;
       isHiddenButton = !isHiddenButton;
     }else{

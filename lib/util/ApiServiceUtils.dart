@@ -42,7 +42,6 @@ class ApiServiceUtils{
       }else{
         throw new Exception("Error Absent");
       }
-
     }
 
     Future<String> getDataClaim(String getuId, String getToken) async{
@@ -62,7 +61,6 @@ class ApiServiceUtils{
       }else{
         throw new Exception("Error Claim");
       }
-
     }
 
     Future<String> getMasterClaim() async{
