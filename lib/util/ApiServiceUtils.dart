@@ -1,7 +1,7 @@
 import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:http/http.dart' as http;
 
-class ApiServiceUtils{
+class ApiServiceUtils {
     Future<String> getLogin(String un, String pass) async{
       //post using form data
       print(ConstanstVar.urlApi+'loginUser.php');
@@ -13,7 +13,6 @@ class ApiServiceUtils{
       );
 
       if(responseLogin.statusCode == ConstanstVar.successCode
-          || responseLogin.statusCode == ConstanstVar.invalidTokenCode
           || responseLogin.statusCode == ConstanstVar.failedHttp){
         print(responseLogin.body);
         return responseLogin.body;
@@ -63,6 +62,25 @@ class ApiServiceUtils{
       }
     }
 
+    Future<String> getDataUser(String getuId, String getToken) async{
+      String urlClaim = ConstanstVar.urlApi +'MasterUserDetail.php?user_id=$getuId-$getToken';
+      print('url $urlClaim');
+      final http.Response responseUserDtl = await http
+          .get(urlClaim,
+          headers: {
+            'Content-Type': 'application/json',
+          }
+      );
+      if(responseUserDtl.statusCode == ConstanstVar.successCode
+          || responseUserDtl.statusCode == ConstanstVar.invalidTokenCode
+          || responseUserDtl.statusCode == ConstanstVar.failedHttp){
+        print('$responseUserDtl.body');
+        return responseUserDtl.body;
+      }else{
+        throw new Exception("Error Claim");
+      }
+    }
+
     Future<String> getMasterClaim() async{
       String urlMasterClaim = ConstanstVar.urlApi+'MasterClaimData.php';
       print('url $urlMasterClaim');
@@ -76,4 +94,5 @@ class ApiServiceUtils{
         throw new Exception("Error Master Claim");
       }
     }
+
 }

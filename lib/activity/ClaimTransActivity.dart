@@ -55,7 +55,6 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   void initState() {
     super.initState();
     if(widget.claimModel != null){
-
       isEnableText = false;
       isShowDropDown = false;
       etDateClaim.text = widget.claimModel.transDate;

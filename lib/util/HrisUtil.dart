@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 
 class HrisUtil {
 
@@ -42,6 +41,7 @@ class HrisUtil {
       value = value.replaceAll(RegExp(r'\B(?=(\d{3})+(?!\d))'), '.');
       return value;
     }
+    return "";
   }
 
   void showNoActionDialog(String title, String content, BuildContext context) =>
