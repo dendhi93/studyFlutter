@@ -46,6 +46,7 @@ class _HomeActivityState extends State<HomeActivity> {
       validateConnection(context);
     }
 
+    //view
     Widget _initListAbsent(){
       return Container(
           child: list.length > 0  ?
@@ -97,30 +98,36 @@ class _HomeActivityState extends State<HomeActivity> {
       return SystemChannels.platform.invokeMethod('SystemNavigator.pop');
     }
 
-    // @override
-    // Widget build(BuildContext context) {
-    //   return WillPopScope(
-    //     onWillPop: onWillPop,
-    //     child: new Scaffold(
-    //       appBar: new AppBar(
-    //         title: new Text(
-    //           "Home",
-    //           style: new TextStyle(color: Colors.white),
-    //         ),
-    //       ),
-    //       body: _initListAbsent(), floatingActionButton: FloatingActionButton(
-    //             child: Icon(Icons.add),
-    //             onPressed: () {
-    //                   Navigator.push(context, MaterialPageRoute(
-    //                     builder: (context) => DetailAbsentActivity(absensiModel: null),
-    //                   ),
-    //                 );
-    //             },
-    //           ),
-    //     ),
-    //   );
-    // }
+    @override
+    Widget build(BuildContext context) {
+      return WillPopScope(
+        onWillPop: onWillPop,
+        child: new Scaffold(
+          appBar: new AppBar(
+            title: new Text(
+              "Home",
+              style: new TextStyle(color: Colors.white),
+            ),
+            //hide left arrow
+            leading: new Container(),
+          ),
+          body: isLoading ? Center(
+            child: CircularProgressIndicator(),
+          ) : _initListAbsent(),
+          floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) => AbsentTransActivity(absentModel: null),
+              ),
+              );
+            },
+          ),
+        ),
+      );
+    }
 
+    //controller
     Future<ResponseDataAbsentModel> _loadAbsent(String uId,String userToken) async{
       try{
           loadingOption();
@@ -185,35 +192,6 @@ class _HomeActivityState extends State<HomeActivity> {
           _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
         }
       });
-    }
-
-    @override
-    Widget build(BuildContext context) {
-      return WillPopScope(
-        onWillPop: onWillPop,
-        child: new Scaffold(
-          appBar: new AppBar(
-            title: new Text(
-              "Home",
-              style: new TextStyle(color: Colors.white),
-            ),
-            //hide left arrow
-            leading: new Container(),
-          ),
-          body: isLoading ? Center(
-            child: CircularProgressIndicator(),
-          ) : _initListAbsent(),
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) => AbsentTransActivity(absentModel: null),
-              ),
-              );
-            },
-          ),
-        ),
-      );
     }
 }
 
