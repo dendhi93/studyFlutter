@@ -32,6 +32,7 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
             "UnAttendance Planning",
             style: new TextStyle(color: Colors.white),
           ),
+          leading: new Container(),
         ),
         body: new Center(
           child: new Text("UnAttendance Planning"),

@@ -29,7 +29,7 @@ class _UserActivityState extends State<UserActivity> {
         child: new Center(
             child: new Column(
                 children: <Widget>[
-                  new Padding(padding: EdgeInsets.only(top: 29.0)),
+                  new Padding(padding: EdgeInsets.only(top: 90.0)),
                   new Image.asset('assets/images/ic_user_128.png', width: 190, height: 120,),
                   new Padding(padding: EdgeInsets.only(top: 25.0)),
                   new Text("Hris Mobile", style: TextStyle(fontSize: 18)),
@@ -116,12 +116,6 @@ class _UserActivityState extends State<UserActivity> {
     return WillPopScope(
       onWillPop: onWillPop,
       child: new Scaffold(
-        appBar: new AppBar(
-          title: new Text(
-            "User",
-            style: new TextStyle(color: Colors.white),
-          ),
-        ),
         body: _initUser(context)
       ),
     );

@@ -60,6 +60,7 @@ class _ClaimActivityState extends State<ClaimActivity> {
             "Claim",
             style: new TextStyle(color: Colors.white),
           ),
+          leading: new Container(),
         ),
         body:isLoading ? Center(
           child: CircularProgressIndicator(),
