@@ -28,6 +28,7 @@ class _UserActivityState extends State<UserActivity> {
   String stAddress = "";
   String stEmail = "";
   String stPhone = "";
+  String stNameUser = "";
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   int responseCode = 0;
 
@@ -58,7 +59,7 @@ class _UserActivityState extends State<UserActivity> {
                   new Padding(padding: EdgeInsets.only(top: 90.0)),
                   new Image.asset('assets/images/ic_user_128.png', width: 190, height: 120,),
                   new Padding(padding: EdgeInsets.only(top: 25.0)),
-                  new Text("Hris Mobile", style: TextStyle(fontSize: 18)),
+                  new Text(stNameUser, style: TextStyle(fontSize: 18)),
                   new Padding(padding: EdgeInsets.only(top: 19.0, left: 3.0,right: 3.0)),
                   Padding(
                     padding:EdgeInsets.symmetric(horizontal:10.0),
@@ -193,6 +194,7 @@ class _UserActivityState extends State<UserActivity> {
           stAddress = ResponseHeadUserDetail.fromJson(jsonDecode(value)).userDetail.addressUser,
           stEmail = ResponseHeadUserDetail.fromJson(jsonDecode(value)).userDetail.emailUser,
           stPhone = ResponseHeadUserDetail.fromJson(jsonDecode(value)).userDetail.phoneUser,
+          stNameUser = ResponseHeadUserDetail.fromJson(jsonDecode(value)).userDetail.nameUser,
         }else if(responseCode == ConstanstVar.invalidTokenCode){
           stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
           _hrisStore.removeAllValues().then((isSuccess) =>{
