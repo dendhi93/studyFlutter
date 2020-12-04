@@ -1,10 +1,16 @@
 
+import 'dart:convert';
+
+import 'package:absent_hris/model/ErrorResponse.dart';
+import 'package:absent_hris/model/ResponseHeadUserDetail.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'LoginActivity.dart';
 
 class UserActivity extends StatefulWidget {
   @override
@@ -18,6 +24,10 @@ class _UserActivityState extends State<UserActivity> {
   var isLoadingView = false;
   String stUid = "";
   String stToken = "";
+  String stResponseMessage = "";
+  String stAddress = "";
+  String stEmail = "";
+  String stPhone = "";
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   int responseCode = 0;
 
@@ -66,7 +76,7 @@ class _UserActivityState extends State<UserActivity> {
                           ),
                           new Container(
                             padding: EdgeInsets.fromLTRB(0, 5, 15, 0),
-                            child: Text("xxxx", style: TextStyle(fontSize: 15)),
+                            child: Text(stAddress.trim(), style: TextStyle(fontSize: 15)),
                           ),
                         ],
                     ),
@@ -80,7 +90,7 @@ class _UserActivityState extends State<UserActivity> {
                         ),
                         new Container(
                           padding: EdgeInsets.fromLTRB(0, 5, 15, 0),
-                          child: Text("xxxx", style: TextStyle(fontSize: 15)),
+                          child: Text(stPhone.trim(), style: TextStyle(fontSize: 15)),
                         ),
                       ],
                     ),
@@ -94,7 +104,7 @@ class _UserActivityState extends State<UserActivity> {
                         ),
                         new Container(
                           padding: EdgeInsets.fromLTRB(0, 5, 15, 0),
-                          child: Text("xxxx", style: TextStyle(fontSize: 15)),
+                          child: Text(stEmail.trim(), style: TextStyle(fontSize: 15)),
                         ),
                       ],
                     ),
@@ -143,7 +153,7 @@ class _UserActivityState extends State<UserActivity> {
   void validateConnection(BuildContext context){
     HrisUtil.checkConnection().then((isConnected) => {
       if(isConnected){
-
+        initUIdToken(1)
       }else{
         loadingOption(),
         _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
@@ -162,7 +172,7 @@ class _UserActivityState extends State<UserActivity> {
       Future<String> authUToken = _hrisStore.getAuthToken();
       authUToken.then((data) {
         stToken = data.trim();
-        // _loadClaim(stUid, stToken);
+        _loadDtlUser(stUid, stToken);
       },onError: (e) {_hrisUtil.toastMessage(e);});
     }
   }
@@ -173,6 +183,38 @@ class _UserActivityState extends State<UserActivity> {
     });
   }
 
-
-
+  Future<ResponseHeadUserDetail> _loadDtlUser(String uId,String userToken) async{
+    try{
+      loadingOption();
+      _apiServiceUtils.getDataUser(uId, userToken).then((value) => {
+        responseCode = ResponseHeadUserDetail.fromJson(jsonDecode(value)).code,
+        loadingOption(),
+        if(responseCode == ConstanstVar.successCode){
+          stAddress = ResponseHeadUserDetail.fromJson(jsonDecode(value)).userDetail.addressUser,
+          stEmail = ResponseHeadUserDetail.fromJson(jsonDecode(value)).userDetail.emailUser,
+          stPhone = ResponseHeadUserDetail.fromJson(jsonDecode(value)).userDetail.phoneUser,
+        }else if(responseCode == ConstanstVar.invalidTokenCode){
+          stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+          _hrisStore.removeAllValues().then((isSuccess) =>{
+            if(isSuccess){
+              _hrisUtil.toastMessage("$stResponseMessage"),
+              new Future.delayed(const Duration(seconds: 3), () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginActivity()),
+                );
+              }),
+            }
+          }),
+        }else{
+          stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+          _hrisUtil.toastMessage("$stResponseMessage")
+        }
+      });
+    }catch(error){
+      loadingOption();
+      _hrisUtil.toastMessage("err load claim " +error.toString());
+    }
+    return null;
+  }
 }
