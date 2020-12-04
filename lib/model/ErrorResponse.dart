@@ -8,5 +8,4 @@ class ErrorResponse {
     code = json['Code'];
     message = json['message'];
   }
-
 }

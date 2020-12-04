@@ -62,25 +62,6 @@ class ApiServiceUtils {
       }
     }
 
-    Future<String> getDataUser(String getuId, String getToken) async{
-      String urlClaim = ConstanstVar.urlApi +'MasterUserDetail.php?user_id=$getuId-$getToken';
-      print('url $urlClaim');
-      final http.Response responseUserDtl = await http
-          .get(urlClaim,
-          headers: {
-            'Content-Type': 'application/json',
-          }
-      );
-      if(responseUserDtl.statusCode == ConstanstVar.successCode
-          || responseUserDtl.statusCode == ConstanstVar.invalidTokenCode
-          || responseUserDtl.statusCode == ConstanstVar.failedHttp){
-        print('$responseUserDtl.body');
-        return responseUserDtl.body;
-      }else{
-        throw new Exception("Error Claim");
-      }
-    }
-
     Future<String> getMasterClaim() async{
       String urlMasterClaim = ConstanstVar.urlApi+'MasterClaimData.php';
       print('url $urlMasterClaim');
@@ -92,6 +73,44 @@ class ApiServiceUtils {
         return responseMasterClaim.body;
       }else{
         throw new Exception("Error Master Claim");
+      }
+    }
+
+    Future<String> getDataUser(String getuId, String getToken) async{
+      String urlUserDtl = ConstanstVar.urlApi +'MasterUserDetail.php?user_id=$getuId-$getToken';
+      print('url $urlUserDtl');
+      final http.Response responseUserDtl = await http
+          .get(urlUserDtl,
+          headers: {
+            'Content-Type': 'application/json',
+          }
+      );
+      if(responseUserDtl.statusCode == ConstanstVar.successCode
+          || responseUserDtl.statusCode == ConstanstVar.invalidTokenCode
+          || responseUserDtl.statusCode == ConstanstVar.failedHttp){
+        print('$responseUserDtl.body');
+        return responseUserDtl.body;
+      }else{
+        throw new Exception("Error User Detail");
+      }
+    }
+
+    Future<String> transLogout(String getuId, String getToken) async{
+      String urlLogout = ConstanstVar.urlApi +'Logout.php?user_id=$getuId-$getToken';
+      print('url $urlLogout');
+      final http.Response responseLogout = await http
+          .get(urlLogout,
+          headers: {
+            'Content-Type': 'application/json',
+          }
+      );
+      if(responseLogout.statusCode == ConstanstVar.successCode
+          || responseLogout.statusCode == ConstanstVar.failedHttp){
+        print('$responseLogout.body');
+        return responseLogout.body;
+      }else{
+        print('ke else');
+        throw new Exception("Error User Detail");
       }
     }
 

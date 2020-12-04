@@ -121,9 +121,7 @@ class _UserActivityState extends State<UserActivity> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       new GestureDetector(
-                        onTap: () {
-                          _hrisUtil.toastMessage("coba");
-                                  },
+                        onTap: () {showAlertDialog(context);},
                         child: new Container(
                           padding: EdgeInsets.fromLTRB(13, 5, 0, 0),
                           child: Text("Sign Out", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
@@ -218,5 +216,63 @@ class _UserActivityState extends State<UserActivity> {
       _hrisUtil.toastMessage("err load claim " +error.toString());
     }
     return null;
+  }
+
+  Future<ErrorResponse> _logOutTrans(String uId,String userToken) async{
+    try{
+      loadingOption();
+      _apiServiceUtils.transLogout(uId, userToken).then((value) => {
+        responseCode = ErrorResponse.fromJson(jsonDecode(value)).code,
+        stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+        loadingOption(),
+        if(responseCode == ConstanstVar.successCode && stResponseMessage.contains('Success')){
+          _hrisStore.removeAllValues().then((isSuccess) =>{
+              if(isSuccess){
+                  Navigator.of(context).pop(),
+                  SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
+              }
+            }),
+        }else{
+          _hrisUtil.toastMessage("$stResponseMessage")
+        }
+      });
+    }catch(error){
+      loadingOption();
+      _hrisUtil.toastMessage("err load claim " +error.toString());
+    }
+    return null;
+  }
+
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed:  () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("OK"),
+      onPressed:  () {
+        Navigator.of(context).pop();
+        _logOutTrans(stUid, stToken);
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Logout Application"),
+      content: Text("Are you sure want to log out this application ?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }
