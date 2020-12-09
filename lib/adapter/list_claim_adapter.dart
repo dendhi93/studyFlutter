@@ -2,15 +2,15 @@ import 'package:absent_hris/model/ResponseClaimDataModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ListClaimdapter extends StatefulWidget{
+class ListClaimAdapter extends StatefulWidget{
   final ResponseClaimDataModel responseClaimDataModel;
-  ListClaimdapter({this.responseClaimDataModel});
+  ListClaimAdapter({this.responseClaimDataModel});
 
   @override
-  ListClaimdapterState createState() => ListClaimdapterState();
+  ListClaimAdapterState createState() => ListClaimAdapterState();
 }
 
-class ListClaimdapterState extends State<ListClaimdapter> {
+class ListClaimAdapterState extends State<ListClaimAdapter> {
   int statusClaim = 0;
   String imageClaim = "";
 

@@ -35,6 +35,10 @@ class _LoginActivityState extends State<LoginActivity> {
   @override
   void initState() {
     super.initState();
+    initUsername();
+  }
+
+  void initUsername(){
     Future<String> authUn = _hrisStore.getAuthUsername();
     authUn.then((data) {
       if(data != ""){
@@ -163,7 +167,8 @@ class _LoginActivityState extends State<LoginActivity> {
             stToken = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.token,
             stName = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.nameUser,
             stUId = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.userId.toString(),
-            _hrisStore.setAuthUsername(stName, stToken,stUId),
+            _hrisStore.setAuthUsername(stName, stToken,stUId,
+                ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.levelId.toString()),
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => BottomMenuNavigationAdapter()),

@@ -29,19 +29,20 @@ class _HomeActivityState extends State<HomeActivity> {
     DateTime _currentBackPressTime;
     ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
     int responseCode = 0;
-    String stResponseMessage, stUid,stToken;
+    String stResponseMessage = "";
+    String stUid = "";
+    String stToken = "";
     List<ResponseDtlDataAbsentModel> list = List();
     var isLoading = false;
 
     @override
     void initState() {
       super.initState();
-      // Future<String> authUn = _hrisStore.getAuthToken();
+      // Future<String> authUn = _hrisStore.getAuthUserLevelId();
       // authUn.then((data) {
-      //   _messageUtil.toastMessage("Welcome User " +data.trim());
-      //   print(data.trim());
+      //   stLevelId = data.trim();
       // },onError: (e) {
-      //   _messageUtil.toastMessage(e);
+      //   _hrisUtil.toastMessage(e);
       // });
       validateConnection(context);
     }

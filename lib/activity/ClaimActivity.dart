@@ -118,7 +118,7 @@ class _ClaimActivityState extends State<ClaimActivity> {
           itemCount: listClaim.length,
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
-              child: ListClaimdapter(responseClaimDataModel: listClaim[index]),
+              child: ListClaimAdapter(responseClaimDataModel: listClaim[index]),
               onTap: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (context) => ClaimTransActivity(claimModel: listClaim[index],),
