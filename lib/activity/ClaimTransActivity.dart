@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:io';
 import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/ResponseClaimDataModel.dart';
 import 'package:absent_hris/model/ResponseDetailMasterClaim.dart';
@@ -9,10 +10,8 @@ import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:camera/camera.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' show join;
 
 class ClaimTransActivity extends StatefulWidget{
   final ResponseClaimDataModel claimModel;
@@ -45,11 +44,8 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   ResponseDetailMasterClaim _selectedResponseDtlMasterClaim;
   String stResponseMessage,_selectedMasterClaim,_selectedPaidClaim;
   var isLoading = false;
-  // CameraController _cameraController;
-  // Future<void> _initializeControllerFuture;
-  // var isCameraReady = false;
-  // var showCapturedPhoto = false;
-  // var ImagePath;
+  File _image;
+  final picker = ImagePicker();
 
   @override
   void initState() {
@@ -275,27 +271,40 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                             fontFamily: "Poppins",
                           ),
                         ),
-                        // new Padding(padding: EdgeInsets.only(top: 10.0)),
-                        // new FlatButton(
-                        //   color: Colors.blue,
-                        //   textColor: Colors.white,
-                        //   disabledColor: Colors.blueGrey,
-                        //   disabledTextColor: Colors.black,
-                        //   padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
-                        //   splashColor: Colors.blueAccent,
-                        //   shape: RoundedRectangleBorder(
-                        //       borderRadius: BorderRadius.circular(18.0),
-                        //       side: BorderSide(color: Colors.yellow)
-                        //   ),
-                        //   onPressed: () {
-                        //       // _hrisUtil.toastMessage("Coba");
-                        //     displayCamera();
-                        //   },
-                        //   child: Text(
-                        //     "Capture Camera",
-                        //     style: TextStyle(fontSize: 20.0),
-                        //   ),
-                        //),
+                        new Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                                 _image == null
+                                      ? new Text('No Image Selected',style: TextStyle(fontSize: 17.0))
+                                : new Image.file(_image,
+                                    width: 350,
+                                    height: 150,
+                                 ),
+                                new Padding(padding: EdgeInsets.only(top: 10.0)),
+                                isHiddenButton ? new FlatButton(
+                                  color: Colors.blue,
+                                  textColor: Colors.white,
+                                  disabledColor: Colors.blueGrey,
+                                  disabledTextColor: Colors.black,
+                                  padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
+                                  splashColor: Colors.blueAccent,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      side: BorderSide(color: Colors.yellow)
+                                  ),
+                                  onPressed: () {
+                                    // _hrisUtil.toastMessage("Coba");
+                                    // displayCamera();
+                                    getImage();
+                                  },
+                                  child: Text(
+                                    "Capture Camera",
+                                    style: TextStyle(fontSize: 20.0),
+                                  ),
+                                ): Text(""),
+                          ]
+                        ),
+
                         new Padding(padding: EdgeInsets.only(top: 50.0)),
                         new Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -425,71 +434,17 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
     etDescClaim.text = "";
   }
 
-  // Future<void> _initializeCamera() async {
-  //   WidgetsFlutterBinding.ensureInitialized();
-  //   final cameras = await availableCameras();
-  //   final firstCamera = cameras.first;
-  //   _cameraController = CameraController(firstCamera,ResolutionPreset.high);
-  //   _initializeControllerFuture = _cameraController.initialize();
-  //   if (!mounted) {
-  //     return;
-  //   }
-  //   setState(() {
-  //     isCameraReady = true;
-  //   });
-  // }
+  Future getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
 
-  // @override
-  // void dispose() {
-  //   // implement dispose
-  //   _cameraController?.dispose();
-  //   super.dispose();
-  // }
-
-  // void displayCamera(){
-  //   print('1');
-  //   FutureBuilder<void>(
-  //     future: _initializeControllerFuture,
-  //     builder: (context, snapshot) {
-  //       if (snapshot.connectionState == ConnectionState.done) {
-  //         // If the Future is complete, display the preview.
-  //         print('on snapshot');
-  //         return CameraPreview(_cameraController);
-  //       } else {
-  //         print('on else');
-  //         // Otherwise, display a loading indicator.
-  //         return Center(child: CircularProgressIndicator());
-  //       }
-  //     },
-  //   );
-  //   FloatingActionButton(
-  //     child: Icon(Icons.camera_alt),
-  //     // Provide an onPressed callback.
-  //     onPressed: () async {
-  //       // Take the Picture in a try / catch block. If anything goes wrong,
-  //       // catch the error.
-  //       try {
-  //         // Ensure that the camera is initialized.
-  //         await _initializeControllerFuture;
-  //
-  //         // Construct the path where the image should be saved using the path
-  //         // package.
-  //         final path = join(
-  //           // Store the picture in the temp directory.
-  //           // Find the temp directory using the `path_provider` plugin.
-  //           (await getTemporaryDirectory()).path,
-  //           '${DateTime.now()}.png',
-  //         );
-  //
-  //         // Attempt to take a picture and log where it's been saved.
-  //         await _cameraController.takePicture(path);
-  //       } catch (e) {
-  //         // If an error occurs, log the error to the console.
-  //         print(e);
-  //       }
-  //     },
-  //   );
-  // }
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
