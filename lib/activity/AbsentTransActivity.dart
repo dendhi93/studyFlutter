@@ -46,8 +46,14 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
         _groupValue = 2;
       }
     }else{
-      etInputTime.text = new DateFormat.Hm().format(new DateTime.now());
-      etDateAbsent.text = new DateFormat('y-M-dd').format(new DateTime.now());
+      var selectedDate = DateTime.now();
+      etInputTime.text = new DateFormat.Hm().format(selectedDate);
+      etDateAbsent.text = new DateFormat('y-M-dd').format(selectedDate);
+      String nameDay = messageUtil.nameOfDay(selectedDate);
+      if(nameDay == "Saturday" || nameDay == "Sunday"){
+        messageUtil.toastMessage("Today is day off");
+        isHiddenButton = !isHiddenButton;
+      }
     }
     _gpsValidaton();
   }

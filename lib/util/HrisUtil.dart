@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class HrisUtil {
 
@@ -40,6 +41,13 @@ class HrisUtil {
       value = value.replaceAll(RegExp(r'\D'), '');
       value = value.replaceAll(RegExp(r'\B(?=(\d{3})+(?!\d))'), '.');
       return value;
+    }
+    return "";
+  }
+
+  String nameOfDay(var inputDate){
+    if(inputDate != null){
+      return DateFormat('EEEE').format(inputDate).toString();
     }
     return "";
   }
