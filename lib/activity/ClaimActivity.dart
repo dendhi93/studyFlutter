@@ -22,7 +22,6 @@ class ClaimActivity extends StatefulWidget {
 
 class _ClaimActivityState extends State<ClaimActivity> {
   DateTime currentBackPressTime;
-  HrisUtil hrisUtil = HrisUtil();
   var isLoading = false;
   HrisUtil _hrisUtil = HrisUtil();
   HrisStore _hrisStore = HrisStore();
@@ -44,38 +43,10 @@ class _ClaimActivityState extends State<ClaimActivity> {
     if (currentBackPressTime == null ||
         now.difference(currentBackPressTime) > Duration(seconds: 2)) {
       currentBackPressTime = now;
-      hrisUtil.toastMessage("please tap again to exit");
+      _hrisUtil.toastMessage("please tap again to exit");
       return Future.value(false);
     }
     return SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: onWillPop,
-      child: new Scaffold(
-        appBar: new AppBar(
-          title: new Text(
-            "Claim",
-            style: new TextStyle(color: Colors.white),
-          ),
-          leading: new Container(),
-        ),
-        body:isLoading ? Center(
-          child: CircularProgressIndicator(),
-        ) : _initListClaim(),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(
-                builder: (context) => ClaimTransActivity(claimModel: null),
-              ),
-            );
-          },
-        ),
-      ),
-    );
   }
 
   void validateConnection(BuildContext context){
@@ -84,7 +55,7 @@ class _ClaimActivityState extends State<ClaimActivity> {
         initUIdToken(1)
       }else{
         loadingOption(),
-        hrisUtil.snackBarMessage(ConstanstVar.noConnectionMessage, context)
+        _hrisUtil.snackBarMessage(ConstanstVar.noConnectionMessage, context)
       }
     });
   }
@@ -162,5 +133,34 @@ class _ClaimActivityState extends State<ClaimActivity> {
       _hrisUtil.toastMessage("err load claim " +error.toString());
     }
     return null;
+  }
+
+  //view
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: onWillPop,
+      child: new Scaffold(
+        appBar: new AppBar(
+          title: new Text(
+            "Claim",
+            style: new TextStyle(color: Colors.white),
+          ),
+          leading: new Container(),
+        ),
+        body:isLoading ? Center(
+          child: CircularProgressIndicator(),
+        ) : _initListClaim(),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) => ClaimTransActivity(claimModel: null),
+            ),
+            );
+          },
+        ),
+      ),
+    );
   }
 }

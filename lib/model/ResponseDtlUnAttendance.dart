@@ -12,6 +12,6 @@ class ResponseDtlUnAttendance{
     transDate = json['trans_date'];
     statusId = json['status_id'];
     statusDesc = json['status_desc'];
-    descUnattendance = json['desc_unattendance'];
+    descUnattendance = json['note_unattendance'];
   }
 }

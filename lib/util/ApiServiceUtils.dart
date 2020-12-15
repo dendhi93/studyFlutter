@@ -109,8 +109,26 @@ class ApiServiceUtils {
         print('$responseLogout.body');
         return responseLogout.body;
       }else{
-        print('ke else');
         throw new Exception("Error User Detail");
+      }
+    }
+
+    Future<String> getDataUnAttendance(String getuId, String getToken) async{
+      String urlUnAttendance = ConstanstVar.urlApi +'MasterUnattendanceTrans.php?user_id=$getuId-$getToken';
+      print('url $urlUnAttendance');
+      final http.Response responseUnAttendance = await http
+          .get(urlUnAttendance,
+          headers: {
+            'Content-Type': 'application/json',
+          }
+      );
+      if(responseUnAttendance.statusCode == ConstanstVar.successCode
+          || responseUnAttendance.statusCode == ConstanstVar.invalidTokenCode
+          || responseUnAttendance.statusCode == ConstanstVar.failedHttp){
+        print('$responseUnAttendance.body');
+        return responseUnAttendance.body;
+      }else{
+        throw new Exception("Error User unattendance");
       }
     }
 
