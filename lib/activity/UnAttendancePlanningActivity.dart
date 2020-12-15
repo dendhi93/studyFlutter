@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:absent_hris/adapter/list_unattendance_adapter.dart';
 import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/ResponseDtlUnAttendance.dart';
 import 'package:absent_hris/model/ResponseHeadUnAttendance.dart';
@@ -30,6 +31,12 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
   int responseCode = 0;
 
   //controller
+  @override
+  void initState() {
+    super.initState();
+    validateConnection(context);
+  }
+
   Future<bool> onWillPop() {
     DateTime now = DateTime.now();
     if (currentBackPressTime == null ||
@@ -107,7 +114,30 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
     return null;
   }
 
+
   //view
+
+  Widget _initListUnAttendance(){
+    return Container(
+      child: listDataUnAttendance.length > 0  ?
+      ListView.builder(
+          itemCount: listDataUnAttendance.length,
+          itemBuilder: (BuildContext context, int index) {
+            return GestureDetector(
+              child: ListUnAttendanceAdapter(responseDtlUnAttendance: listDataUnAttendance[index]),
+              onTap: () {
+                _hrisUtil.toastMessage("coba");
+              //     Navigator.push(context, MaterialPageRoute(
+              //       builder: (context) => ClaimTransActivity(claimModel: listClaim[index],),
+              //     ),
+              //   );
+              },
+            );
+          }
+      ) : Center(child: Text('No Data Found')),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -120,9 +150,9 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
           ),
           leading: new Container(),
         ),
-        body: new Center(
-          child: new Text("UnAttendance Planning"),
-        ),
+          body:isLoading ? Center(
+            child: CircularProgressIndicator(),
+          ) : _initListUnAttendance(),
       ),
     );
   }
