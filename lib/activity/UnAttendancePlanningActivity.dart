@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:absent_hris/activity/UnAttendanceTransActivity.dart';
 import 'package:absent_hris/adapter/list_unattendance_adapter.dart';
 import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/ResponseDtlUnAttendance.dart';
@@ -126,11 +127,11 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
             return GestureDetector(
               child: ListUnAttendanceAdapter(responseDtlUnAttendance: listDataUnAttendance[index]),
               onTap: () {
-                _hrisUtil.toastMessage("coba");
-              //     Navigator.push(context, MaterialPageRoute(
-              //       builder: (context) => ClaimTransActivity(claimModel: listClaim[index],),
-              //     ),
-              //   );
+                  Navigator.push(context, MaterialPageRoute(
+                    // builder: (context) => ClaimTransActivity(claimModel: listClaim[index],),
+                    builder: (context) => UnAttendanceTransActivity(),
+                  ),
+                );
               },
             );
           }
@@ -153,6 +154,16 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
           body:isLoading ? Center(
             child: CircularProgressIndicator(),
           ) : _initListUnAttendance(),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+              Navigator.push(context, MaterialPageRoute(
+                // builder: (context) => ClaimTransActivity(claimModel: null),
+                builder: (context) => UnAttendanceTransActivity(),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
