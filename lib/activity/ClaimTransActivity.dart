@@ -160,7 +160,6 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   }
 
   //view
-
   Widget _initClaim(BuildContext context){
     return Form(
       key: _formKey,
