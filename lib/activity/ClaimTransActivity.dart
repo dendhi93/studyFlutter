@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/ResponseClaimDataModel.dart';
 import 'package:absent_hris/model/ResponseDetailMasterClaim.dart';
@@ -37,15 +38,18 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   var isHideDetailText = false;
   var isShowDropDown = true;
   var isHiddenButton = true;
+  var isStringBaseImage = false;
   HrisUtil _hrisUtil = HrisUtil();
   int responseCode = 0;
   List<ResponseDetailMasterClaim> listDtlMasterClaim = List();
   List<ResponseDetailMasterClaim> arrDtlMasterClaim = [];
   ResponseDetailMasterClaim _selectedResponseDtlMasterClaim;
   String stResponseMessage,_selectedMasterClaim,_selectedPaidClaim;
+  String stringFileClaim = "";
   var isLoading = false;
   File _image;
   final picker = ImagePicker();
+  Uint8List _bytesImage;
 
   @override
   void initState() {
@@ -58,6 +62,9 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
       String moneyIdr = _hrisUtil.idrFormating(widget.claimModel.paidClaim.toString());
       etPaidClaim.text = moneyIdr.trim();
       etDescClaim.text = widget.claimModel.descClaim;
+      stringFileClaim = widget.claimModel.fileClaim;
+      if(stringFileClaim != null){_bytesImage = base64.decode(widget.claimModel.fileClaim);}
+      isStringBaseImage = !isStringBaseImage;
       isHiddenButton = !isHiddenButton;
     }else{
       isEnableText = true;
@@ -348,6 +355,16 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                 new Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
+                      isStringBaseImage ? new Column(
+                          children: <Widget>[
+                            _bytesImage == null
+                                ? new Text('No Image Selected',style: TextStyle(fontSize: 17.0))
+                                : new Image.memory(_bytesImage,
+                              width: 450,
+                              height: 150,
+                            ),
+                          ]
+                      ) :
                       _image == null
                           ? new Text('No Image Selected',style: TextStyle(fontSize: 17.0))
                           : new Image.file(_image,
@@ -367,7 +384,6 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                             side: BorderSide(color: Colors.yellow)
                         ),
                         onPressed: () {
-                          // _hrisUtil.toastMessage("Coba");
                           // displayCamera();
                           getImage();
                         },
