@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'dart:io' as Io;
 
 class ClaimTransActivity extends StatefulWidget{
   final ResponseClaimDataModel claimModel;
@@ -116,7 +117,6 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
            if(listDtlMasterClaim.length > 0){
              arrDtlMasterClaim.addAll(listDtlMasterClaim),
            },
-          // _initializeCamera(),
         }else{
           stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
           _hrisUtil.toastMessage("$stResponseMessage")
@@ -149,6 +149,10 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
+        //converting into string base64
+        final bytes = Io.File(pickedFile.path).readAsBytesSync();
+        String img64 = base64Encode(bytes);
+        _hrisUtil.toastMessage(img64);
       } else {
         print('No image selected.');
       }
