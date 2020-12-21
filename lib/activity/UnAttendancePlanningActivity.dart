@@ -129,7 +129,7 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
               onTap: () {
                   Navigator.push(context, MaterialPageRoute(
                     // builder: (context) => ClaimTransActivity(claimModel: listClaim[index],),
-                    builder: (context) => UnAttendanceTransActivity(),
+                    builder: (context) => UnAttendanceTransActivity(unAttendanceModel: listDataUnAttendance[index],),
                   ),
                 );
               },
@@ -159,7 +159,7 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
           onPressed: () {
               Navigator.push(context, MaterialPageRoute(
                 // builder: (context) => ClaimTransActivity(claimModel: null),
-                builder: (context) => UnAttendanceTransActivity(),
+                builder: (context) => UnAttendanceTransActivity(unAttendanceModel: null,),
               ),
             );
           },

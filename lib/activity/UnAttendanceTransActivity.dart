@@ -1,8 +1,12 @@
 
+import 'package:absent_hris/model/ResponseDtlUnAttendance.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class UnAttendanceTransActivity extends StatefulWidget {
+  final ResponseDtlUnAttendance unAttendanceModel;
+  UnAttendanceTransActivity({Key key, @required this.unAttendanceModel}) : super(key: key);
+
   @override
   _UnAttendanceTransActivityState createState() => _UnAttendanceTransActivityState();
   
