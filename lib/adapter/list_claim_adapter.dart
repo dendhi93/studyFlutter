@@ -1,4 +1,5 @@
-import 'package:absent_hris/model/ResponseClaimDataModel.dart';
+
+import 'package:absent_hris/model/MasterClaim/GetClaim/ResponseClaimDataModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

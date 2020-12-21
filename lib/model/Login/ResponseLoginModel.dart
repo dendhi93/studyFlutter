@@ -1,4 +1,4 @@
-import 'package:absent_hris/model/ModelDataLogin.dart';
+import 'file:///D:/project/flutter/lib/model/Login/ModelDataLogin.dart';
 
 class ResponseLoginModel {
   int code;

@@ -1,4 +1,6 @@
-import 'package:absent_hris/model/ResponseUserDetail.dart';
+
+
+import 'package:absent_hris/model/UserDtl/ResponseUserDetail.dart';
 
 class ResponseHeadUserDetail {
   int code;

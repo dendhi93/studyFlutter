@@ -2,7 +2,7 @@
 import 'dart:convert';
 
 import 'package:absent_hris/model/ErrorResponse.dart';
-import 'package:absent_hris/model/ResponseHeadUserDetail.dart';
+import 'file:///D:/project/flutter/lib/model/UserDtl/ResponseHeadUserDetail.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:absent_hris/util/HrisStore.dart';

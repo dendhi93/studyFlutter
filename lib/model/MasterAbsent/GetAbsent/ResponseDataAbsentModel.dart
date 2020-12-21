@@ -1,4 +1,5 @@
-import 'package:absent_hris/model/ResponseDtlAbsentModel.dart';
+
+import 'package:absent_hris/model/MasterAbsent/GetAbsent/ResponseDtlAbsentModel.dart';
 
 class ResponseDataAbsentModel{
   int code;

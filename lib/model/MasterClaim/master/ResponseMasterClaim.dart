@@ -1,5 +1,4 @@
-
-import 'ResponseDetailMasterClaim.dart';
+import 'package:absent_hris/model/MasterClaim/master/ResponseDetailMasterClaim.dart';
 
 class ResponseMasterClaim {
   int code;

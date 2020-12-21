@@ -1,5 +1,5 @@
 
-import 'package:absent_hris/model/ResponseDtlUnAttendance.dart';
+import 'file:///D:/project/flutter/lib/model/Master_UnAttendance/GetUnAttendance/ResponseDtlUnAttendance.dart';
 import 'package:flutter/material.dart';
 
 class ListUnAttendanceAdapter extends StatefulWidget{

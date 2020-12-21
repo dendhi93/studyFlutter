@@ -1,4 +1,4 @@
-import 'package:absent_hris/model/ResponseDtlUnAttendance.dart';
+import 'file:///D:/project/flutter/lib/model/Master_UnAttendance/GetUnAttendance/ResponseDtlUnAttendance.dart';
 
 class ResponseHeadUnAttendance{
   int code;

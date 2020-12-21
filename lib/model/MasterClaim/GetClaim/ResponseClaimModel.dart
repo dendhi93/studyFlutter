@@ -1,4 +1,6 @@
-import 'package:absent_hris/model/ResponseClaimDataModel.dart';
+
+
+import 'ResponseClaimDataModel.dart';
 
 class ResponseClaimModel{
   int code;
