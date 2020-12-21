@@ -46,7 +46,7 @@ class ListUnAttendanceAdapterState extends State<ListUnAttendanceAdapter> {
                   width: 24.0,
                 ),
                 title: Text(widget.responseDtlUnAttendance.unattendanceDesc.trim()),
-                subtitle: Text(widget.responseDtlUnAttendance.transDate),
+                subtitle: Text(widget.responseDtlUnAttendance.startDate + " - " + widget.responseDtlUnAttendance.endDate),
               )
             ],
           ),

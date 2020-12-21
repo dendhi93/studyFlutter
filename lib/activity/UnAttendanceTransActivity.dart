@@ -19,6 +19,14 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   TextEditingController etQtyDate = new TextEditingController();
 
 
+  @override
+  void initState() {
+    if(widget.unAttendanceModel != null){
+      etStartDate.text = widget.unAttendanceModel.startDate;
+      etEndDate.text = widget.unAttendanceModel.endDate;
+      etQtyDate.text = widget.unAttendanceModel.qtyDate.toString();
+    }
+  }
 
   //view
   Widget _initUnAttendance(BuildContext buildContext){
@@ -59,7 +67,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                       new Padding(padding: EdgeInsets.only(top: 10.0)),
                       new TextFormField(
                         enabled: false,
-                        controller: etStartDate,
+                        controller: etEndDate,
                         // onTap: (){
                         //   FocusScope.of(context).requestFocus(new FocusNode());
                         //     _selecDatePicker(context);
