@@ -16,8 +16,8 @@ class ListUnAttendanceAdapterState extends State<ListUnAttendanceAdapter> {
 
   @override
   void initState() {
-    statusUnAttendance = widget.responseDtlUnAttendance.statusId;
     super.initState();
+    statusUnAttendance = widget.responseDtlUnAttendance.statusId;
     if(statusUnAttendance != null){
       if(statusUnAttendance == 1){
         imageUnAttendance = "ic_sand.png";

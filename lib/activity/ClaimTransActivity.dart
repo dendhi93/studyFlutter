@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'dart:io' as Io;
 
 class ClaimTransActivity extends StatefulWidget{
   final ResponseClaimDataModel claimModel;
@@ -39,7 +38,6 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   var isHideDetailText = false;
   var isShowDropDown = true;
   var isHiddenButton = true;
-  var isStringBaseImage = false;
   HrisUtil _hrisUtil = HrisUtil();
   int responseCode = 0;
   List<ResponseDetailMasterClaim> listDtlMasterClaim = List();
@@ -65,7 +63,6 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
       etDescClaim.text = widget.claimModel.descClaim;
       stringFileClaim = widget.claimModel.fileClaim;
       if(stringFileClaim != null){_bytesImage = base64.decode(widget.claimModel.fileClaim);}
-      isStringBaseImage = !isStringBaseImage;
       isHiddenButton = !isHiddenButton;
     }else{
       isEnableText = true;
@@ -144,15 +141,16 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   }
 
   Future getImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    var pickedFile = await picker.getImage(source: ImageSource.camera);
+    //converting into string base64
 
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
-        //converting into string base64
-        final bytes = Io.File(pickedFile.path).readAsBytesSync();
-        String img64 = base64Encode(bytes);
-        _hrisUtil.toastMessage(img64);
+        List<int> imageBytes = _image.readAsBytesSync();
+        String base64Image = base64Encode(imageBytes);
+        // print(base64Image);
+        _bytesImage = base64.decode(base64Image);
       } else {
         print('No image selected.');
       }
@@ -358,7 +356,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                 new Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      isStringBaseImage ? new Column(
+                      new Column(
                           children: <Widget>[
                             _bytesImage == null
                                 ? new Text('No Image Selected',style: TextStyle(fontSize: 17.0))
@@ -367,12 +365,6 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                               height: 150,
                             ),
                           ]
-                      ) :
-                      _image == null
-                          ? new Text('No Image Selected',style: TextStyle(fontSize: 17.0))
-                          : new Image.file(_image,
-                        width: 350,
-                        height: 150,
                       ),
                       new Padding(padding: EdgeInsets.only(top: 10.0)),
                       isHiddenButton ? new FlatButton(

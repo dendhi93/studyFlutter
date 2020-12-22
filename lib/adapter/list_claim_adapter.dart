@@ -17,8 +17,8 @@ class ListClaimAdapterState extends State<ListClaimAdapter> {
 
   @override
   void initState() {
-    statusClaim = widget.responseClaimDataModel.statusId;
     super.initState();
+    statusClaim = widget.responseClaimDataModel.statusId;
     if(statusClaim != null){
         if(statusClaim == 1){
             imageClaim = "ic_sand.png";
