@@ -128,7 +128,24 @@ class ApiServiceUtils {
         print('$responseUnAttendance.body');
         return responseUnAttendance.body;
       }else{
-        throw new Exception("Error User unattendance");
+        throw new Exception("Error get unattendance");
+      }
+    }
+
+    Future<String> getMasterUnAttendance() async{
+      String urlMasterUnAttendance = ConstanstVar.urlApi +'MasterUnAttendanceData.php';
+      print('url $urlMasterUnAttendance');
+      final http.Response responseMasterUnAttendance = await http
+          .get(urlMasterUnAttendance,
+          headers: {
+            'Content-Type': 'application/json',
+          }
+      );
+      if(responseMasterUnAttendance.statusCode == ConstanstVar.successCode){
+        print('$responseMasterUnAttendance.body');
+        return responseMasterUnAttendance.body;
+      }else{
+        throw new Exception("Error master unattendance");
       }
     }
 

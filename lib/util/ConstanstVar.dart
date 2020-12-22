@@ -12,5 +12,7 @@ class ConstanstVar{
   static int inProgressClaimStatus = 1;
   static int approvedClaimStatus = 2;
   static int rejectClaimStatus = 3;
+  static int selectStartDate = 5;
+  static int selectEndDate = 15;
 
 }

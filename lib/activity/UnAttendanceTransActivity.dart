@@ -1,7 +1,11 @@
 
 import 'file:///D:/project/flutter/lib/model/Master_UnAttendance/GetUnAttendance/ResponseDtlUnAttendance.dart';
+import 'package:absent_hris/model/Master_UnAttendance/master/ResponseHeadMasterUnAttendance.dart';
+import 'package:absent_hris/util/ConstanstVar.dart';
+import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class UnAttendanceTransActivity extends StatefulWidget {
   final ResponseDtlUnAttendance unAttendanceModel;
@@ -16,16 +20,50 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   TextEditingController etStartDate = new TextEditingController();
   TextEditingController etEndDate = new TextEditingController();
   TextEditingController etQtyDate = new TextEditingController();
-
+  HrisUtil _hrisUtil = HrisUtil();
+  DateTime selectedDate = DateTime.now();
+  var isEnableText = true;
+  int statusTrans = 0;
 
   @override
   void initState() {
     super.initState();
     if(widget.unAttendanceModel != null){
+      statusTrans = widget.unAttendanceModel.statusId;
+      if(statusTrans == ConstanstVar.approvedClaimStatus){isEnableText = !isEnableText;}
       etStartDate.text = widget.unAttendanceModel.startDate;
       etEndDate.text = widget.unAttendanceModel.endDate;
       etQtyDate.text = widget.unAttendanceModel.qtyDate.toString();
     }
+  }
+
+  //controller
+  void validateConnection(BuildContext context){
+    HrisUtil.checkConnection().then((isConnected) => {
+      isConnected ? _loadMasterUnAttendance()
+          : _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
+    });
+  }
+
+  Future<ResponseHeadMasterUnAttendance> _loadMasterUnAttendance() async{
+
+  }
+
+  _selecDatePicker(BuildContext context, int typeDate) async{
+    final DateTime picked = await showDatePicker(
+      context: context,
+      helpText: 'Select Absent Date',
+      initialDate: selectedDate, // Refer step 1
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+    );
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+        String selectedDateFormat = new DateFormat("yyyy-MM-dd").format(selectedDate);
+        typeDate == ConstanstVar.selectStartDate
+            ? etStartDate.text = selectedDateFormat : etEndDate.text = selectedDateFormat;
+      });
   }
 
   //view
@@ -39,12 +77,12 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                     children: <Widget>[
                       new Padding(padding: EdgeInsets.only(top: 10.0)),
                       new TextFormField(
-                        enabled: false,
+                        enabled: isEnableText,
                         controller: etStartDate,
-                        // onTap: (){
-                        //   FocusScope.of(context).requestFocus(new FocusNode());
-                        //     _selecDatePicker(context);
-                        // },
+                        onTap: (){
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                            _selecDatePicker(context, ConstanstVar.selectStartDate);
+                        },
                         decoration: new InputDecoration(
                           labelText: "Start Date",
                           contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
@@ -66,12 +104,12 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                       ),
                       new Padding(padding: EdgeInsets.only(top: 10.0)),
                       new TextFormField(
-                        enabled: false,
+                        enabled: isEnableText,
                         controller: etEndDate,
-                        // onTap: (){
-                        //   FocusScope.of(context).requestFocus(new FocusNode());
-                        //     _selecDatePicker(context);
-                        // },
+                        onTap: (){
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                            _selecDatePicker(context, ConstanstVar.selectEndDate);
+                        },
                         decoration: new InputDecoration(
                           labelText: "End Date",
                           contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
