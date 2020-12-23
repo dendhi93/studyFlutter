@@ -1,6 +1,11 @@
 
+import 'dart:convert';
+
 import 'file:///D:/project/flutter/lib/model/Master_UnAttendance/GetUnAttendance/ResponseDtlUnAttendance.dart';
+import 'package:absent_hris/model/ErrorResponse.dart';
+import 'package:absent_hris/model/Master_UnAttendance/master/ResponseDtlMasterUnAttendance.dart';
 import 'package:absent_hris/model/Master_UnAttendance/master/ResponseHeadMasterUnAttendance.dart';
+import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,10 +25,17 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   TextEditingController etStartDate = new TextEditingController();
   TextEditingController etEndDate = new TextEditingController();
   TextEditingController etQtyDate = new TextEditingController();
+  List<ResponseDtlMasterUnAttendance> arrDtlMasterUnAttendance = [];
+  ResponseHeadMasterUnAttendance _responseHeadMasterUnAttendance;
+  List<ResponseDtlMasterUnAttendance> listDtlMasterUnAttendance = List();
   HrisUtil _hrisUtil = HrisUtil();
   DateTime selectedDate = DateTime.now();
+  ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   var isEnableText = true;
   int statusTrans = 0;
+  int responseCode = 0;
+  var isLoading = false;
+  String stResponseMessage;
 
   @override
   void initState() {
@@ -35,6 +47,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
       etEndDate.text = widget.unAttendanceModel.endDate;
       etQtyDate.text = widget.unAttendanceModel.qtyDate.toString();
     }
+    validateConnection(context);
   }
 
   //controller
@@ -46,7 +59,29 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   }
 
   Future<ResponseHeadMasterUnAttendance> _loadMasterUnAttendance() async{
+    loadingOption();
+    _apiServiceUtils.getMasterUnAttendance().then((value) => {
+      responseCode = ResponseHeadMasterUnAttendance.fromJson(jsonDecode(value)).code,
+      if(responseCode == ConstanstVar.successCode){
+        listDtlMasterUnAttendance = ResponseHeadMasterUnAttendance.fromJson(jsonDecode(value)).masterUnAttendance,
+        if(listDtlMasterUnAttendance.length > 0){
+          arrDtlMasterUnAttendance.addAll(listDtlMasterUnAttendance),
+        },
+      }else{
+        stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+        _hrisUtil.toastMessage("$stResponseMessage")
+      }
+    });
+    new Future.delayed(const Duration(seconds: 1), () {
+      loadingOption();
+    });
+    return null;
+  }
 
+  void loadingOption(){
+    setState(() {
+      isLoading = !isLoading;
+    });
   }
 
   _selecDatePicker(BuildContext context, int typeDate) async{
