@@ -24,7 +24,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   TextEditingController etAddressAbsent = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TimeOfDay timeOfDay = TimeOfDay.now();
-  HrisUtil messageUtil = HrisUtil();
+  HrisUtil hrisUtil = HrisUtil();
   int intDateIn = 1;
   int intDateOut = 2;
   int _groupValue = -1;
@@ -49,9 +49,9 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
       var selectedDate = DateTime.now();
       etInputTime.text = new DateFormat.Hm().format(selectedDate);
       etDateAbsent.text = new DateFormat('y-M-dd').format(selectedDate);
-      String nameDay = messageUtil.nameOfDay(selectedDate);
+      String nameDay = hrisUtil.nameOfDay(selectedDate);
       if(nameDay == "Saturday" || nameDay == "Sunday"){
-        messageUtil.toastMessage("Today is day off");
+        hrisUtil.toastMessage("Today is day off");
         isHiddenButton = !isHiddenButton;
       }
     }
@@ -170,22 +170,26 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                           ),
                           onPressed: () {
                             if (_formKey.currentState.validate()){
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        content: Text("Transaction Success"),
-                                        actions: <Widget>[
-                                            FlatButton(child: Text('OK'),
-                                                onPressed: (){
-                                                    Navigator.of(context, rootNavigator: true).pop();
-                                                    Navigator.pop(context, '');
-                                                },
-                                            ),
-                                        ],
-                                      );
-                                    },
-                                  );
+                              if(_groupValue == -1){
+                                hrisUtil.toastMessage("Please choose absent type");
+                              }else{
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      content: Text("Transaction Success"),
+                                      actions: <Widget>[
+                                        FlatButton(child: Text('OK'),
+                                          onPressed: (){
+                                            Navigator.of(context, rootNavigator: true).pop();
+                                            Navigator.pop(context, '');
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
                             }
                           },
                           child: Text(
@@ -273,15 +277,6 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
           //manifest sama info.plist hrs copas manual
           if(_currentPosition != null){
             _getAddress(position);
-              // Fluttertoast.showToast(
-              //     msg: "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}",
-              //     toastLength: Toast.LENGTH_LONG,
-              //     gravity: ToastGravity.CENTER,
-              //     timeInSecForIosWeb: 1,
-              //     backgroundColor: Colors.blue,
-              //     textColor: Colors.white,
-              //     fontSize: 16.0
-              // );
           }
         });
       }).catchError((e) {print(e);});

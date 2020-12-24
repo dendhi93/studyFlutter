@@ -50,6 +50,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
       if(statusTrans == ConstanstVar.approvedClaimStatus){
         isEnableText = !isEnableText;
         isEnableDropdown = !isEnableDropdown;
+        isShowButton = !isShowButton;
       }else{validateConnection(context);}
 
       etStartDate.text = widget.unAttendanceModel.startDate;
