@@ -331,10 +331,10 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                                 side: BorderSide(color: Colors.grey)
                             ),
                             onPressed: () {
-                              // _clearText();
+                              Navigator.pop(context, '');
                             },
                             child: Text(
-                              "Clear",
+                              "Cancel",
                               style: TextStyle(fontSize: 20.0),
                             ),
                           ) : Text(""),

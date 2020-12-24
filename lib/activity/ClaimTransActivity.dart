@@ -140,15 +140,6 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
     });
   }
 
-  void _clearText() {
-    etDateClaim.text = "";
-    etOtherClaim.text = "";
-    etSelectedClaimType.text = "";
-    etAvailableClaimTotal.text = "";
-    etPaidClaim.text = "";
-    etDescClaim.text = "";
-  }
-
   Future getImage() async {
     var pickedFile = await picker.getImage(source: ImageSource.camera);
     //converting into string base64
@@ -446,10 +437,10 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                           side: BorderSide(color: Colors.grey)
                       ),
                       onPressed: () {
-                        _clearText();
+                        Navigator.pop(context, '');
                       },
                       child: Text(
-                        "Clear",
+                        "Cancel",
                         style: TextStyle(fontSize: 20.0),
                       ),
                     ) : Text(""),

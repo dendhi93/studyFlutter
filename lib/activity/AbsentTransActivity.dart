@@ -206,10 +206,10 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                             side: BorderSide(color: Colors.grey)
                         ),
                         onPressed: () {
-                          _clearText();
+                          Navigator.pop(context, '');
                         },
                         child: Text(
-                          "Clear",
+                          "Cancel",
                           style: TextStyle(fontSize: 20.0),
                         ),
                       ) : Text(""),
@@ -233,13 +233,6 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
     );
   }
   Color hexToColor(String code) {return new Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);}
-
-  void _clearText() {
-    etAddressAbsent.text = "";
-    etDateAbsent.text = "";
-    etInputTime.text = "";
-  }
-
 
   // _selectTimeAbsent(BuildContext context, int optionText) async{
   //   TimeOfDay t = await showTimePicker(
