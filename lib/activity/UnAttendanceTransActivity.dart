@@ -25,6 +25,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   TextEditingController etStartDate = new TextEditingController();
   TextEditingController etEndDate = new TextEditingController();
   TextEditingController etQtyDate = new TextEditingController();
+  TextEditingController etUnAttendanceType = new TextEditingController();
   List<ResponseDtlMasterUnAttendance> arrDtlMasterUnAttendance = [];
   ResponseDtlMasterUnAttendance _selectedDtlMasterUnAttendance;
   List<ResponseDtlMasterUnAttendance> listDtlMasterUnAttendance = List();
@@ -32,22 +33,30 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   DateTime selectedDate = DateTime.now();
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   var isEnableText = true;
+  var isEnableDropdown = true;
   int statusTrans = 0;
   int responseCode = 0;
   var isLoading = false;
-  String stResponseMessage;
+  String stResponseMessage,_selectedUnAttendanceType;
 
   @override
   void initState() {
     super.initState();
     if(widget.unAttendanceModel != null){
       statusTrans = widget.unAttendanceModel.statusId;
-      if(statusTrans == ConstanstVar.approvedClaimStatus){isEnableText = !isEnableText;}
+      if(statusTrans == ConstanstVar.approvedClaimStatus){
+        isEnableText = !isEnableText;
+        isEnableDropdown = !isEnableDropdown;
+      }else{
+        validateConnection(context);
+      }
       etStartDate.text = widget.unAttendanceModel.startDate;
       etEndDate.text = widget.unAttendanceModel.endDate;
       etQtyDate.text = widget.unAttendanceModel.qtyDate.toString();
+      etUnAttendanceType.text = widget.unAttendanceModel.unattendanceDesc;
+    }else{
+      validateConnection(context);
     }
-    validateConnection(context);
   }
 
   //controller
@@ -200,15 +209,43 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                             items: arrDtlMasterUnAttendance.map((value) {
                               return DropdownMenuItem(
                                   child: Text(value.unAttendanceDesc),
-                                  value: value.id
+                                  value: value.id+'-'+value.unAttendanceDesc
                               );
                             }).toList(),
                             onChanged: (value) {
-                              setState(() {
-                                _hrisUtil.toastMessage(value);
-                              });
+                              if(isEnableDropdown){
+                                setState(() {
+                                  var splitValue = value.split("-");
+                                  _selectedUnAttendanceType = splitValue[0].toString();
+                                  etUnAttendanceType.text = splitValue[1];
+                                });
+                              }
                             },
-                          )
+                          ),
+                          new Padding(padding: EdgeInsets.only(top: 10.0)),
+                          new TextFormField(
+                            enabled: false,
+                            controller: etUnAttendanceType,
+                            decoration: new InputDecoration(
+                              labelText: "UnAttendance Type",
+                              contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                              fillColor: Colors.white,
+                              border: new OutlineInputBorder(
+                                borderRadius: new BorderRadius.circular(15.0),
+                                borderSide: new BorderSide(
+                                ),
+                              ),
+                            ),
+                            validator: (val) {
+                              if(val.length==0) {return "Date cannot be empty";
+                              }else{return null;}
+                            },
+                            keyboardType: TextInputType.text,
+                            maxLength: 25,
+                            style: new TextStyle(
+                              fontFamily: "Poppins",
+                            ),
+                          ),
                         ],
                       )
                     ]

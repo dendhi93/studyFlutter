@@ -35,15 +35,15 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   DateTime selectedDate = DateTime.now();
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   var isEnableText = false;
-  var isHideDetailText = false;
-  var isShowDropDown = true;
+  var isShowDetailText = false;
+  var isEnableDropDown = true;
   var isHiddenButton = true;
   HrisUtil _hrisUtil = HrisUtil();
   int responseCode = 0;
   List<ResponseDetailMasterClaim> listDtlMasterClaim = List();
   List<ResponseDetailMasterClaim> arrDtlMasterClaim = [];
   ResponseDetailMasterClaim _selectedResponseDtlMasterClaim;
-  String stResponseMessage,_selectedMasterClaim,_selectedPaidClaim;
+  String stResponseMessage,_selectedMasterClaim;
   String stringFileClaim = "";
   var isLoading = false;
   File _image;
@@ -54,8 +54,6 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   void initState() {
     super.initState();
     if(widget.claimModel != null){
-      isEnableText = false;
-      isShowDropDown = false;
       etDateClaim.text = widget.claimModel.transDate;
       etSelectedClaimType.text = widget.claimModel.claimDesc;
       String moneyIdr = _hrisUtil.idrFormating(widget.claimModel.paidClaim.toString());
@@ -63,7 +61,18 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
       etDescClaim.text = widget.claimModel.descClaim;
       stringFileClaim = widget.claimModel.fileClaim;
       if(stringFileClaim != null){_bytesImage = base64.decode(widget.claimModel.fileClaim);}
-      isHiddenButton = !isHiddenButton;
+      if(widget.claimModel.statusId == ConstanstVar.approvedClaimStatus){
+        isHiddenButton = !isHiddenButton;
+        isEnableText = false;
+        isEnableDropDown = false;
+      }else{
+        isEnableText = true;
+        validateConnection(context);
+      }
+      if(widget.claimModel.detailClaim != ""){
+        isShowDetailText = true;
+        etOtherClaim.text = widget.claimModel.detailClaim;
+      }else{isShowDetailText = false;}
     }else{
       isEnableText = true;
       validateConnection(context);
@@ -194,7 +203,6 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                     fontFamily: "Poppins",
                   ),
                 ),
-                isShowDropDown ?
                 new Column(
                   children: <Widget>[
                     new Padding(padding: EdgeInsets.only(top: 3.0)),
@@ -204,30 +212,25 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                       items: arrDtlMasterClaim.map((value) {
                         return DropdownMenuItem(
                             child: Text(value.claimDesc),
-                            value: value.id+'-'+value.paidClaim.toString()
+                            value: value.id+'-'+value.paidClaim.toString()+'-'+value.claimDesc
                         );
                       }).toList(),
                       onChanged: (value) {
-                        setState(() {
-                          var splitValue = value.split("-");
-                          _selectedMasterClaim = splitValue[0];
-                          _selectedPaidClaim = splitValue[1];
-                          if(_selectedMasterClaim == "7"){
-                            setState(() {
-                              isHideDetailText = true;
-                            });
-                          }else{
-                            setState(() {
-                              isHideDetailText = false;
-                            });
-                          }
-                          etAvailableClaimTotal.text = _selectedPaidClaim.trim();
-                          // _hrisUtil.toastMessage(_selectedMasterClaim);
-                        });
+                        if(isEnableDropDown){
+                          setState(() {
+                            var splitValue = value.split("-");
+                            _selectedMasterClaim = splitValue[0];
+                            etAvailableClaimTotal.text = _hrisUtil.idrFormating(splitValue[1]);
+                            etSelectedClaimType.text = splitValue[2];
+                            if(_selectedMasterClaim == "7"){isShowDetailText = true;
+                            }else{isShowDetailText = false;}
+                          });
+                        }
                       },
                     )
                   ],
-                ): new Column(
+                ),
+                new Column(
                   children: <Widget>[
                     new Padding(padding: EdgeInsets.only(top: 10.0)),
                     new TextFormField(
@@ -249,7 +252,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                     ),
                   ],
                 ),
-                isHideDetailText ?
+                isShowDetailText ?
                 new Column(
                   children: <Widget>[
                     new Padding(padding: EdgeInsets.all(5.0)),
@@ -270,6 +273,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                         if(val.length==0 && _selectedMasterClaim == "Lainnya") {return "Type Claim cannot be empty";
                         }else{return null;}
                       },
+                      maxLength:100,
                       keyboardType: TextInputType.text,
                       style: new TextStyle(
                         fontFamily: "Poppins",
@@ -279,7 +283,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                 ): Container(
                     color: Colors.white // This is optional
                 ),
-                isShowDropDown ?
+                isEnableDropDown ?
                 new Column(
                   children: <Widget>[
                     new Padding(padding: EdgeInsets.only(top: 5.0)),
@@ -296,6 +300,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                           ),
                         ),
                       ),
+                      maxLength:100,
                       keyboardType: TextInputType.text,
                       style: new TextStyle(
                         fontFamily: "Poppins",
@@ -389,7 +394,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                     ]
                 ),
 
-                new Padding(padding: EdgeInsets.only(top: 50.0)),
+                new Padding(padding: EdgeInsets.only(top: 25.0)),
                 new Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
