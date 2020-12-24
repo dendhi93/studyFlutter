@@ -105,7 +105,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   Widget _initUnAttendance(BuildContext buildContext){
     return Form(
       key: _formKey,
-        child: new Container(
+        child: new SingleChildScrollView(
           padding: const EdgeInsets.all(10.0),
             child: new Center(
                 child: new Column(

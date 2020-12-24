@@ -161,9 +161,8 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   Widget _initClaim(BuildContext context){
     return Form(
       key: _formKey,
-      child: new Container(
+      child: new SingleChildScrollView(
         padding: const EdgeInsets.all(10.0),
-        color: Colors.white,
         child: new Container(
           child: new Center(
             child: new Column(
