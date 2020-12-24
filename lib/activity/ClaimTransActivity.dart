@@ -222,8 +222,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                             _selectedMasterClaim = splitValue[0];
                             etAvailableClaimTotal.text = _hrisUtil.idrFormating(splitValue[1]);
                             etSelectedClaimType.text = splitValue[2];
-                            if(_selectedMasterClaim == "7"){isShowDetailText = true;
-                            }else{isShowDetailText = false;}
+                            _selectedMasterClaim == "7" ? isShowDetailText = true : isShowDetailText = false;
                           });
                         }
                       },

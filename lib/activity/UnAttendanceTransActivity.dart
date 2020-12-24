@@ -26,6 +26,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   TextEditingController etEndDate = new TextEditingController();
   TextEditingController etQtyDate = new TextEditingController();
   TextEditingController etUnAttendanceType = new TextEditingController();
+  TextEditingController etNoteUnAttendance = new TextEditingController();
   List<ResponseDtlMasterUnAttendance> arrDtlMasterUnAttendance = [];
   ResponseDtlMasterUnAttendance _selectedDtlMasterUnAttendance;
   List<ResponseDtlMasterUnAttendance> listDtlMasterUnAttendance = List();
@@ -34,6 +35,8 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   var isEnableText = true;
   var isEnableDropdown = true;
+  var isShowButton = true;
+  var isHideNoteUnAttendance = false;
   int statusTrans = 0;
   int responseCode = 0;
   var isLoading = false;
@@ -47,16 +50,13 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
       if(statusTrans == ConstanstVar.approvedClaimStatus){
         isEnableText = !isEnableText;
         isEnableDropdown = !isEnableDropdown;
-      }else{
-        validateConnection(context);
-      }
+      }else{validateConnection(context);}
+
       etStartDate.text = widget.unAttendanceModel.startDate;
       etEndDate.text = widget.unAttendanceModel.endDate;
       etQtyDate.text = widget.unAttendanceModel.qtyDate.toString();
       etUnAttendanceType.text = widget.unAttendanceModel.unattendanceDesc;
-    }else{
-      validateConnection(context);
-    }
+    }else{validateConnection(context);}
   }
 
   //controller
@@ -146,7 +146,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                           fontFamily: "Poppins",
                         ),
                       ),
-                      new Padding(padding: EdgeInsets.only(top: 10.0)),
+                      new Padding(padding: EdgeInsets.only(top: 15.0)),
                       new TextFormField(
                         enabled: isEnableText,
                         controller: etEndDate,
@@ -218,6 +218,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                                   var splitValue = value.split("-");
                                   _selectedUnAttendanceType = splitValue[0].toString();
                                   etUnAttendanceType.text = splitValue[1];
+                                   _selectedUnAttendanceType == "8" ? isHideNoteUnAttendance = true : isHideNoteUnAttendance = false;
                                 });
                               }
                             },
@@ -246,8 +247,99 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                               fontFamily: "Poppins",
                             ),
                           ),
+                          isHideNoteUnAttendance ?
+                          new Column(
+                            children: <Widget>[
+                              new TextFormField(
+                                enabled: isEnableText,
+                                controller: etNoteUnAttendance,
+                                decoration: new InputDecoration(
+                                  labelText: "Note UnAttendance",
+                                  contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                                  fillColor: Colors.white,
+                                  border: new OutlineInputBorder(
+                                    borderRadius: new BorderRadius.circular(15.0),
+                                    borderSide: new BorderSide(
+                                    ),
+                                  ),
+                                ),
+                                validator: (val) {
+                                  if(val.length==0 && _selectedUnAttendanceType == "8") {return "Type Claim cannot be empty";
+                                  }else{return null;}
+                                },
+                                maxLength:100,
+                                keyboardType: TextInputType.text,
+                                style: new TextStyle(
+                                  fontFamily: "Poppins",
+                                ),
+                              )
+                            ],
+                          ): Container(color: Colors.white // This is optional
+                          ),
                         ],
-                      )
+                      ),
+                      new Padding(padding: EdgeInsets.only(top: 25.0)),
+                      new Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          isShowButton ? new FlatButton(
+                            color: Colors.blue,
+                            textColor: Colors.white,
+                            disabledColor: Colors.blueGrey,
+                            disabledTextColor: Colors.black,
+                            padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
+                            splashColor: Colors.blueAccent,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: BorderSide(color: Colors.yellow)
+                            ),
+                            onPressed: () {
+                              if (_formKey.currentState.validate()){
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      content: Text("Transaction Success"),
+                                      actions: <Widget>[
+                                        FlatButton(child: Text('OK'),
+                                          onPressed: (){
+                                            Navigator.of(context, rootNavigator: true).pop();
+                                            Navigator.pop(context, '');
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                            child: Text(
+                              "Save",
+                              style: TextStyle(fontSize: 20.0),
+                            ),
+                          ) : Text(""),
+
+                          isShowButton ? new FlatButton(
+                            color: Colors.white,
+                            textColor: Colors.black,
+                            disabledColor: Colors.grey,
+                            disabledTextColor: Colors.grey,
+                            padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
+                            splashColor: Colors.blueAccent,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: BorderSide(color: Colors.grey)
+                            ),
+                            onPressed: () {
+                              // _clearText();
+                            },
+                            child: Text(
+                              "Clear",
+                              style: TextStyle(fontSize: 20.0),
+                            ),
+                          ) : Text(""),
+                        ],
+                      ),
                     ]
                 ),
             ),
