@@ -253,12 +253,12 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                 isHideDetailText ?
                 new Column(
                   children: <Widget>[
-                    new Padding(padding: EdgeInsets.only(top: 10.0)),
+                    new Padding(padding: EdgeInsets.all(5.0)),
                     new TextFormField(
                       enabled: isEnableText,
                       controller: etOtherClaim,
                       decoration: new InputDecoration(
-                        labelText: "type Claim",
+                        labelText: "Type claim",
                         contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
                         fillColor: Colors.white,
                         border: new OutlineInputBorder(
@@ -283,7 +283,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                 isShowDropDown ?
                 new Column(
                   children: <Widget>[
-                    new Padding(padding: EdgeInsets.only(top: 1.0)),
+                    new Padding(padding: EdgeInsets.only(top: 5.0)),
                     new TextFormField(
                       enabled: false,
                       controller: etAvailableClaimTotal,
@@ -306,7 +306,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                 ): Container(
                     color: Colors.white
                 ),
-                new Padding(padding: EdgeInsets.only(top: 20.0)),
+                new Padding(padding: EdgeInsets.only(top: 10.0)),
                 new TextFormField(
                   enabled: isEnableText,
                   controller: etPaidClaim,

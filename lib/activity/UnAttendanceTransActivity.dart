@@ -26,7 +26,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   TextEditingController etEndDate = new TextEditingController();
   TextEditingController etQtyDate = new TextEditingController();
   List<ResponseDtlMasterUnAttendance> arrDtlMasterUnAttendance = [];
-  ResponseHeadMasterUnAttendance _responseHeadMasterUnAttendance;
+  ResponseDtlMasterUnAttendance _selectedDtlMasterUnAttendance;
   List<ResponseDtlMasterUnAttendance> listDtlMasterUnAttendance = List();
   HrisUtil _hrisUtil = HrisUtil();
   DateTime selectedDate = DateTime.now();
@@ -173,10 +173,6 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                               child: new TextFormField(
                                 enabled: false,
                                 controller: etQtyDate,
-                                // onTap: (){
-                                //   FocusScope.of(context).requestFocus(new FocusNode());
-                                //     _selecDatePicker(context);
-                                // },
                                 decoration: new InputDecoration(
                                   labelText: "Qty Date",
                                   contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
@@ -187,10 +183,6 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                                     ),
                                   ),
                                 ),
-                                validator: (val) {
-                                  if(val.length==0) {return "Date cannot be empty";
-                                  }else{return null;}
-                                },
                                 keyboardType: TextInputType.number,
                                 style: new TextStyle(
                                   fontFamily: "Poppins",
@@ -199,6 +191,26 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                             ),
                           ]
                       ),
+                      new Column(
+                        children: <Widget>[
+                          new Padding(padding: EdgeInsets.only(top: 3.0)),
+                          DropdownButton(
+                            hint: Text("Select Claim Type"),
+                            value: _selectedDtlMasterUnAttendance,
+                            items: arrDtlMasterUnAttendance.map((value) {
+                              return DropdownMenuItem(
+                                  child: Text(value.unAttendanceDesc),
+                                  value: value.id
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _hrisUtil.toastMessage(value);
+                              });
+                            },
+                          )
+                        ],
+                      )
                     ]
                 ),
             ),
