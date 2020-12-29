@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:absent_hris/adapter/BottomMenuAdapter.dart';
 import 'package:absent_hris/model/ErrorResponse.dart';
-import 'file:///D:/project/flutter/lib/model/Login/ResponseLoginModel.dart';
+import 'package:absent_hris/model/Login/ResponseLoginModel.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:absent_hris/util/HrisStore.dart';
