@@ -52,7 +52,6 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
         isEnableDropdown = !isEnableDropdown;
         isShowButton = !isShowButton;
       }else{validateConnection(context);}
-
       etStartDate.text = widget.unAttendanceModel.startDate;
       etEndDate.text = widget.unAttendanceModel.endDate;
       etQtyDate.text = widget.unAttendanceModel.qtyDate.toString();
@@ -113,6 +112,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
             _hrisUtil.toastMessage("please set start date first");
           }else{
             etEndDate.text = selectedDateFormat;
+            // _hrisUtil.toastMessage("dif " +_hrisUtil.dateDiff(etStartDate, endDate))
           }
         }
       });
