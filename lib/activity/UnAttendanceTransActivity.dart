@@ -40,7 +40,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   int statusTrans = 0;
   int responseCode = 0;
   var isLoading = false;
-  String stResponseMessage,_selectedUnAttendanceType;
+  String stResponseMessage,_selectedUnAttendanceType,tempStStartDate;
 
   @override
   void initState() {
@@ -107,12 +107,13 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
         String selectedDateFormat = new DateFormat("yyyy-MM-dd").format(selectedDate);
         if(typeDate == ConstanstVar.selectStartDate){
           etStartDate.text = selectedDateFormat;
+          tempStStartDate = selectedDateFormat;
         }else{
           if(etStartDate.text.isEmpty){
             _hrisUtil.toastMessage("please set start date first");
           }else{
             etEndDate.text = selectedDateFormat;
-            // _hrisUtil.toastMessage("dif " +_hrisUtil.dateDiff(etStartDate, endDate))
+            etQtyDate.text = _hrisUtil.dateDiff(tempStStartDate, selectedDateFormat).toString();
           }
         }
       });
