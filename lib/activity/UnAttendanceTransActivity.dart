@@ -113,7 +113,19 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
             _hrisUtil.toastMessage("please set start date first");
           }else{
             etEndDate.text = selectedDateFormat;
-            etQtyDate.text = _hrisUtil.dateDiff(tempStStartDate, selectedDateFormat).toString();
+            //converting into date
+            // DateTime dateTime = DateTime.parse(selectedDateFormat);
+            int intQtyDate = _hrisUtil.dateDiff(tempStStartDate, selectedDateFormat);
+            int tempQtyDate = intQtyDate;
+            for(var i = 0; i < intQtyDate; i++){
+              var splitStartValue = tempStStartDate.split("-");
+              final loopDate = DateTime(int.parse(splitStartValue[0]), int.parse(splitStartValue[1]), int.parse(splitStartValue[2]) + i);
+              String loopDay = HrisUtil().nameOfDay(loopDate);
+              if(loopDay == "Saturday" || loopDay == "Sunday"){
+                tempQtyDate = tempQtyDate - 1;
+              }
+            }
+            etQtyDate.text = tempQtyDate.toString();
           }
         }
       });
