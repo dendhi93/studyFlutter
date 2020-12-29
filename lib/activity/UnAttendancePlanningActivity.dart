@@ -115,9 +115,7 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
     return null;
   }
 
-
   //view
-
   Widget _initListUnAttendance(){
     return Container(
       child: listDataUnAttendance.length > 0  ?

@@ -102,12 +102,19 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2025),
     );
-    if (picked != null && picked != selectedDate)
+    if (picked != null)
       setState(() {
         selectedDate = picked;
         String selectedDateFormat = new DateFormat("yyyy-MM-dd").format(selectedDate);
-        typeDate == ConstanstVar.selectStartDate
-            ? etStartDate.text = selectedDateFormat : etEndDate.text = selectedDateFormat;
+        if(typeDate == ConstanstVar.selectStartDate){
+          etStartDate.text = selectedDateFormat;
+        }else{
+          if(etStartDate.text.isEmpty){
+            _hrisUtil.toastMessage("please set start date first");
+          }else{
+            etEndDate.text = selectedDateFormat;
+          }
+        }
       });
   }
 
