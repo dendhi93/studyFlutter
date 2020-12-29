@@ -225,7 +225,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                         children: <Widget>[
                           new Padding(padding: EdgeInsets.only(top: 3.0)),
                           DropdownButton(
-                            hint: Text("Select Claim Type"),
+                            hint: Text("Select UnAttendance Type"),
                             value: _selectedDtlMasterUnAttendance,
                             items: arrDtlMasterUnAttendance.map((value) {
                               return DropdownMenuItem(
