@@ -169,7 +169,7 @@ packages:
       name: fluttertoast
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.1.5"
+    version: "7.1.6"
   geocoder:
     dependency: "direct dev"
     description:
@@ -218,7 +218,7 @@ packages:
       name: image_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.7+14"
+    version: "0.6.7+17"
   image_picker_platform_interface:
     dependency: transitive
     description:
