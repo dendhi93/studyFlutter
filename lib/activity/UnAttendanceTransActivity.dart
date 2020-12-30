@@ -94,7 +94,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
     });
   }
 
-  _selecDatePicker(BuildContext context, int typeDate) async{
+  _selectDatePicker(BuildContext context, int typeDate) async{
     final DateTime picked = await showDatePicker(
       context: context,
       helpText: 'Select Absent Date',
@@ -133,7 +133,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                         controller: etStartDate,
                         onTap: (){
                           FocusScope.of(context).requestFocus(new FocusNode());
-                            _selecDatePicker(context, ConstanstVar.selectStartDate);
+                            _selectDatePicker(context, ConstanstVar.selectStartDate);
                         },
                         decoration: new InputDecoration(
                           labelText: "Start Date",
@@ -160,7 +160,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                         controller: etEndDate,
                         onTap: (){
                           FocusScope.of(context).requestFocus(new FocusNode());
-                            _selecDatePicker(context, ConstanstVar.selectEndDate);
+                            _selectDatePicker(context, ConstanstVar.selectEndDate);
                         },
                         decoration: new InputDecoration(
                           labelText: "End Date",

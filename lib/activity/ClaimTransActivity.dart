@@ -91,7 +91,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
     return SystemChannels.platform.invokeMethod('SystemNavigator.pop');
   }
 
-  _selecDatePicker(BuildContext context) async{
+  _selectDatePicker(BuildContext context) async{
     final DateTime picked = await showDatePicker(
       context: context,
       helpText: 'Select Absent Date',
@@ -173,7 +173,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                   controller: etDateClaim,
                   onTap: (){
                     FocusScope.of(context).requestFocus(new FocusNode());
-                    _selecDatePicker(context);
+                    _selectDatePicker(context);
                   },
                   decoration: new InputDecoration(
                     labelText: "Date Claim",
