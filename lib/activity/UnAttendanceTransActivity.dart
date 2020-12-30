@@ -40,7 +40,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   int statusTrans = 0;
   int responseCode = 0;
   var isLoading = false;
-  String stResponseMessage,_selectedUnAttendanceType;
+  String stResponseMessage,_selectedUnAttendanceType,tempStStartDate;
 
   @override
   void initState() {
@@ -52,7 +52,6 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
         isEnableDropdown = !isEnableDropdown;
         isShowButton = !isShowButton;
       }else{validateConnection(context);}
-
       etStartDate.text = widget.unAttendanceModel.startDate;
       etEndDate.text = widget.unAttendanceModel.endDate;
       etQtyDate.text = widget.unAttendanceModel.qtyDate.toString();
@@ -108,11 +107,25 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
         String selectedDateFormat = new DateFormat("yyyy-MM-dd").format(selectedDate);
         if(typeDate == ConstanstVar.selectStartDate){
           etStartDate.text = selectedDateFormat;
+          tempStStartDate = selectedDateFormat;
         }else{
           if(etStartDate.text.isEmpty){
             _hrisUtil.toastMessage("please set start date first");
           }else{
             etEndDate.text = selectedDateFormat;
+            //converting into date
+            // DateTime dateTime = DateTime.parse(selectedDateFormat);
+            int intQtyDate = _hrisUtil.dateDiff(tempStStartDate, selectedDateFormat);
+            int tempQtyDate = intQtyDate;
+            for(var i = 0; i < intQtyDate; i++){
+              var splitStartValue = tempStStartDate.split("-");
+              final loopDate = DateTime(int.parse(splitStartValue[0]), int.parse(splitStartValue[1]), int.parse(splitStartValue[2]) + i);
+              String loopDay = HrisUtil().nameOfDay(loopDate);
+              if(loopDay == "Saturday" || loopDay == "Sunday"){
+                tempQtyDate = tempQtyDate - 1;
+              }
+            }
+            etQtyDate.text = tempQtyDate.toString();
           }
         }
       });
@@ -212,7 +225,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                         children: <Widget>[
                           new Padding(padding: EdgeInsets.only(top: 3.0)),
                           DropdownButton(
-                            hint: Text("Select Claim Type"),
+                            hint: Text("Select UnAttendance Type"),
                             value: _selectedDtlMasterUnAttendance,
                             items: arrDtlMasterUnAttendance.map((value) {
                               return DropdownMenuItem(

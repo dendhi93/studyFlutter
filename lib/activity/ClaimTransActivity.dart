@@ -142,18 +142,16 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
 
   Future getImage() async {
     var pickedFile = await picker.getImage(source: ImageSource.camera);
-    //converting into string base64
 
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
+        //converting into string base64
         List<int> imageBytes = _image.readAsBytesSync();
         String base64Image = base64Encode(imageBytes);
         // print(base64Image);
         _bytesImage = base64.decode(base64Image);
-      } else {
-        print('No image selected.');
-      }
+      } else {print('No image selected.');}
     });
   }
 

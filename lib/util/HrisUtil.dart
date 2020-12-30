@@ -45,6 +45,19 @@ class HrisUtil {
     return "";
   }
 
+  int dateDiff(String startDate, String endDate){
+    try{
+      var splitStartValue = startDate.split("-");
+      var splitEndValue = endDate.split("-");
+      final dateOne = DateTime(int.parse(splitStartValue[0]), int.parse(splitStartValue[1]), int.parse(splitStartValue[2]));
+      final dateTwo = DateTime(int.parse(splitEndValue[0]), int.parse(splitEndValue[1]), int.parse(splitEndValue[2]));
+      return dateTwo.difference(dateOne).inDays+1;
+    }catch(error){
+      print("err load claim " +error.toString());
+      return 0;
+    }
+  }
+
   String nameOfDay(var inputDate){
     if(inputDate != null){
       return DateFormat('EEEE').format(inputDate).toString();
