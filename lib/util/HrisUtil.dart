@@ -23,6 +23,14 @@ class HrisUtil {
     Scaffold.of(context).showSnackBar(snackBar);
   }
 
+  void snackBarMessageScaffoldKey(String message, GlobalKey<ScaffoldState> scaffoldKey) {
+    scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: Text(message),
+          duration: Duration(seconds: 3),
+        ));
+  }
+
   static Future<bool> checkConnection() async {
     try {
       final result = await InternetAddress.lookup('google.com');

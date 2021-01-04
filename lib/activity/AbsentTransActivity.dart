@@ -18,6 +18,7 @@ class AbsentTransActivity extends StatefulWidget {
 }
 
 class _AbsentTransActivityState extends State<AbsentTransActivity> {
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   Position _currentPosition;
   TextEditingController etDateAbsent = new TextEditingController();
   TextEditingController etInputTime = new TextEditingController();
@@ -134,6 +135,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                 new Padding(padding: EdgeInsets.only(top: 30.0)),
                 new TextFormField(
                   controller: etAddressAbsent,
+                  enabled: false,
                   maxLines: 3,
                   decoration: new InputDecoration(
                     labelText: "Address",
@@ -182,6 +184,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                                         FlatButton(child: Text('OK'),
                                           onPressed: (){
                                             Navigator.of(context, rootNavigator: true).pop();
+                                            hrisUtil.snackBarMessageScaffoldKey('Success', scaffoldKey);
                                             // Navigator.pop(context, '');
                                           },
                                         ),
@@ -235,6 +238,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         title: Text('Absent'),
       ),
