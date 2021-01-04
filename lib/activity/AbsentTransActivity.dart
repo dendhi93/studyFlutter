@@ -177,12 +177,17 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
-                                      content: Text("Transaction Success"),
+                                      content: Text("Are you sure want to absent ? "),
                                       actions: <Widget>[
                                         FlatButton(child: Text('OK'),
                                           onPressed: (){
                                             Navigator.of(context, rootNavigator: true).pop();
-                                            Navigator.pop(context, '');
+                                            // Navigator.pop(context, '');
+                                          },
+                                        ),
+                                        FlatButton(child: Text('Cancel'),
+                                          onPressed: (){
+                                            Navigator.of(context, rootNavigator: true).pop();
                                           },
                                         ),
                                       ],
