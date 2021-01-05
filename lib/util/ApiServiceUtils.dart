@@ -1,3 +1,4 @@
+import 'package:absent_hris/model/MasterAbsent/PostAbsent/PostJsonAbsent.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:http/http.dart' as http;
 
@@ -144,6 +145,25 @@ class ApiServiceUtils {
       if(responseMasterUnAttendance.statusCode == ConstanstVar.successCode){
         print('$responseMasterUnAttendance.body');
         return responseMasterUnAttendance.body;
+      }else{
+        throw new Exception("Error master unattendance");
+      }
+    }
+
+    Future<String>createAbsent(PostJsonAbsent absentData) async{
+      String urlTRAbsent = ConstanstVar.urlApi +'TRAbsent.php';
+      print('url $urlTRAbsent');
+      final http.Response responseTrAbsent = await http
+          .post(urlTRAbsent,
+          headers: {'Content-Type': 'application/json',},
+          body: PostJsonAbsent().absentToJson(absentData)
+      );
+
+      if(responseTrAbsent.statusCode == ConstanstVar.successCode
+          || responseTrAbsent.statusCode == ConstanstVar.invalidTokenCode
+          || responseTrAbsent.statusCode == ConstanstVar.failedHttp){
+        print('$responseTrAbsent.body');
+        return responseTrAbsent.body;
       }else{
         throw new Exception("Error master unattendance");
       }

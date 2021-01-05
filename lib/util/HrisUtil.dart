@@ -19,8 +19,17 @@ class HrisUtil {
   }
 
   void snackBarMessage(String message, BuildContext context) {
-    final snackBar = SnackBar(content: Text(message));
+    final snackBar = SnackBar(content: Text(message),backgroundColor: Colors.blue);
     Scaffold.of(context).showSnackBar(snackBar);
+  }
+
+  void snackBarMessageScaffoldKey(String message, GlobalKey<ScaffoldState> scaffoldKey) {
+    scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: Colors.blue,
+          duration: Duration(seconds: 3),
+        ));
   }
 
   static Future<bool> checkConnection() async {

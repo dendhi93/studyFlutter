@@ -45,8 +45,6 @@ class HrisStore {
     return userToken;
   }
 
-
-
   Future<bool>removeAllValues() async{
     final SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.clear();
