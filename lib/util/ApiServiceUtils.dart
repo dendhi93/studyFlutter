@@ -165,7 +165,7 @@ class ApiServiceUtils {
         print('$responseTrAbsent.body');
         return responseTrAbsent.body;
       }else{
-        throw new Exception("Error master unattendance");
+        throw new Exception("Error transaction absent");
       }
     }
 

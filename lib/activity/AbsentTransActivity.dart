@@ -1,5 +1,8 @@
 
 import 'package:absent_hris/model/MasterAbsent/GetAbsent/ResponseDtlAbsentModel.dart';
+import 'package:absent_hris/model/MasterAbsent/PostAbsent/PostJsonAbsent.dart';
+import 'package:absent_hris/util/ConstanstVar.dart';
+import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +29,9 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TimeOfDay timeOfDay = TimeOfDay.now();
   HrisUtil hrisUtil = HrisUtil();
+  HrisStore _hrisStore = HrisStore();
+  String stToken = "";
+  String stUid = "";
   int intDateIn = 1;
   int intDateOut = 2;
   int _groupValue = -1;
@@ -59,6 +65,116 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
     _gpsValidaton();
   }
 
+  //controller
+  Future _gpsValidaton() async {
+    final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+
+    if(!(await Geolocator().isLocationServiceEnabled())){validateAlertGps();}
+    else{_getCurrentLocation(geolocator);}
+  }
+
+  Future _getCurrentLocation(Geolocator _geolocator){
+    _geolocator
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) {
+      setState(() {
+        _currentPosition = position;
+        //manifest sama info.plist hrs copas manual
+        if(_currentPosition != null){
+          _getAddress(position);
+        }
+      });
+    }).catchError((e) {print(e);});
+    return null;
+  }
+
+  Widget _myRadioButton({String title, int value, Function onChanged}) {
+    return RadioListTile(
+      value: value,
+      groupValue: _groupValue,
+      onChanged: isEnableRadio ? onChanged : null,
+      title: Text(title),
+    );
+  }
+
+  void validateAlertGps(){
+    if(Platform.isAndroid){
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text("Can't get current location"),
+            actions: <Widget>[
+              FlatButton(child: Text('OK'),
+                onPressed: (){
+                  final AndroidIntent intent = AndroidIntent(
+                      action: 'android.settings.LOCATION_SOURCE_SETTINGS');
+                  intent.launch();
+                  //to close alert dialog
+                  Navigator.of(context, rootNavigator: true).pop();
+                  _gpsValidaton();
+                },
+              )
+            ],
+          );
+        },
+      );
+    }else{
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text("Can't get current location"),
+            actions: <Widget>[
+              FlatButton(child: Text('OK'),
+                onPressed: (){
+                  Navigator.pop(context, '');
+                },
+              )
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  void _getAddress(Position _position) async{
+    final coordinates = new Coordinates(_position.latitude, _position.longitude);
+    var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    var first = addresses.first;
+    print("${first.featureName} : ${first.addressLine}");
+    if(widget.absentModel ==null){etAddressAbsent.text = "${first.addressLine}";}
+  }
+
+  void initUIdToken(int intType){
+    if(intType == 1){
+      Future<String> authUid = _hrisStore.getAuthUserId();
+      authUid.then((data) {
+        stUid = data.trim();
+        initUIdToken(2);
+      },onError: (e) {hrisUtil.toastMessage(e);});
+    }else{
+      Future<String> authUToken = _hrisStore.getAuthToken();
+      authUToken.then((data) {
+        stToken = data.trim();
+        stUid = stUid+"-"+stUid;
+        // PostJsonAbsent _postJsonAbsent = PostJsonAbsent(userId: stUid,);
+        // _loadAbsent(stUid, stToken);
+      },onError: (e) {hrisUtil.toastMessage(e);});
+    }
+  }
+
+  void validateConnection(BuildContext context){
+    HrisUtil.checkConnection().then((isConnected) => {
+      if(isConnected){
+        initUIdToken(1),
+      }else{
+        hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
+      }
+    });
+  }
+
+  //view
   Widget _initDetail(BuildContext context){
     return Form(
       key: _formKey,
@@ -269,84 +385,4 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   //     });
   //
   // }
-
-  Future _gpsValidaton() async {
-    final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
-
-    if(!(await Geolocator().isLocationServiceEnabled())){validateAlertGps();}
-    else{_getCurrentLocation(geolocator);}
-  }
-
-  Future _getCurrentLocation(Geolocator _geolocator){
-    _geolocator
-          .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-          .then((Position position) {
-        setState(() {
-          _currentPosition = position;
-          //manifest sama info.plist hrs copas manual
-          if(_currentPosition != null){
-            _getAddress(position);
-          }
-        });
-      }).catchError((e) {print(e);});
-    return null;
-  }
-
-  Widget _myRadioButton({String title, int value, Function onChanged}) {
-    return RadioListTile(
-      value: value,
-      groupValue: _groupValue,
-      onChanged: isEnableRadio ? onChanged : null,
-      title: Text(title),
-    );
-  }
-
-  void validateAlertGps(){
-    if(Platform.isAndroid){
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                content: Text("Can't get current location"),
-                actions: <Widget>[
-                  FlatButton(child: Text('OK'),
-                    onPressed: (){
-                      final AndroidIntent intent = AndroidIntent(
-                          action: 'android.settings.LOCATION_SOURCE_SETTINGS');
-                      intent.launch();
-                      //to close alert dialog
-                      Navigator.of(context, rootNavigator: true).pop();
-                      _gpsValidaton();
-                    },
-                  )
-                ],
-              );
-            },
-          );
-    }else{
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                content: Text("Can't get current location"),
-                actions: <Widget>[
-                  FlatButton(child: Text('OK'),
-                    onPressed: (){
-                      Navigator.pop(context, '');
-                    },
-                  )
-                ],
-              );
-            },
-          );
-    }
-  }
-
-  void _getAddress(Position _position) async{
-      final coordinates = new Coordinates(_position.latitude, _position.longitude);
-      var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-      var first = addresses.first;
-      print("${first.featureName} : ${first.addressLine}");
-      if(widget.absentModel ==null){etAddressAbsent.text = "${first.addressLine}";}
-    }
 }
