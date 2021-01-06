@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/MasterAbsent/GetAbsent/ResponseDtlAbsentModel.dart';
 import 'package:absent_hris/model/MasterAbsent/PostAbsent/PostJsonAbsent.dart';
@@ -37,9 +39,11 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   String stToken = "";
   String stUid = "";
+  String stResponseMessage = "";
   int intDateIn = 1;
   int intDateOut = 2;
   int _groupValue = -1;
+  int responseCode = 0;
   var isHiddenButton = true;
   var isEnableRadio = true;
 
@@ -162,22 +166,21 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
       Future<String> authUToken = _hrisStore.getAuthToken();
       authUToken.then((data) {
         stToken = data.trim();
-        stUid = stUid+"-"+stUid;
-        String stAbsentType = "";
+        stUid = stUid+"-"+stToken;
         String _stAbsentLat = "";
         String _stAbsentLongitute = "";
-        _groupValue == 1 ? stAbsentType = "Absent In" : stAbsentType = "Absent Out";
         if(_currentPosition != null){
           _stAbsentLat = _currentPosition.latitude.toString();
           _stAbsentLongitute = _currentPosition.longitude.toString();
         }
         PostJsonAbsent _postJsonAbsent =
-          PostJsonAbsent(userId: stUid,absentType: stAbsentType,
-            addressAbsent: etAddressAbsent.text.trim(),reason: "",
+          PostJsonAbsent(userId: stUid,absentType: _groupValue.toString(),
+            addressAbsent: etAddressAbsent.text.trim(),reason: "-",
               dateAbsent: etDateAbsent.text.toString(),absentLat: _stAbsentLat,
               absentLongitude: _stAbsentLongitute, absentTime: etInputTime.text.toString());
+
+        print(PostJsonAbsent().absentToJson(_postJsonAbsent));
         _submitAbsent(context, _postJsonAbsent);
-        // _loadAbsent(stUid, stToken);
       },onError: (e) {hrisUtil.toastMessage(e);});
     }
   }
@@ -186,15 +189,24 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
     HrisUtil.checkConnection().then((isConnected) => {
       if(isConnected){
         initUIdToken(1, context),
-      }else{
-        hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
-      }
+      }else{hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)}
     });
   }
 
   Future<ErrorResponse> _submitAbsent(BuildContext context, PostJsonAbsent postData) async {
     LoadingUtils.showLoadingDialog(context, _keyLoader);
-
+    _apiServiceUtils.createAbsent(postData).then((value) => {
+      responseCode = ErrorResponse.fromJson(jsonDecode(value)).code,
+        stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+      Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop(),
+      if(responseCode == ConstanstVar.successCode){
+          if(stResponseMessage == "Success Absent"){
+            hrisUtil.toastMessage("$stResponseMessage"),
+            Navigator.pop(context, ''),
+          }else{hrisUtil.snackBarMessageScaffoldKey("$stResponseMessage", scaffoldKey),}
+      }else{hrisUtil.snackBarMessageScaffoldKey("$stResponseMessage", scaffoldKey),}
+    });
+    return null;
   }
 
   //view
@@ -323,8 +335,8 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                                         FlatButton(child: Text('OK'),
                                           onPressed: (){
                                             Navigator.of(context, rootNavigator: true).pop();
-                                            hrisUtil.snackBarMessageScaffoldKey('Success', scaffoldKey);
-                                            // Navigator.pop(context, '');
+                                            //submitAbsent
+                                            validateConnection(context);
                                           },
                                         ),
                                         FlatButton(child: Text('Cancel'),
@@ -344,7 +356,6 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                             style: TextStyle(fontSize: 20.0),
                           ),
                         ) : Text(""),
-
                       isHiddenButton ? new FlatButton(
                         color: Colors.white,
                         textColor: Colors.black,
