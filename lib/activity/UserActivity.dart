@@ -186,6 +186,7 @@ class _UserActivityState extends State<UserActivity> {
     try{
       loadingOption();
       _apiServiceUtils.getDataUser(uId, userToken).then((value) => {
+        print(jsonDecode(value)),
         responseCode = ResponseHeadUserDetail.fromJson(jsonDecode(value)).code,
         loadingOption(),
         if(responseCode == ConstanstVar.successCode){

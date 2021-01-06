@@ -86,6 +86,7 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
     try{
       loadingOption();
       _apiServiceUtils.getDataUnAttendance(uId, userToken).then((value) => {
+        print(jsonDecode(value)),
         responseCode = ResponseHeadUnAttendance.fromJson(jsonDecode(value)).code,
         loadingOption(),
         if(responseCode == ConstanstVar.successCode){

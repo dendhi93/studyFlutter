@@ -106,6 +106,7 @@ class _ClaimActivityState extends State<ClaimActivity> {
     try{
       loadingOption();
       _apiServiceUtils.getDataClaim(uId, userToken).then((value) => {
+        print(jsonDecode(value)),
         responseCode = ResponseClaimModel.fromJson(jsonDecode(value)).code,
         loadingOption(),
         if(responseCode == ConstanstVar.successCode){

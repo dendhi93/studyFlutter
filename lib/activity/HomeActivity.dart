@@ -133,6 +133,7 @@ class _HomeActivityState extends State<HomeActivity> {
       try{
           loadingOption();
           _apiServiceUtils.getDataAbsen(uId, userToken).then((value) => {
+            print(jsonDecode(value)),
             responseCode = ResponseDataAbsentModel.fromJson(jsonDecode(value)).code,
             loadingOption(),
             if(responseCode == ConstanstVar.successCode){

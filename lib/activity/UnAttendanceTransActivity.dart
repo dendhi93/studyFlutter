@@ -70,6 +70,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   Future<ResponseHeadMasterUnAttendance> _loadMasterUnAttendance() async{
     loadingOption();
     _apiServiceUtils.getMasterUnAttendance().then((value) => {
+      print(jsonDecode(value)),
       responseCode = ResponseHeadMasterUnAttendance.fromJson(jsonDecode(value)).code,
       if(responseCode == ConstanstVar.successCode){
         listDtlMasterUnAttendance = ResponseHeadMasterUnAttendance.fromJson(jsonDecode(value)).masterUnAttendance,

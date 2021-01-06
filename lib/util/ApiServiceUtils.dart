@@ -37,7 +37,6 @@ class ApiServiceUtils {
       if(responseAbsent.statusCode == ConstanstVar.successCode
           || responseAbsent.statusCode == ConstanstVar.invalidTokenCode
           || responseAbsent.statusCode == ConstanstVar.failedHttp){
-          print('$responseAbsent.body');
           return responseAbsent.body;
       }else{
         throw new Exception("Error Absent");
@@ -70,7 +69,6 @@ class ApiServiceUtils {
 
       if(responseMasterClaim.statusCode == ConstanstVar.successCode
           || responseMasterClaim.statusCode == ConstanstVar.failedHttp){
-        print('$responseMasterClaim.body');
         return responseMasterClaim.body;
       }else{
         throw new Exception("Error Master Claim");
@@ -89,7 +87,6 @@ class ApiServiceUtils {
       if(responseUserDtl.statusCode == ConstanstVar.successCode
           || responseUserDtl.statusCode == ConstanstVar.invalidTokenCode
           || responseUserDtl.statusCode == ConstanstVar.failedHttp){
-        print('$responseUserDtl.body');
         return responseUserDtl.body;
       }else{
         throw new Exception("Error User Detail");
@@ -107,7 +104,6 @@ class ApiServiceUtils {
       );
       if(responseLogout.statusCode == ConstanstVar.successCode
           || responseLogout.statusCode == ConstanstVar.failedHttp){
-        print('$responseLogout.body');
         return responseLogout.body;
       }else{
         throw new Exception("Error User Detail");
@@ -126,7 +122,6 @@ class ApiServiceUtils {
       if(responseUnAttendance.statusCode == ConstanstVar.successCode
           || responseUnAttendance.statusCode == ConstanstVar.invalidTokenCode
           || responseUnAttendance.statusCode == ConstanstVar.failedHttp){
-        print('$responseUnAttendance.body');
         return responseUnAttendance.body;
       }else{
         throw new Exception("Error get unattendance");
@@ -143,7 +138,6 @@ class ApiServiceUtils {
           }
       );
       if(responseMasterUnAttendance.statusCode == ConstanstVar.successCode){
-        print('$responseMasterUnAttendance.body');
         return responseMasterUnAttendance.body;
       }else{
         throw new Exception("Error master unattendance");
@@ -162,7 +156,6 @@ class ApiServiceUtils {
       if(responseTrAbsent.statusCode == ConstanstVar.successCode
           || responseTrAbsent.statusCode == ConstanstVar.invalidTokenCode
           || responseTrAbsent.statusCode == ConstanstVar.failedHttp){
-        print('$responseTrAbsent.body');
         return responseTrAbsent.body;
       }else{
         throw new Exception("Error transaction absent");
