@@ -1,9 +1,12 @@
 
+import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/MasterAbsent/GetAbsent/ResponseDtlAbsentModel.dart';
 import 'package:absent_hris/model/MasterAbsent/PostAbsent/PostJsonAbsent.dart';
+import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
+import 'package:absent_hris/util/LoadingUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -22,6 +25,7 @@ class AbsentTransActivity extends StatefulWidget {
 
 class _AbsentTransActivityState extends State<AbsentTransActivity> {
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
   Position _currentPosition;
   TextEditingController etDateAbsent = new TextEditingController();
   TextEditingController etInputTime = new TextEditingController();
@@ -30,6 +34,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   TimeOfDay timeOfDay = TimeOfDay.now();
   HrisUtil hrisUtil = HrisUtil();
   HrisStore _hrisStore = HrisStore();
+  ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   String stToken = "";
   String stUid = "";
   int intDateIn = 1;
@@ -146,19 +151,32 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
     if(widget.absentModel ==null){etAddressAbsent.text = "${first.addressLine}";}
   }
 
-  void initUIdToken(int intType){
+  void initUIdToken(int intType, BuildContext context){
     if(intType == 1){
       Future<String> authUid = _hrisStore.getAuthUserId();
       authUid.then((data) {
         stUid = data.trim();
-        initUIdToken(2);
+        initUIdToken(2, context);
       },onError: (e) {hrisUtil.toastMessage(e);});
     }else{
       Future<String> authUToken = _hrisStore.getAuthToken();
       authUToken.then((data) {
         stToken = data.trim();
         stUid = stUid+"-"+stUid;
-        // PostJsonAbsent _postJsonAbsent = PostJsonAbsent(userId: stUid,);
+        String stAbsentType = "";
+        String _stAbsentLat = "";
+        String _stAbsentLongitute = "";
+        _groupValue == 1 ? stAbsentType = "Absent In" : stAbsentType = "Absent Out";
+        if(_currentPosition != null){
+          _stAbsentLat = _currentPosition.latitude.toString();
+          _stAbsentLongitute = _currentPosition.longitude.toString();
+        }
+        PostJsonAbsent _postJsonAbsent =
+          PostJsonAbsent(userId: stUid,absentType: stAbsentType,
+            addressAbsent: etAddressAbsent.text.trim(),reason: "",
+              dateAbsent: etDateAbsent.text.toString(),absentLat: _stAbsentLat,
+              absentLongitude: _stAbsentLongitute, absentTime: etInputTime.text.toString());
+        _submitAbsent(context, _postJsonAbsent);
         // _loadAbsent(stUid, stToken);
       },onError: (e) {hrisUtil.toastMessage(e);});
     }
@@ -167,11 +185,16 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   void validateConnection(BuildContext context){
     HrisUtil.checkConnection().then((isConnected) => {
       if(isConnected){
-        initUIdToken(1),
+        initUIdToken(1, context),
       }else{
         hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
       }
     });
+  }
+
+  Future<ErrorResponse> _submitAbsent(BuildContext context, PostJsonAbsent postData) async {
+    LoadingUtils.showLoadingDialog(context, _keyLoader);
+
   }
 
   //view
