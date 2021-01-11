@@ -47,7 +47,8 @@ class ListClaimAdapterState extends State<ListClaimAdapter> {
                   width: 24.0,
                 ),
                 title: Text(widget.responseClaimDataModel.claimDesc.trim()),
-                subtitle: Text(widget.responseClaimDataModel.transDate),
+                trailing: Text(widget.responseClaimDataModel.transDate),
+                subtitle: Text(widget.responseClaimDataModel.nameRequester.trim()),
               )
             ],
           ),
