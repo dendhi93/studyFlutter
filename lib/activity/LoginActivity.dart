@@ -168,7 +168,8 @@ class _LoginActivityState extends State<LoginActivity> {
             stName = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.nameUser,
             stUId = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.userId.toString(),
             _hrisStore.setAuthUsername(stName, stToken,stUId,
-                ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.levelId.toString()),
+                ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.levelId.toString(),
+              ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.userType.toString()),
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => BottomMenuNavigationAdapter()),

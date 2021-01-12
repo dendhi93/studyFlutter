@@ -6,14 +6,16 @@ class HrisStore {
   final String tokenStore = "token";
   final String userIDStore = "user_id";
   final String userLevelStore = "user_level";
+  final String userTypeStore = "user_type";
 
   //set value username
-  Future<void> setAuthUsername(String un, String token, String userID, String userLevel) async {
+  Future<void> setAuthUsername(String un, String token, String userID, String userLevel, String userType) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(this.usernameStore, un);
     prefs.setString(this.tokenStore, token);
     prefs.setString(this.userIDStore, userID);
     prefs.setString(this.userLevelStore, userLevel);
+    prefs.setString(this.userTypeStore, userType);
   }
 
   //get value from shared preferences
@@ -36,6 +38,13 @@ class HrisStore {
     String uLevelIdStore;
     uLevelIdStore = pref.getString(this.userLevelStore) ?? "";
     return uLevelIdStore;
+  }
+
+  Future<String> getAuthUserLevelType() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    String uTypeStore;
+    uTypeStore = pref.getString(this.userTypeStore) ?? "";
+    return uTypeStore;
   }
 
   Future<String> getAuthToken() async {
