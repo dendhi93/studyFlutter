@@ -9,13 +9,12 @@ class HrisStore {
   final String userTypeStore = "user_type";
 
   //set value username
-  Future<void> setAuthUsername(String un, String token, String userID, String userLevel, String userType) async {
+  Future<void> setAuthUsername(String un, String token, String userID, String userLevel) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(this.usernameStore, un);
     prefs.setString(this.tokenStore, token);
     prefs.setString(this.userIDStore, userID);
     prefs.setString(this.userLevelStore, userLevel);
-    prefs.setString(this.userTypeStore, userType);
   }
 
   //get value from shared preferences
