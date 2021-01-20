@@ -1,6 +1,6 @@
 
 class ConstanstVar{
-  static String urlApi = "http://192.168.142.241/coreHris/";
+  static String urlApi = "http://172.17.15.209/coreHris/";
   static String noConnectionMessage = "Device not connected to network";
   static String noConnectionTitle = "No Network";
   static String blankStatement = "please fill in the blank";

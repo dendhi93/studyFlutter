@@ -5,8 +5,9 @@ class ModelDataLogin{
   int levelId;
   String token;
   int userId;
+  String userType;
 
-  ModelDataLogin({this.nameUser, this.levelDesc, this.levelId = 0, this.token, this.userId = 0});
+  ModelDataLogin({this.nameUser, this.levelDesc, this.levelId = 0, this.token, this.userId = 0, this.userType});
 
   ModelDataLogin.fromJson(Map<String, dynamic> json) {
     nameUser = json['name_user'];
@@ -14,6 +15,8 @@ class ModelDataLogin{
     levelId = json['level_id'];
     token = json['token'];
     userId = json['user_id'];
+    userType = json['type_desc'];
+
   }
 
 }
