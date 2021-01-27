@@ -27,6 +27,8 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
   String stUid = "";
   String stToken = "";
   String stResponseMessage;
+  String userType;
+  var isVisibleFloating = false;
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   var isLoading = false;
   int responseCode = 0;
@@ -35,6 +37,11 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
   @override
   void initState() {
     super.initState();
+    Future<String> authUType = _hrisStore.getAuthUserLevelType();
+    authUType.then((data) {
+      userType = data.trim();
+      if(userType != "approval" ){isVisibleFloating = !isVisibleFloating;}
+    });
     validateConnection(context);
   }
 
@@ -153,15 +160,18 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
           body:isLoading ? Center(
             child: CircularProgressIndicator(),
           ) : _initListUnAttendance(),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-              Navigator.push(context, MaterialPageRoute(
-                // builder: (context) => ClaimTransActivity(claimModel: null),
-                builder: (context) => UnAttendanceTransActivity(unAttendanceModel: null,),
+        floatingActionButton:  new Visibility(
+          visible: isVisibleFloating,
+          child: new FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(
+                      // builder: (context) => ClaimTransActivity(claimModel: null),
+                      builder: (context) => UnAttendanceTransActivity(unAttendanceModel: null,),
               ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );

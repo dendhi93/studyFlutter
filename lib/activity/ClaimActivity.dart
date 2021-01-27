@@ -28,6 +28,8 @@ class _ClaimActivityState extends State<ClaimActivity> {
   List<ResponseClaimDataModel> listClaim = List();
   String stUid = "";
   String stToken = "";
+  String _userType = "";
+  var isVisibleFloating  = false;
   String stResponseMessage;
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   int responseCode = 0;
@@ -35,6 +37,11 @@ class _ClaimActivityState extends State<ClaimActivity> {
   @override
   void initState() {
     super.initState();
+    Future<String> authUType = _hrisStore.getAuthUserLevelType();
+    authUType.then((data) {
+      _userType = data.trim();
+      if(_userType != "approval" ){isVisibleFloating = !isVisibleFloating;}
+    });
     validateConnection(context);
   }
 
@@ -152,15 +159,18 @@ class _ClaimActivityState extends State<ClaimActivity> {
         body:isLoading ? Center(
           child: CircularProgressIndicator(),
         ) : _initListClaim(),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) => ClaimTransActivity(claimModel: null),
+          floatingActionButton:  new Visibility(
+            visible: isVisibleFloating,
+            child: new FloatingActionButton(
+                child: Icon(Icons.add),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => ClaimTransActivity(claimModel: null),
+                  ),
+                  );
+                },
             ),
-            );
-          },
-        ),
+          ),
       ),
     );
   }

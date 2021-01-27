@@ -28,6 +28,8 @@ class _LoginActivityState extends State<LoginActivity> {
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   String stToken;
   String stName;
+  String uLevelId = "";
+  String userType = "";
   String stResponseMessage;
   int responseCode = 0;
   String stUId;
@@ -164,12 +166,12 @@ class _LoginActivityState extends State<LoginActivity> {
         responseCode = ResponseLoginModel.fromJson(jsonDecode(value)).code,
         Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop(),
           if(responseCode == ConstanstVar.successCode){
+            uLevelId =  ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.levelId.toString(),
+            userType =  ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.userType.toString(),
             stToken = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.token,
             stName = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.nameUser,
             stUId = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.userId.toString(),
-            _hrisStore.setAuthUsername(stName, stToken,stUId,
-                ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.levelId.toString(),
-              ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.userType.toString()),
+            _hrisStore.setAuthUsername(stName, stToken,stUId, uLevelId,userType),
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => BottomMenuNavigationAdapter()),
