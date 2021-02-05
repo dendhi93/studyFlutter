@@ -1,4 +1,5 @@
 import 'package:absent_hris/model/MasterAbsent/PostAbsent/PostJsonAbsent.dart';
+import 'package:absent_hris/model/MasterClaim/PostClaim/PostJsonClaimTR.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:http/http.dart' as http;
 
@@ -159,6 +160,24 @@ class ApiServiceUtils {
         return responseTrAbsent.body;
       }else{
         throw new Exception("Error transaction absent");
+      }
+    }
+
+    Future<String>createUpdateApproveClaim(PostJsonClaimTR claimData) async{
+      String urlTRClaim = ConstanstVar.urlApi +'TRClaim.php';
+      print('url $urlTRClaim');
+      final http.Response responseTrClaim = await http
+          .post(urlTRClaim,
+          headers: {'Content-Type': 'application/json',},
+          body: PostJsonClaimTR().postClaimToJson(claimData)
+      );
+
+      if(responseTrClaim.statusCode == ConstanstVar.successCode
+          || responseTrClaim.statusCode == ConstanstVar.invalidTokenCode
+          || responseTrClaim.statusCode == ConstanstVar.failedHttp){
+        return responseTrClaim.body;
+      }else{
+        throw new Exception("Error transaction claim");
       }
     }
 

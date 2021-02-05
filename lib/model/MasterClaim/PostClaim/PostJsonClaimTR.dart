@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class PostClaimTrans {
+class PostJsonClaimTR {
   String userId;
   String dateTrans;
   String claimId;
@@ -13,7 +13,7 @@ class PostClaimTrans {
   String statusId;
   String reasonReject;
 
-  PostClaimTrans(
+  PostJsonClaimTR(
       {this.userId,
         this.dateTrans,
         this.claimId,
@@ -42,7 +42,7 @@ class PostClaimTrans {
     return data;
   }
 
-  String postClaimToJson(PostClaimTrans data) {
+  String postClaimToJson(PostJsonClaimTR data) {
     final jsonData = data.toJson();
     return json.encode(jsonData);
   }

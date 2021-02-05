@@ -26,6 +26,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   DateTime currentBackPressTime;
   HrisUtil messageUtil = HrisUtil();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   TextEditingController etDateClaim = new TextEditingController();
   TextEditingController etOtherClaim = new TextEditingController();
   TextEditingController etSelectedClaimType = new TextEditingController();
@@ -152,6 +153,13 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
         // print(base64Image);
         _bytesImage = base64.decode(base64Image);
       } else {print('No image selected.');}
+    });
+  }
+
+  void validateConnectionTransaction(BuildContext context){
+    HrisUtil.checkConnection().then((isConnected) => {
+      isConnected ? _loadMasterClaim()
+          : _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
     });
   }
 
@@ -403,12 +411,20 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                content: Text("Transaction Success"),
+                                content: Text("Are you sure want to absent ?"),
                                 actions: <Widget>[
                                   FlatButton(child: Text('OK'),
                                     onPressed: (){
                                       Navigator.of(context, rootNavigator: true).pop();
-                                      Navigator.pop(context, '');
+                                      //submitclaim
+                                      validateConnectionTransaction(context);
+                                    },
+                                  ),
+                                  FlatButton(child: Text('Cancel'),
+                                    onPressed: (){
+                                      Navigator.of(context, rootNavigator: true).pop();
+                                      //back to previous screen
+                                      // Navigator.pop(context, '');
                                     },
                                   ),
                                 ],
@@ -455,6 +471,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Claim'),
       ),
