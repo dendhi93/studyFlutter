@@ -194,19 +194,24 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   }
 
   Future<ErrorResponse> _submitAbsent(BuildContext context, PostJsonAbsent postData) async {
-    LoadingUtils.showLoadingDialog(context, _keyLoader);
-    _apiServiceUtils.createAbsent(postData).then((value) => {
-      print(jsonDecode(value)),
-      responseCode = ErrorResponse.fromJson(jsonDecode(value)).code,
-        stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
-      Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop(),
-      if(responseCode == ConstanstVar.successCode){
-          if(stResponseMessage == "Success Absent"){
-            hrisUtil.toastMessage("$stResponseMessage"),
-            Navigator.pop(context, ''),
+    try{
+        LoadingUtils.showLoadingDialog(context, _keyLoader);
+        _apiServiceUtils.createAbsent(postData).then((value) => {
+          print(jsonDecode(value)),
+          responseCode = ErrorResponse.fromJson(jsonDecode(value)).code,
+            stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+          Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop(),
+          if(responseCode == ConstanstVar.successCode){
+              if(stResponseMessage == "Success Absent"){
+                hrisUtil.toastMessage("$stResponseMessage"),
+                Navigator.pop(context, ''),
+              }else{hrisUtil.snackBarMessageScaffoldKey("$stResponseMessage", scaffoldKey),}
           }else{hrisUtil.snackBarMessageScaffoldKey("$stResponseMessage", scaffoldKey),}
-      }else{hrisUtil.snackBarMessageScaffoldKey("$stResponseMessage", scaffoldKey),}
-    });
+        });
+    }catch(error){
+      Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+      hrisUtil.snackBarMessageScaffoldKey("err load claim " +error.toString(), scaffoldKey);
+    }
     return null;
   }
 

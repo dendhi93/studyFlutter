@@ -4,10 +4,12 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/MasterClaim/GetClaim/ResponseClaimDataModel.dart';
+import 'package:absent_hris/model/MasterClaim/PostClaim/PostJsonClaimTR.dart';
 import 'package:absent_hris/model/MasterClaim/master/ResponseDetailMasterClaim.dart';
 import 'package:absent_hris/model/MasterClaim/master/ResponseMasterClaim.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
+import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -40,16 +42,19 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   var isEnableDropDown = true;
   var isHiddenButton = true;
   HrisUtil _hrisUtil = HrisUtil();
+  HrisStore _hrisStore = HrisStore();
   int responseCode = 0;
-  List<ResponseDetailMasterClaim> listDtlMasterClaim = List();
+  List<ResponseDetailMasterClaim> listDtlMasterClaim = [];
   List<ResponseDetailMasterClaim> arrDtlMasterClaim = [];
   ResponseDetailMasterClaim _selectedResponseDtlMasterClaim;
   String stResponseMessage,_selectedMasterClaim;
   String stringFileClaim = "";
+  String stToken,stUid;
   var isLoading = false;
   File _image;
   final picker = ImagePicker();
   Uint8List _bytesImage;
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
   @override
   void initState() {
@@ -161,6 +166,39 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
       isConnected ? _loadMasterClaim()
           : _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
     });
+  }
+
+  void initUIdToken(int intType, BuildContext context){
+    if(intType == 1){
+      Future<String> authUid = _hrisStore.getAuthUserId();
+      authUid.then((data) {
+        stUid = data.trim();
+        initUIdToken(2, context);
+      },onError: (e) {_hrisUtil.toastMessage(e);});
+    }else{
+      Future<String> authUToken = _hrisStore.getAuthToken();
+      authUToken.then((data) {
+        stToken = data.trim();
+        stUid = stUid+"-"+stToken;
+        etOtherClaim.text.isEmpty ? etOtherClaim.text = "-" : etOtherClaim.text =  etOtherClaim.text.trim();
+        // PostJsonClaimTR _postClaimTR = PostJsonClaimTR(userId: stUid,
+        //     dateTrans: etDateClaim.text.trim(), claimId: _selectedMasterClaim,
+        //     detailClaim: etOtherClaim.text.trim(), paidClaim: int.parse(etPaidClaim.text.trim())
+        //     descClaim: etDescClaim.text.trim());
+
+        // print(PostJsonAbsent().absentToJson(_postJsonAbsent));
+        // _submitAbsent(context, _postJsonAbsent);
+      },onError: (e) {_hrisUtil.toastMessage(e);});
+    }
+  }
+
+  Future<ErrorResponse> _submitClaim(BuildContext context, PostJsonClaimTR postData) async {
+    try{
+
+    }catch(error){
+      Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+      _hrisUtil.snackBarMessageScaffoldKey("err load claim " +error.toString(), _scaffoldKey);
+    }
   }
 
   //view
