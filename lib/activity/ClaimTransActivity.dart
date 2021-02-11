@@ -44,12 +44,14 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   HrisUtil _hrisUtil = HrisUtil();
   HrisStore _hrisStore = HrisStore();
   int responseCode = 0;
+  int intTransClaimId = 0;
   List<ResponseDetailMasterClaim> listDtlMasterClaim = [];
   List<ResponseDetailMasterClaim> arrDtlMasterClaim = [];
   ResponseDetailMasterClaim _selectedResponseDtlMasterClaim;
   String stResponseMessage,_selectedMasterClaim;
   String stringFileClaim = "";
   String stToken,stUid;
+  String stLowerId = "";
   var isLoading = false;
   File _image;
   final picker = ImagePicker();
@@ -66,6 +68,8 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
       etPaidClaim.text = moneyIdr.trim();
       etDescClaim.text = widget.claimModel.descClaim;
       stringFileClaim = widget.claimModel.fileClaim;
+      intTransClaimId = widget.claimModel.idTrans;
+      stLowerId = widget.claimModel.lowerUserId;
       if(stringFileClaim != null){_bytesImage = base64.decode(widget.claimModel.fileClaim);}
       if(widget.claimModel.statusId == ConstanstVar.approvedClaimStatus){
         isHiddenButton = !isHiddenButton;
@@ -183,8 +187,8 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
         etOtherClaim.text.isEmpty ? etOtherClaim.text = "-" : etOtherClaim.text =  etOtherClaim.text.trim();
         // PostJsonClaimTR _postClaimTR = PostJsonClaimTR(userId: stUid,
         //     dateTrans: etDateClaim.text.trim(), claimId: _selectedMasterClaim,
-        //     detailClaim: etOtherClaim.text.trim(), paidClaim: int.parse(etPaidClaim.text.trim())
-        //     descClaim: etDescClaim.text.trim());
+        //     detailClaim: etOtherClaim.text.trim(), paidClaim: int.parse(etPaidClaim.text.trim()),
+        //     descClaim: etDescClaim.text.trim(), lowerUserId: stLowerId.trim(), transId: intTransClaimId.toString());
 
         // print(PostJsonAbsent().absentToJson(_postJsonAbsent));
         // _submitAbsent(context, _postJsonAbsent);
