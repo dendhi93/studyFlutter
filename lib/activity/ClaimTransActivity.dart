@@ -185,12 +185,12 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
         stToken = data.trim();
         stUid = stUid+"-"+stToken;
         etOtherClaim.text.isEmpty ? etOtherClaim.text = "-" : etOtherClaim.text =  etOtherClaim.text.trim();
-        // PostJsonClaimTR _postClaimTR = PostJsonClaimTR(userId: stUid,
-        //     dateTrans: etDateClaim.text.trim(), claimId: _selectedMasterClaim,
-        //     detailClaim: etOtherClaim.text.trim(), paidClaim: int.parse(etPaidClaim.text.trim()),
-        //     descClaim: etDescClaim.text.trim(), lowerUserId: stLowerId.trim(), transId: intTransClaimId.toString());
+        PostJsonClaimTR _postClaimTR = PostJsonClaimTR(userId: stUid,
+            dateTrans: etDateClaim.text.trim(), claimId: _selectedMasterClaim,
+            detailClaim: etOtherClaim.text.trim(), paidClaim: int.parse(etPaidClaim.text.trim()),
+            descClaim: etDescClaim.text.trim(), lowerUserId: stLowerId.trim(), transId: intTransClaimId.toString());
 
-        // print(PostJsonAbsent().absentToJson(_postJsonAbsent));
+        print(PostJsonClaimTR().postClaimToJson(_postClaimTR));
         // _submitAbsent(context, _postJsonAbsent);
       },onError: (e) {_hrisUtil.toastMessage(e);});
     }

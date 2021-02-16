@@ -137,7 +137,8 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
             actions: <Widget>[
               FlatButton(child: Text('OK'),
                 onPressed: (){
-                  Navigator.pop(context, '');
+                  // Navigator.pop(context, '');
+                  Navigator.of(context).pop('String');
                 },
               )
             ],
@@ -204,7 +205,8 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
           if(responseCode == ConstanstVar.successCode){
               if(stResponseMessage == "Success Absent"){
                 hrisUtil.toastMessage("$stResponseMessage"),
-                Navigator.pop(context, ''),
+                // Navigator.pop(context, ''),
+                Navigator.of(context).pop('String'),
               }else{hrisUtil.snackBarMessageScaffoldKey("$stResponseMessage", scaffoldKey),}
           }else{hrisUtil.snackBarMessageScaffoldKey("$stResponseMessage", scaffoldKey),}
         });
@@ -362,7 +364,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                             style: TextStyle(fontSize: 20.0),
                           ),
                         ) : Text(""),
-                      isHiddenButton ? new FlatButton(
+                      isHiddenButton ? new RaisedButton(
                         color: Colors.white,
                         textColor: Colors.black,
                         disabledColor: Colors.grey,
@@ -374,7 +376,8 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                             side: BorderSide(color: Colors.grey)
                         ),
                         onPressed: () {
-                          Navigator.pop(context, '');
+                          // Navigator.pop(context, '');
+                          Navigator.of(context).pop('String');
                         },
                         child: Text(
                           "Cancel",

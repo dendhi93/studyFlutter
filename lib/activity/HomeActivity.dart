@@ -57,10 +57,15 @@ class _HomeActivityState extends State<HomeActivity> {
                 return GestureDetector(
                   child: ListAdapter(modelAbsensi: list[index]),
                   onTap: () {
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => AbsentTransActivity(absentModel: list[index]),
-                      ),
-                    );
+                    //   Navigator.push(context, MaterialPageRoute<String>(
+                    //     builder: (context) => AbsentTransActivity(absentModel: list[index]),
+                    //   ),
+                    // );
+                    Navigator.of(context)
+                        .push(new MaterialPageRoute<String>(builder: (context) => AbsentTransActivity(absentModel: list[index])))
+                        .then((String value) {
+                      print(value);
+                    });
                   },
                 );
   //              return Dismissible(
