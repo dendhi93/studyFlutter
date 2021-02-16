@@ -409,13 +409,10 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                           ]
                       ),
                       new Padding(padding: EdgeInsets.only(top: 10.0)),
-                      isHiddenButton ? new FlatButton(
-                        color: Colors.blue,
-                        textColor: Colors.white,
-                        disabledColor: Colors.blueGrey,
-                        disabledTextColor: Colors.black,
+                      isHiddenButton ? new RawMaterialButton(
+                        fillColor: Colors.blue,
+                        splashColor: Colors.yellow,
                         padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
-                        splashColor: Colors.blueAccent,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
                             side: BorderSide(color: Colors.yellow)
@@ -426,7 +423,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                         },
                         child: Text(
                           "Capture Camera",
-                          style: TextStyle(fontSize: 20.0),
+                          style: TextStyle(fontSize: 20.0, color:Colors.white),
                         ),
                       ): Text(""),
                     ]
@@ -436,13 +433,10 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                 new Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    isHiddenButton ? new FlatButton(
-                      color: Colors.blue,
-                      textColor: Colors.white,
-                      disabledColor: Colors.blueGrey,
-                      disabledTextColor: Colors.black,
+                    isHiddenButton ? new RawMaterialButton(
+                      fillColor: Colors.blue,
+                      splashColor: Colors.yellow,
                       padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
-                      splashColor: Colors.blueAccent,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
                           side: BorderSide(color: Colors.yellow)
@@ -477,17 +471,14 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                       },
                       child: Text(
                         "Save",
-                        style: TextStyle(fontSize: 20.0),
+                        style: TextStyle(fontSize: 20.0,color:Colors.white),
                       ),
                     ) : Text(""),
 
-                    isHiddenButton ? new FlatButton(
-                      color: Colors.white,
-                      textColor: Colors.black,
-                      disabledColor: Colors.grey,
-                      disabledTextColor: Colors.grey,
+                    isHiddenButton ? new RawMaterialButton(
+                      fillColor: Colors.white,
+                      splashColor: Colors.white,
                       padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
-                      splashColor: Colors.blueAccent,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
                           side: BorderSide(color: Colors.grey)
@@ -497,7 +488,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                       },
                       child: Text(
                         "Cancel",
-                        style: TextStyle(fontSize: 20.0),
+                        style: TextStyle(fontSize: 20.0, color: Colors.black),
                       ),
                     ) : Text(""),
                   ],

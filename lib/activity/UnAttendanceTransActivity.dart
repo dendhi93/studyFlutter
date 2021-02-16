@@ -304,13 +304,10 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                       new Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          isShowButton ? new FlatButton(
-                            color: Colors.blue,
-                            textColor: Colors.white,
-                            disabledColor: Colors.blueGrey,
-                            disabledTextColor: Colors.black,
+                          isShowButton ? new RawMaterialButton(
+                            fillColor: Colors.blue,
+                            splashColor: Colors.yellow,
                             padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
-                            splashColor: Colors.blueAccent,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18.0),
                                 side: BorderSide(color: Colors.yellow)
@@ -337,17 +334,14 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                             },
                             child: Text(
                               "Save",
-                              style: TextStyle(fontSize: 20.0),
+                              style: TextStyle(fontSize: 20.0, color:Colors.white),
                             ),
                           ) : Text(""),
 
-                          isShowButton ? new FlatButton(
-                            color: Colors.white,
-                            textColor: Colors.black,
-                            disabledColor: Colors.grey,
-                            disabledTextColor: Colors.grey,
+                          isShowButton ? new RawMaterialButton(
+                            fillColor: Colors.white,
+                            splashColor: Colors.white54,
                             padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
-                            splashColor: Colors.blueAccent,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18.0),
                                 side: BorderSide(color: Colors.grey)
@@ -357,7 +351,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                             },
                             child: Text(
                               "Cancel",
-                              style: TextStyle(fontSize: 20.0),
+                              style: TextStyle(fontSize: 20.0, color: Colors.black),
                             ),
                           ) : Text(""),
                         ],
