@@ -319,19 +319,14 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                 new Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                        isHiddenButton ? new TextButton(
-                            style: TextButton.styleFrom(
-                              primary: Colors.black,
-                              backgroundColor : Colors.white,
-                              // disabledColor: Colors.blueGrey,
-                              // disabledTextColor: Colors.black,
-                              padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
-                              // splashColor: Colors.blueAccent,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
-                                  side: BorderSide(color: Colors.yellow)
-                              ),
-                            ),
+                        isHiddenButton ? new RawMaterialButton(
+                          fillColor: Colors.blue,
+                          splashColor: Colors.yellow,
+                          padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(color: Colors.yellow)
+                          ),
                           onPressed: () {
                             if (_formKey.currentState.validate()){
                               if(_groupValue == -1){
@@ -364,17 +359,14 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                           },
                           child: Text(
                             "Save",
-                            style: TextStyle(fontSize: 20.0),
+                            style: TextStyle(fontSize: 20.0, color: Colors.white),
                           ),
                         ) : Text(""),
                       isHiddenButton ?
-                      new RaisedButton(
-                        color: Colors.white,
-                        textColor: Colors.black,
-                        disabledColor: Colors.grey,
-                        disabledTextColor: Colors.grey,
+                      new RawMaterialButton(
+                        fillColor: Colors.white,
+                        splashColor: Colors.white54,
                         padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
-                        splashColor: Colors.blueAccent,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
                             side: BorderSide(color: Colors.grey)
@@ -385,7 +377,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                         },
                         child: Text(
                           "Cancel",
-                          style: TextStyle(fontSize: 20.0),
+                          style: TextStyle(fontSize: 20.0, color:Colors.black),
                         ),
                       )
                           : Text(""),

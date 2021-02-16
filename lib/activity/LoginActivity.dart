@@ -122,13 +122,10 @@ class _LoginActivityState extends State<LoginActivity> {
                       ),
                     ),
                     new Padding(padding: EdgeInsets.only(top: 50.0)),
-                    new FlatButton(
-                      color: Colors.blue,
-                      textColor: Colors.white,
-                      disabledColor: Colors.blueGrey,
-                      disabledTextColor: Colors.black,
+                    new RawMaterialButton(
+                      fillColor: Colors.blue,
+                      splashColor: Colors.yellow,
                       padding: EdgeInsets.only(left: 120, top:20, right: 120, bottom: 20),
-                      splashColor: Colors.blueAccent,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
                           side: BorderSide(color: Colors.yellow)
@@ -140,7 +137,7 @@ class _LoginActivityState extends State<LoginActivity> {
                       },
                       child: Text(
                         "LOG IN",
-                        style: TextStyle(fontSize: 20.0),
+                        style: TextStyle(fontSize: 20.0, color: Colors.white),
                       ),
                     ),
                   ],
