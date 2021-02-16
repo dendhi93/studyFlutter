@@ -246,13 +246,13 @@ class _UserActivityState extends State<UserActivity> {
 
   showAlertDialog(BuildContext context) {
     // set up the buttons
-    Widget cancelButton = FlatButton(
+    Widget cancelButton = TextButton(
       child: Text("Cancel"),
       onPressed:  () {
         Navigator.of(context).pop();
       },
     );
-    Widget continueButton = FlatButton(
+    Widget continueButton = TextButton(
       child: Text("OK"),
       onPressed:  () {
         Navigator.of(context).pop();

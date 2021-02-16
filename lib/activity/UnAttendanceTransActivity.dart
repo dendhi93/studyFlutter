@@ -323,7 +323,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                                     return AlertDialog(
                                       content: Text("Transaction Success"),
                                       actions: <Widget>[
-                                        FlatButton(child: Text('OK'),
+                                        TextButton(child: Text('OK'),
                                           onPressed: (){
                                             Navigator.of(context, rootNavigator: true).pop();
                                             Navigator.pop(context, '');

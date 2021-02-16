@@ -82,7 +82,7 @@ class HrisUtil {
                 title: new Text(title),
                 content: new Text(content),
                 actions: <Widget>[
-                  new FlatButton(
+                  new TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },

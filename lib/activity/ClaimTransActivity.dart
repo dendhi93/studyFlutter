@@ -455,14 +455,14 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                               return AlertDialog(
                                 content: Text("Are you sure want to absent ?"),
                                 actions: <Widget>[
-                                  FlatButton(child: Text('OK'),
+                                  TextButton(child: Text('OK'),
                                     onPressed: (){
                                       Navigator.of(context, rootNavigator: true).pop();
                                       //submitclaim
                                       validateConnectionTransaction(context);
                                     },
                                   ),
-                                  FlatButton(child: Text('Cancel'),
+                                  TextButton(child: Text('Cancel'),
                                     onPressed: (){
                                       Navigator.of(context, rootNavigator: true).pop();
                                       //back to previous screen

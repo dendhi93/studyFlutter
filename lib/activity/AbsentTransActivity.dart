@@ -6,6 +6,7 @@ import 'package:absent_hris/model/MasterAbsent/GetAbsent/ResponseDtlAbsentModel.
 import 'package:absent_hris/model/MasterAbsent/PostAbsent/PostJsonAbsent.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
+import 'package:absent_hris/util/CustomSubmitButton.dart';
 import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:absent_hris/util/LoadingUtils.dart';
@@ -114,7 +115,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
           return AlertDialog(
             content: Text("Can't get current location"),
             actions: <Widget>[
-              FlatButton(child: Text('OK'),
+              TextButton(child: Text('OK'),
                 onPressed: (){
                   final AndroidIntent intent = AndroidIntent(
                       action: 'android.settings.LOCATION_SOURCE_SETTINGS');
@@ -135,7 +136,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
           return AlertDialog(
             content: Text("Can't get current location"),
             actions: <Widget>[
-              FlatButton(child: Text('OK'),
+              TextButton(child: Text('OK'),
                 onPressed: (){
                   // Navigator.pop(context, '');
                   Navigator.of(context).pop('String');
@@ -318,17 +319,19 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                 new Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                        isHiddenButton ? new FlatButton(
-                          color: Colors.blue,
-                          textColor: Colors.white,
-                          disabledColor: Colors.blueGrey,
-                          disabledTextColor: Colors.black,
-                          padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
-                          splashColor: Colors.blueAccent,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(color: Colors.yellow)
-                          ),
+                        isHiddenButton ? new TextButton(
+                            style: TextButton.styleFrom(
+                              primary: Colors.black,
+                              backgroundColor : Colors.white,
+                              // disabledColor: Colors.blueGrey,
+                              // disabledTextColor: Colors.black,
+                              padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
+                              // splashColor: Colors.blueAccent,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  side: BorderSide(color: Colors.yellow)
+                              ),
+                            ),
                           onPressed: () {
                             if (_formKey.currentState.validate()){
                               if(_groupValue == -1){
@@ -340,14 +343,14 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                                     return AlertDialog(
                                       content: Text("Are you sure want to absent ? "),
                                       actions: <Widget>[
-                                        FlatButton(child: Text('OK'),
+                                        TextButton(child: Text('OK'),
                                           onPressed: (){
                                             Navigator.of(context, rootNavigator: true).pop();
                                             //submitAbsent
                                             validateConnection(context);
                                           },
                                         ),
-                                        FlatButton(child: Text('Cancel'),
+                                        TextButton(child: Text('Cancel'),
                                           onPressed: (){
                                             Navigator.of(context, rootNavigator: true).pop();
                                           },
@@ -364,7 +367,8 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                             style: TextStyle(fontSize: 20.0),
                           ),
                         ) : Text(""),
-                      isHiddenButton ? new RaisedButton(
+                      isHiddenButton ?
+                      new RaisedButton(
                         color: Colors.white,
                         textColor: Colors.black,
                         disabledColor: Colors.grey,
@@ -383,7 +387,8 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                           "Cancel",
                           style: TextStyle(fontSize: 20.0),
                         ),
-                      ) : Text(""),
+                      )
+                          : Text(""),
                   ],
                 ),
               ],
