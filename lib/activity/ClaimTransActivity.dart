@@ -41,6 +41,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   var isShowDetailText = false;
   var isEnableDropDown = true;
   var isHiddenButton = true;
+  var isHiddenButtonCapture = true;
   HrisUtil _hrisUtil = HrisUtil();
   HrisStore _hrisStore = HrisStore();
   int responseCode = 0;
@@ -77,7 +78,6 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
         stLowerId = widget.claimModel.lowerUserId;
         if(stringFileClaim != null){_bytesImage = base64.decode(widget.claimModel.fileClaim);}
         intStatusId = widget.claimModel.statusId;
-        print(intStatusId);
         if(intStatusId == ConstanstVar.approvedClaimStatus){
           isHiddenButton = !isHiddenButton;
           isEnableText = false;
@@ -85,6 +85,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
         }else{
           isEnableText = true;
           validateConnection(context);
+          if(_userType == "approval"){isHiddenButtonCapture = !isHiddenButtonCapture;}
         }
         if(widget.claimModel.detailClaim != ""){
           isShowDetailText = true;
@@ -422,7 +423,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                           ]
                       ),
                       new Padding(padding: EdgeInsets.only(top: 10.0)),
-                      isHiddenButton ? new RawMaterialButton(
+                      isHiddenButtonCapture ? new RawMaterialButton(
                         fillColor: Colors.blue,
                         splashColor: Colors.yellow,
 
