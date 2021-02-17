@@ -54,6 +54,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   String stResponseMessage,_selectedMasterClaim;
   String stringFileClaim = "";
   String stToken,stUid,_userType;
+  String stPaidClaim = "";
   String stLowerId = "";
   String stReasonReject = "";
   var isLoading = false;
@@ -72,6 +73,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
       if(widget.claimModel != null){
         etDateClaim.text = widget.claimModel.transDate;
         etSelectedClaimType.text = widget.claimModel.claimDesc;
+        stPaidClaim = widget.claimModel.paidClaim.toString();
         String moneyIdr = _hrisUtil.idrFormating(widget.claimModel.paidClaim.toString());
         etPaidClaim.text = moneyIdr.trim();
         etDescClaim.text = widget.claimModel.descClaim;
@@ -199,9 +201,10 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
         stToken = data.trim();
         stUid = stUid+"-"+stToken;
         etOtherClaim.text.isEmpty ? etOtherClaim.text = "-" : etOtherClaim.text =  etOtherClaim.text.trim();
+        if(stPaidClaim == "")stPaidClaim = etPaidClaim.text.trim();
         PostJsonClaimTR _postClaimTR = PostJsonClaimTR(userId: stUid,
             dateTrans: etDateClaim.text.trim(), claimId: _selectedMasterClaim,
-            detailClaim: etOtherClaim.text.trim(), paidClaim: etPaidClaim.text.trim(),
+            detailClaim: etOtherClaim.text.trim(), paidClaim: stPaidClaim.trim(),
             descClaim: etDescClaim.text.trim(), lowerUserId: stLowerId.trim(),
             transId: intTransClaimId.toString(), statusId: intStatusId.toString(),reasonReject: stReasonReject.trim(),
             fileClaim: stringFileClaim);
