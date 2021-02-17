@@ -45,12 +45,13 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   HrisStore _hrisStore = HrisStore();
   int responseCode = 0;
   int intTransClaimId = 0;
+  int intStatusId = 0;
   List<ResponseDetailMasterClaim> listDtlMasterClaim = [];
   List<ResponseDetailMasterClaim> arrDtlMasterClaim = [];
   ResponseDetailMasterClaim _selectedResponseDtlMasterClaim;
   String stResponseMessage,_selectedMasterClaim;
   String stringFileClaim = "";
-  String stToken,stUid;
+  String stToken,stUid,_userType;
   String stLowerId = "";
   var isLoading = false;
   File _image;
@@ -61,32 +62,40 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   @override
   void initState() {
     super.initState();
-    if(widget.claimModel != null){
-      etDateClaim.text = widget.claimModel.transDate;
-      etSelectedClaimType.text = widget.claimModel.claimDesc;
-      String moneyIdr = _hrisUtil.idrFormating(widget.claimModel.paidClaim.toString());
-      etPaidClaim.text = moneyIdr.trim();
-      etDescClaim.text = widget.claimModel.descClaim;
-      stringFileClaim = widget.claimModel.fileClaim;
-      intTransClaimId = widget.claimModel.idTrans;
-      stLowerId = widget.claimModel.lowerUserId;
-      if(stringFileClaim != null){_bytesImage = base64.decode(widget.claimModel.fileClaim);}
-      if(widget.claimModel.statusId == ConstanstVar.approvedClaimStatus){
-        isHiddenButton = !isHiddenButton;
-        isEnableText = false;
-        isEnableDropDown = false;
+    Future<String> authUType = _hrisStore.getAuthUserLevelType();
+    authUType.then((data) {
+      _userType = data.trim();
+
+      if(widget.claimModel != null){
+        etDateClaim.text = widget.claimModel.transDate;
+        etSelectedClaimType.text = widget.claimModel.claimDesc;
+        String moneyIdr = _hrisUtil.idrFormating(widget.claimModel.paidClaim.toString());
+        etPaidClaim.text = moneyIdr.trim();
+        etDescClaim.text = widget.claimModel.descClaim;
+        stringFileClaim = widget.claimModel.fileClaim;
+        intTransClaimId = widget.claimModel.idTrans;
+        stLowerId = widget.claimModel.lowerUserId;
+        if(stringFileClaim != null){_bytesImage = base64.decode(widget.claimModel.fileClaim);}
+        intStatusId = widget.claimModel.statusId;
+        print(intStatusId);
+        if(intStatusId == ConstanstVar.approvedClaimStatus){
+          isHiddenButton = !isHiddenButton;
+          isEnableText = false;
+          isEnableDropDown = false;
+        }else{
+          isEnableText = true;
+          validateConnection(context);
+        }
+        if(widget.claimModel.detailClaim != ""){
+          isShowDetailText = true;
+          etOtherClaim.text = widget.claimModel.detailClaim;
+        }else{isShowDetailText = false;}
       }else{
         isEnableText = true;
         validateConnection(context);
       }
-      if(widget.claimModel.detailClaim != ""){
-        isShowDetailText = true;
-        etOtherClaim.text = widget.claimModel.detailClaim;
-      }else{isShowDetailText = false;}
-    }else{
-      isEnableText = true;
-      validateConnection(context);
-    }
+
+    });
   }
 
   //controller
@@ -127,6 +136,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   Future<ResponseMasterClaim> _loadMasterClaim() async{
     loadingOption();
       _apiServiceUtils.getMasterClaim().then((value) => {
+        print(jsonDecode(value)),
           responseCode = ResponseMasterClaim.fromJson(jsonDecode(value)).code,
         if(responseCode == ConstanstVar.successCode){
            listDtlMasterClaim = ResponseMasterClaim.fromJson(jsonDecode(value)).masterClaim,
@@ -158,9 +168,9 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
         _image = File(pickedFile.path);
         //converting into string base64
         List<int> imageBytes = _image.readAsBytesSync();
-        String base64Image = base64Encode(imageBytes);
+        stringFileClaim = base64Encode(imageBytes);
         // print(base64Image);
-        _bytesImage = base64.decode(base64Image);
+        _bytesImage = base64.decode(stringFileClaim);
       } else {print('No image selected.');}
     });
   }
@@ -185,10 +195,13 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
         stToken = data.trim();
         stUid = stUid+"-"+stToken;
         etOtherClaim.text.isEmpty ? etOtherClaim.text = "-" : etOtherClaim.text =  etOtherClaim.text.trim();
+        if(intTransClaimId == 0){intStatusId = 1;}
         PostJsonClaimTR _postClaimTR = PostJsonClaimTR(userId: stUid,
             dateTrans: etDateClaim.text.trim(), claimId: _selectedMasterClaim,
             detailClaim: etOtherClaim.text.trim(), paidClaim: int.parse(etPaidClaim.text.trim()),
-            descClaim: etDescClaim.text.trim(), lowerUserId: stLowerId.trim(), transId: intTransClaimId.toString());
+            descClaim: etDescClaim.text.trim(), lowerUserId: stLowerId.trim(),
+            transId: intTransClaimId.toString(), fileClaim: stringFileClaim,
+            statusId: intStatusId.toString(),reasonReject: "");
 
         print(PostJsonClaimTR().postClaimToJson(_postClaimTR));
         // _submitAbsent(context, _postJsonAbsent);
@@ -412,6 +425,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                       isHiddenButton ? new RawMaterialButton(
                         fillColor: Colors.blue,
                         splashColor: Colors.yellow,
+
                         padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
@@ -430,68 +444,130 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                 ),
 
                 new Padding(padding: EdgeInsets.only(top: 25.0)),
-                new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    isHiddenButton ? new RawMaterialButton(
-                      fillColor: Colors.blue,
-                      splashColor: Colors.yellow,
-                      padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: Colors.yellow)
-                      ),
-                      onPressed: () {
-                        if (_formKey.currentState.validate()){
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                content: Text("Are you sure want to absent ?"),
-                                actions: <Widget>[
-                                  TextButton(child: Text('OK'),
-                                    onPressed: (){
-                                      Navigator.of(context, rootNavigator: true).pop();
-                                      //submitclaim
-                                      validateConnectionTransaction(context);
-                                    },
-                                  ),
-                                  TextButton(child: Text('Cancel'),
-                                    onPressed: (){
-                                      Navigator.of(context, rootNavigator: true).pop();
-                                      //back to previous screen
-                                      // Navigator.pop(context, '');
-                                    },
-                                  ),
-                                ],
+                _userType == 'requester' ? new Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        isHiddenButton ? new RawMaterialButton(
+                          fillColor: Colors.blue,
+                          splashColor: Colors.yellow,
+                          padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(color: Colors.yellow)
+                          ),
+                          onPressed: () {
+                            if (_formKey.currentState.validate()){
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Text("Are you sure want to absent ?"),
+                                    actions: <Widget>[
+                                      TextButton(child: Text('OK'),
+                                        onPressed: (){
+                                          Navigator.of(context, rootNavigator: true).pop();
+                                          //submitclaim
+                                          validateConnectionTransaction(context);
+                                        },
+                                      ),
+                                      TextButton(child: Text('Cancel'),
+                                        onPressed: (){
+                                          Navigator.of(context, rootNavigator: true).pop();
+                                          //back to previous screen
+                                          // Navigator.pop(context, '');
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
-                            },
-                          );
-                        }
-                      },
-                      child: Text(
-                        "Save",
-                        style: TextStyle(fontSize: 20.0,color:Colors.white),
-                      ),
-                    ) : Text(""),
+                            }
+                          },
+                          child: Text(
+                            "Save",
+                            style: TextStyle(fontSize: 20.0,color:Colors.white),
+                          ),
+                        ) : Text(""),
 
-                    isHiddenButton ? new RawMaterialButton(
-                      fillColor: Colors.white,
-                      splashColor: Colors.white,
-                      padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: Colors.grey)
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context, '');
-                      },
-                      child: Text(
-                        "Cancel",
-                        style: TextStyle(fontSize: 20.0, color: Colors.black),
-                      ),
-                    ) : Text(""),
-                  ],
+                        isHiddenButton ? new RawMaterialButton(
+                          fillColor: Colors.white,
+                          splashColor: Colors.white,
+                          padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(color: Colors.grey)
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context, '');
+                          },
+                          child: Text(
+                            "Cancel",
+                            style: TextStyle(fontSize: 20.0, color: Colors.black),
+                          ),
+                        ) : Text(""),
+                      ],
+                ) : new Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        isHiddenButton ? new RawMaterialButton(
+                          fillColor: Colors.blue,
+                          splashColor: Colors.yellow,
+                          padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(color: Colors.yellow)
+                          ),
+                          onPressed: () {
+                            if (_formKey.currentState.validate()){
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Text("Are you sure want to absent ?"),
+                                    actions: <Widget>[
+                                      TextButton(child: Text('OK'),
+                                        onPressed: (){
+                                          Navigator.of(context, rootNavigator: true).pop();
+                                          //submitclaim
+                                          // validateConnectionTransaction(context);
+                                        },
+                                      ),
+                                      TextButton(child: Text('Cancel'),
+                                        onPressed: (){
+                                          Navigator.of(context, rootNavigator: true).pop();
+                                          //back to previous screen
+                                          // Navigator.pop(context, '');
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                          },
+                          child: Text(
+                            "Approve",
+                            style: TextStyle(fontSize: 20.0,color:Colors.white),
+                          ),
+                        ) : Text(""),
+
+                        isHiddenButton ? new RawMaterialButton(
+                          fillColor: Colors.white,
+                          splashColor: Colors.white54,
+                          padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(color: Colors.grey)
+                          ),
+                          onPressed: () {
+                            _hrisUtil.toastMessage("reject cuy");
+                          },
+                          child: Text(
+                            "Reject",
+                            style: TextStyle(fontSize: 20.0, color: Colors.black),
+                          ),
+                        ) : Text(""),
+                      ],
                 ),
               ],
             ),

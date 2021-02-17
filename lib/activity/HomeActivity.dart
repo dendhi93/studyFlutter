@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:absent_hris/activity/AbsentTransActivity.dart';
@@ -57,15 +58,13 @@ class _HomeActivityState extends State<HomeActivity> {
                 return GestureDetector(
                   child: ListAdapter(modelAbsensi: list[index]),
                   onTap: () {
-                    //   Navigator.push(context, MaterialPageRoute<String>(
-                    //     builder: (context) => AbsentTransActivity(absentModel: list[index]),
-                    //   ),
-                    // );
-                    Navigator.of(context)
-                        .push(new MaterialPageRoute<String>(builder: (context) => AbsentTransActivity(absentModel: list[index])))
-                        .then((String value) {
-                      print(value);
-                    });
+                    // Navigator.of(context)
+                    //     .push(new MaterialPageRoute<String>(builder: (context) => AbsentTransActivity(absentModel: list[index])))
+                    //     .then((String value) {
+                    //           print(value);
+                    //     });
+                    Route route = MaterialPageRoute(builder: (context) => AbsentTransActivity(absentModel: list[index]));
+                    Navigator.push(context, route).then(onGoBack);
                   },
                 );
   //              return Dismissible(
@@ -123,10 +122,8 @@ class _HomeActivityState extends State<HomeActivity> {
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) => AbsentTransActivity(absentModel: null),
-              ),
-              );
+              Route route = MaterialPageRoute(builder: (context) => AbsentTransActivity(absentModel: null));
+              Navigator.push(context, route).then(onGoBack);
             },
           ),
         ),
@@ -199,6 +196,11 @@ class _HomeActivityState extends State<HomeActivity> {
           _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
         }
       });
+    }
+
+    FutureOr onGoBack(dynamic value) {
+      validateConnection(context);
+      setState(() {});
     }
 }
 
