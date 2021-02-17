@@ -1,4 +1,5 @@
 class ResponseClaimDataModel{
+  String claimId;
   String claimDesc;
   String detailClaim;
   String transDate;
@@ -12,7 +13,8 @@ class ResponseClaimDataModel{
   int idTrans;
 
   ResponseClaimDataModel(
-      {this.claimDesc,
+      {this.claimId,
+        this.claimDesc,
         this.detailClaim,
         this.transDate,
         this.statusId,
@@ -25,6 +27,7 @@ class ResponseClaimDataModel{
       this.idTrans = 0});
 
   ResponseClaimDataModel.fromJson(Map<String, dynamic> json) {
+    claimId = json['claim_id'];
     claimDesc = json['claim_desc'];
     detailClaim = json['detail_claim'];
     transDate = json['trans_date'];

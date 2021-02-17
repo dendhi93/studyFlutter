@@ -5,7 +5,7 @@ class PostJsonClaimTR {
   String dateTrans;
   String claimId;
   String detailClaim;
-  int paidClaim;
+  String paidClaim;
   String descClaim;
   String lowerUserId;
   String transId;

@@ -35,6 +35,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   TextEditingController etAvailableClaimTotal = new TextEditingController();
   TextEditingController etPaidClaim = new TextEditingController();
   TextEditingController etDescClaim = new TextEditingController();
+  TextEditingController etRejectReason = new TextEditingController();
   DateTime selectedDate = DateTime.now();
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   var isEnableText = false;
@@ -46,7 +47,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   HrisStore _hrisStore = HrisStore();
   int responseCode = 0;
   int intTransClaimId = 0;
-  int intStatusId = 0;
+  int intStatusId = 1;
   List<ResponseDetailMasterClaim> listDtlMasterClaim = [];
   List<ResponseDetailMasterClaim> arrDtlMasterClaim = [];
   ResponseDetailMasterClaim _selectedResponseDtlMasterClaim;
@@ -54,6 +55,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   String stringFileClaim = "";
   String stToken,stUid,_userType;
   String stLowerId = "";
+  String stReasonReject = "";
   var isLoading = false;
   File _image;
   final picker = ImagePicker();
@@ -76,6 +78,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
         stringFileClaim = widget.claimModel.fileClaim;
         intTransClaimId = widget.claimModel.idTrans;
         stLowerId = widget.claimModel.lowerUserId;
+        _selectedMasterClaim = widget.claimModel.claimId;
         if(stringFileClaim != null){_bytesImage = base64.decode(widget.claimModel.fileClaim);}
         intStatusId = widget.claimModel.statusId;
         if(intStatusId == ConstanstVar.approvedClaimStatus){
@@ -178,7 +181,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
 
   void validateConnectionTransaction(BuildContext context){
     HrisUtil.checkConnection().then((isConnected) => {
-      isConnected ? _loadMasterClaim()
+      isConnected ? initUIdToken(1, context)
           : _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
     });
   }
@@ -196,16 +199,15 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
         stToken = data.trim();
         stUid = stUid+"-"+stToken;
         etOtherClaim.text.isEmpty ? etOtherClaim.text = "-" : etOtherClaim.text =  etOtherClaim.text.trim();
-        if(intTransClaimId == 0){intStatusId = 1;}
         PostJsonClaimTR _postClaimTR = PostJsonClaimTR(userId: stUid,
             dateTrans: etDateClaim.text.trim(), claimId: _selectedMasterClaim,
-            detailClaim: etOtherClaim.text.trim(), paidClaim: int.parse(etPaidClaim.text.trim()),
+            detailClaim: etOtherClaim.text.trim(), paidClaim: etPaidClaim.text.trim(),
             descClaim: etDescClaim.text.trim(), lowerUserId: stLowerId.trim(),
-            transId: intTransClaimId.toString(), fileClaim: stringFileClaim,
-            statusId: intStatusId.toString(),reasonReject: "");
+            transId: intTransClaimId.toString(), statusId: intStatusId.toString(),reasonReject: stReasonReject.trim(),
+            fileClaim: stringFileClaim);
 
         print(PostJsonClaimTR().postClaimToJson(_postClaimTR));
-        // _submitAbsent(context, _postJsonAbsent);
+        // _submitClaim(context, _postJsonAbsent);
       },onError: (e) {_hrisUtil.toastMessage(e);});
     }
   }
@@ -217,6 +219,37 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
       Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
       _hrisUtil.snackBarMessageScaffoldKey("err load claim " +error.toString(), _scaffoldKey);
     }
+  }
+
+  void onRejectvalidation(BuildContext context){
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Please Fill reason of reject'),
+            content: TextField(
+              onChanged: (value) {
+                setState(() => stReasonReject = value);
+              },
+              controller: etRejectReason,
+              decoration: InputDecoration(hintText: "reason Reject"),
+            ),
+            actions: <Widget>[
+              TextButton(child: Text('OK'),
+                onPressed: (){
+                  Navigator.of(context, rootNavigator: true).pop();
+                  //submitclaim
+                  validateConnectionTransaction(context);
+                },
+              ),
+              TextButton(child: Text('Cancel'),
+                onPressed: (){
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
 
   //view
@@ -458,30 +491,30 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                           ),
                           onPressed: () {
                             if (_formKey.currentState.validate()){
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    content: Text("Are you sure want to absent ?"),
-                                    actions: <Widget>[
-                                      TextButton(child: Text('OK'),
-                                        onPressed: (){
-                                          Navigator.of(context, rootNavigator: true).pop();
-                                          //submitclaim
-                                          validateConnectionTransaction(context);
-                                        },
-                                      ),
-                                      TextButton(child: Text('Cancel'),
-                                        onPressed: (){
-                                          Navigator.of(context, rootNavigator: true).pop();
-                                          //back to previous screen
-                                          // Navigator.pop(context, '');
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      content: Text("Are you sure want to request claim ?"),
+                                      actions: <Widget>[
+                                        TextButton(child: Text('OK'),
+                                          onPressed: (){
+                                            Navigator.of(context, rootNavigator: true).pop();
+                                            //submitclaim
+                                            validateConnectionTransaction(context);
+                                          },
+                                        ),
+                                        TextButton(child: Text('Cancel'),
+                                          onPressed: (){
+                                            Navigator.of(context, rootNavigator: true).pop();
+                                            //back to previous screen
+                                            // Navigator.pop(context, '');
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
                             }
                           },
                           child: Text(
@@ -520,30 +553,33 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                           ),
                           onPressed: () {
                             if (_formKey.currentState.validate()){
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    content: Text("Are you sure want to absent ?"),
-                                    actions: <Widget>[
-                                      TextButton(child: Text('OK'),
-                                        onPressed: (){
-                                          Navigator.of(context, rootNavigator: true).pop();
-                                          //submitclaim
-                                          // validateConnectionTransaction(context);
-                                        },
-                                      ),
-                                      TextButton(child: Text('Cancel'),
-                                        onPressed: (){
-                                          Navigator.of(context, rootNavigator: true).pop();
-                                          //back to previous screen
-                                          // Navigator.pop(context, '');
-                                        },
-                                      ),
-                                    ],
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        content: Text("Are you sure want to approve claim ?"),
+                                        actions: <Widget>[
+                                          TextButton(child: Text('OK'),
+                                            onPressed: (){
+                                              setState(() {
+                                                intStatusId = 2;
+                                              });
+                                              Navigator.of(context, rootNavigator: true).pop();
+                                              //submitclaim
+                                              validateConnectionTransaction(context);
+                                            },
+                                          ),
+                                          TextButton(child: Text('Cancel'),
+                                            onPressed: (){
+                                              Navigator.of(context, rootNavigator: true).pop();
+                                              //back to previous screen
+                                              // Navigator.pop(context, '');
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
                                   );
-                                },
-                              );
                             }
                           },
                           child: Text(
@@ -561,7 +597,32 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                               side: BorderSide(color: Colors.grey)
                           ),
                           onPressed: () {
-                            _hrisUtil.toastMessage("reject cuy");
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Text("Are you sure want to reject claim ?"),
+                                    actions: <Widget>[
+                                      TextButton(child: Text('OK'),
+                                        onPressed: (){
+                                          setState(() {
+                                            intStatusId = 3;
+                                          });
+                                          Navigator.of(context, rootNavigator: true).pop();
+                                          onRejectvalidation(context);
+                                        },
+                                      ),
+                                      TextButton(child: Text('Cancel'),
+                                        onPressed: (){
+                                          Navigator.of(context, rootNavigator: true).pop();
+                                          //back to previous screen
+                                          // Navigator.pop(context, '');
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
                           },
                           child: Text(
                             "Reject",
