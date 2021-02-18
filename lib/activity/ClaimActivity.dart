@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:absent_hris/activity/LoginActivity.dart';
@@ -98,10 +99,8 @@ class _ClaimActivityState extends State<ClaimActivity> {
             return GestureDetector(
               child: ListClaimAdapter(responseClaimDataModel: listClaim[index]),
               onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => ClaimTransActivity(claimModel: listClaim[index],),
-                  ),
-                );
+                Route route = MaterialPageRoute(builder: (context) => ClaimTransActivity(claimModel: listClaim[index]));
+                Navigator.push(context, route).then(onGoBack);
               },
             );
           }
@@ -143,6 +142,11 @@ class _ClaimActivityState extends State<ClaimActivity> {
     return null;
   }
 
+  FutureOr onGoBack(dynamic value) {
+    validateConnection(context);
+    setState(() {});
+  }
+
   //view
   @override
   Widget build(BuildContext context) {
@@ -164,10 +168,8 @@ class _ClaimActivityState extends State<ClaimActivity> {
             child: new FloatingActionButton(
                 child: Icon(Icons.add),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => ClaimTransActivity(claimModel: null),
-                  ),
-                  );
+                  Route route = MaterialPageRoute(builder: (context) => ClaimTransActivity(claimModel: null));
+                  Navigator.push(context, route).then(onGoBack);
                 },
             ),
           ),

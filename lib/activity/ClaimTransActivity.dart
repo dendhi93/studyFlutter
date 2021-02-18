@@ -11,6 +11,7 @@ import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
+import 'package:absent_hris/util/LoadingUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -202,6 +203,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
         stUid = stUid+"-"+stToken;
         etOtherClaim.text.isEmpty ? etOtherClaim.text = "-" : etOtherClaim.text =  etOtherClaim.text.trim();
         if(stPaidClaim == "")stPaidClaim = etPaidClaim.text.trim();
+        if(stLowerId == "")stLowerId = "-";
         PostJsonClaimTR _postClaimTR = PostJsonClaimTR(userId: stUid,
             dateTrans: etDateClaim.text.trim(), claimId: _selectedMasterClaim,
             detailClaim: etOtherClaim.text.trim(), paidClaim: stPaidClaim.trim(),
@@ -209,15 +211,27 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
             transId: intTransClaimId.toString(), statusId: intStatusId.toString(),reasonReject: stReasonReject.trim(),
             fileClaim: stringFileClaim);
 
-        print(PostJsonClaimTR().postClaimToJson(_postClaimTR));
-        // _submitClaim(context, _postJsonAbsent);
+        // print(PostJsonClaimTR().postClaimToJson(_postClaimTR));
+        _submitClaim(context, _postClaimTR);
       },onError: (e) {_hrisUtil.toastMessage(e);});
     }
   }
 
   Future<ErrorResponse> _submitClaim(BuildContext context, PostJsonClaimTR postData) async {
     try{
-
+      LoadingUtils.showLoadingDialog(context, _keyLoader);
+      int responseCodeClaim;
+      String stResponseMessage;
+      _apiServiceUtils.createUpdateApproveClaim(postData).then((value) => {
+        print(jsonDecode(value)),
+        responseCodeClaim = ErrorResponse.fromJson(jsonDecode(value)).code,
+        stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+        Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop(),
+        if(responseCodeClaim == ConstanstVar.successCode){
+          _hrisUtil.toastMessage("$stResponseMessage"),
+          Navigator.of(context).pop('String'),
+        }else{_hrisUtil.snackBarMessageScaffoldKey("$stResponseMessage", _scaffoldKey),}
+      });
     }catch(error){
       Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
       _hrisUtil.snackBarMessageScaffoldKey("err load claim " +error.toString(), _scaffoldKey);
