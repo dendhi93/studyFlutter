@@ -328,8 +328,10 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                           onPressed: () {
                             if (_formKey.currentState.validate()){
                               if(_groupValue == -1){
-                                hrisUtil.toastMessage("Please choose absent type");
-                              }else{
+                                hrisUtil.snackBarMessageScaffoldKey("Please choose absent type", scaffoldKey);
+                              }else if(etAddressAbsent.text.isEmpty){
+                                hrisUtil.snackBarMessageScaffoldKey(ConstanstVar.blankStatement, scaffoldKey);
+                              } else{
                                 showDialog(
                                   context: context,
                                   builder: (context) {
