@@ -26,7 +26,7 @@ class _ClaimActivityState extends State<ClaimActivity> {
   var isLoading = false;
   HrisUtil _hrisUtil = HrisUtil();
   HrisStore _hrisStore = HrisStore();
-  List<ResponseClaimDataModel> listClaim = List();
+  List<ResponseClaimDataModel> listClaim = [];
   String stUid = "";
   String stToken = "";
   String _userType = "";

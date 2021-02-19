@@ -205,8 +205,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
           if(responseCode == ConstanstVar.successCode){
               if(stResponseMessage == "Success Absent"){
                 hrisUtil.toastMessage("$stResponseMessage"),
-                // Navigator.pop(context, ''),
-                Navigator.of(context).pop('String'),
+                Navigator.pop(context, ''),
               }else{hrisUtil.snackBarMessageScaffoldKey("$stResponseMessage", scaffoldKey),}
           }else{hrisUtil.snackBarMessageScaffoldKey("$stResponseMessage", scaffoldKey),}
         });

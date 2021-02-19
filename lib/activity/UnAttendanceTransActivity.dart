@@ -29,7 +29,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   TextEditingController etNoteUnAttendance = new TextEditingController();
   List<ResponseDtlMasterUnAttendance> arrDtlMasterUnAttendance = [];
   ResponseDtlMasterUnAttendance _selectedDtlMasterUnAttendance;
-  List<ResponseDtlMasterUnAttendance> listDtlMasterUnAttendance = List();
+  List<ResponseDtlMasterUnAttendance> listDtlMasterUnAttendance = [];
   HrisUtil _hrisUtil = HrisUtil();
   DateTime selectedDate = DateTime.now();
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();

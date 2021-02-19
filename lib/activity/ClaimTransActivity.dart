@@ -229,13 +229,14 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
         Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop(),
         if(responseCodeClaim == ConstanstVar.successCode){
           _hrisUtil.toastMessage("$stResponseMessage"),
-          Navigator.of(context).pop('String'),
+          Navigator.pop(context),
         }else{_hrisUtil.snackBarMessageScaffoldKey("$stResponseMessage", _scaffoldKey),}
       });
     }catch(error){
       Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
       _hrisUtil.snackBarMessageScaffoldKey("err load claim " +error.toString(), _scaffoldKey);
     }
+    return null;
   }
 
   void onRejectvalidation(BuildContext context){

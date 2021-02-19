@@ -10,7 +10,7 @@ class ResponseDataAbsentModel{
   ResponseDataAbsentModel.fromJson(Map<String, dynamic> json) {
     code = json['Code'];
     if (json['AbsentData'] != null) {
-      responseDtlDataAbsent = new List<ResponseDtlDataAbsentModel>();
+      responseDtlDataAbsent = <ResponseDtlDataAbsentModel>[];
       json['AbsentData'].forEach((v) {
         responseDtlDataAbsent.add(new ResponseDtlDataAbsentModel.fromJson(v));
       });

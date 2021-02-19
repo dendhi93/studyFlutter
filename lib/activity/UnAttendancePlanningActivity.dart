@@ -23,7 +23,7 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
   DateTime currentBackPressTime;
   HrisUtil _hrisUtil = HrisUtil();
   HrisStore _hrisStore = HrisStore();
-  List<ResponseDtlUnAttendance> listDataUnAttendance = List();
+  List<ResponseDtlUnAttendance> listDataUnAttendance = [];
   String stUid = "";
   String stToken = "";
   String stResponseMessage;

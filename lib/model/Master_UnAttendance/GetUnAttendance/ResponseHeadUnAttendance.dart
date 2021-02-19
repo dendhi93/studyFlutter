@@ -9,7 +9,7 @@ class ResponseHeadUnAttendance{
   ResponseHeadUnAttendance.fromJson(Map<String, dynamic> json) {
     code = json['Code'];
     if (json['UnAttendanceData'] != null) {
-      unAttendanceData = new List<ResponseDtlUnAttendance>();
+      unAttendanceData = <ResponseDtlUnAttendance>[];
       json['UnAttendanceData'].forEach((v) {
         unAttendanceData.add(new ResponseDtlUnAttendance.fromJson(v));
       });

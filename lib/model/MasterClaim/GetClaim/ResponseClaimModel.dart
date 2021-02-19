@@ -10,7 +10,7 @@ class ResponseClaimModel{
   ResponseClaimModel.fromJson(Map<String, dynamic> json) {
     code = json['Code'];
     if (json['ClaimData'] != null) {
-      responseClaimDataModel = new List<ResponseClaimDataModel>();
+      responseClaimDataModel = <ResponseClaimDataModel>[];
       json['ClaimData'].forEach((v) {
         responseClaimDataModel.add(new ResponseClaimDataModel.fromJson(v));
       });

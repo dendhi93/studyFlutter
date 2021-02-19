@@ -33,7 +33,7 @@ class _HomeActivityState extends State<HomeActivity> {
     String stResponseMessage = "";
     String stUid = "";
     String stToken = "";
-    List<ResponseDtlDataAbsentModel> list = List();
+    List<ResponseDtlDataAbsentModel> list = [];
     var isLoading = false;
 
     @override
