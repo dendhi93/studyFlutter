@@ -1,3 +1,4 @@
+import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/MasterAbsent/PostAbsent/PostJsonAbsent.dart';
 import 'package:absent_hris/model/MasterClaim/PostClaim/PostJsonClaimTR.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
@@ -19,7 +20,9 @@ class ApiServiceUtils {
         print(responseLogin.body);
         return responseLogin.body;
       }else{
-        throw new Exception("Error login");
+        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error login");
+        return _errResponse.errResponseToJson(_errResponse);
+        // throw new Exception("Error login");
       }
     }
 
@@ -40,7 +43,8 @@ class ApiServiceUtils {
           || responseAbsent.statusCode == ConstanstVar.failedHttp){
           return responseAbsent.body;
       }else{
-        throw new Exception("Error Absent");
+        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error Absent");
+        return _errResponse.errResponseToJson(_errResponse);
       }
     }
 
@@ -59,7 +63,8 @@ class ApiServiceUtils {
             print('$responseClaim.body');
             return responseClaim.body;
       }else{
-        throw new Exception("Error Claim");
+        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error Claim");
+        return _errResponse.errResponseToJson(_errResponse);
       }
     }
 
@@ -72,7 +77,8 @@ class ApiServiceUtils {
           || responseMasterClaim.statusCode == ConstanstVar.failedHttp){
         return responseMasterClaim.body;
       }else{
-        throw new Exception("Error Master Claim");
+        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error Master Claim");
+        return _errResponse.errResponseToJson(_errResponse);
       }
     }
 
@@ -90,7 +96,8 @@ class ApiServiceUtils {
           || responseUserDtl.statusCode == ConstanstVar.failedHttp){
         return responseUserDtl.body;
       }else{
-        throw new Exception("Error User Detail");
+        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error User Detail");
+        return _errResponse.errResponseToJson(_errResponse);
       }
     }
 
@@ -107,7 +114,9 @@ class ApiServiceUtils {
           || responseLogout.statusCode == ConstanstVar.failedHttp){
         return responseLogout.body;
       }else{
-        throw new Exception("Error User Detail");
+        // throw new Exception("Error User Detail");
+        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error User Detail");
+        return _errResponse.errResponseToJson(_errResponse);
       }
     }
 
@@ -125,7 +134,8 @@ class ApiServiceUtils {
           || responseUnAttendance.statusCode == ConstanstVar.failedHttp){
         return responseUnAttendance.body;
       }else{
-        throw new Exception("Error get unattendance");
+        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error get unattendance");
+        return _errResponse.errResponseToJson(_errResponse);
       }
     }
 
@@ -141,7 +151,8 @@ class ApiServiceUtils {
       if(responseMasterUnAttendance.statusCode == ConstanstVar.successCode){
         return responseMasterUnAttendance.body;
       }else{
-        throw new Exception("Error master unattendance");
+        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error master unattendance");
+        return _errResponse.errResponseToJson(_errResponse);
       }
     }
 
@@ -159,7 +170,8 @@ class ApiServiceUtils {
           || responseTrAbsent.statusCode == ConstanstVar.failedHttp){
         return responseTrAbsent.body;
       }else{
-        throw new Exception("Error transaction absent");
+        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error transaction absent");
+        return _errResponse.errResponseToJson(_errResponse);
       }
     }
 
@@ -177,7 +189,8 @@ class ApiServiceUtils {
           || responseTrClaim.statusCode == ConstanstVar.failedHttp){
         return responseTrClaim.body;
       }else{
-        throw new Exception("Error transaction claim");
+        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error transaction claim");
+        return _errResponse.errResponseToJson(_errResponse);
       }
     }
 
