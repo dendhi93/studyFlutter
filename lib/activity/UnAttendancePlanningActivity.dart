@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:absent_hris/activity/UnAttendanceTransActivity.dart';
@@ -123,6 +124,11 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
     return null;
   }
 
+  FutureOr onGoBack(dynamic value) {
+    validateConnection(context);
+    setState(() {});
+  }
+
   //view
   Widget _initListUnAttendance(){
     return Container(
@@ -133,11 +139,8 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
             return GestureDetector(
               child: ListUnAttendanceAdapter(responseDtlUnAttendance: listDataUnAttendance[index]),
               onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    // builder: (context) => ClaimTransActivity(claimModel: listClaim[index],),
-                    builder: (context) => UnAttendanceTransActivity(unAttendanceModel: listDataUnAttendance[index],),
-                  ),
-                );
+                Route route = MaterialPageRoute(builder: (context) => UnAttendanceTransActivity(unAttendanceModel: listDataUnAttendance[index]));
+                Navigator.push(context, route).then(onGoBack);
               },
             );
           }
@@ -165,11 +168,8 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
           child: new FloatingActionButton(
             child: Icon(Icons.add),
             onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      // builder: (context) => ClaimTransActivity(claimModel: null),
-                      builder: (context) => UnAttendanceTransActivity(unAttendanceModel: null,),
-              ),
-              );
+              Route route = MaterialPageRoute(builder: (context) => UnAttendanceTransActivity(unAttendanceModel: null));
+              Navigator.push(context, route).then(onGoBack);
             },
           ),
         ),

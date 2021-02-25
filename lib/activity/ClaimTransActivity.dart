@@ -222,7 +222,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
       LoadingUtils.showLoadingDialog(context, _keyLoader);
       int responseCodeClaim;
       String stResponseMessage;
-      _apiServiceUtils.createUpdateApproveClaim(postData).then((value) => {
+      _apiServiceUtils.postClaimTrans(postData).then((value) => {
         print(jsonDecode(value)),
         responseCodeClaim = ErrorResponse.fromJson(jsonDecode(value)).code,
         stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,

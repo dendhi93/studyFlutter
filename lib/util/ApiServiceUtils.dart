@@ -1,6 +1,7 @@
 import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/MasterAbsent/PostAbsent/PostJsonAbsent.dart';
 import 'package:absent_hris/model/MasterClaim/PostClaim/PostJsonClaimTR.dart';
+import 'package:absent_hris/model/Master_UnAttendance/PostUnAttendance/PostJsonUnAttendance.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:http/http.dart' as http;
 
@@ -175,7 +176,7 @@ class ApiServiceUtils {
       }
     }
 
-    Future<String>createUpdateApproveClaim(PostJsonClaimTR claimData) async{
+    Future<String>postClaimTrans(PostJsonClaimTR claimData) async{
       String urlTRClaim = ConstanstVar.urlApi +'TRClaim.php';
       print('url $urlTRClaim');
       final http.Response responseTrClaim = await http
@@ -188,6 +189,25 @@ class ApiServiceUtils {
           || responseTrClaim.statusCode == ConstanstVar.invalidTokenCode
           || responseTrClaim.statusCode == ConstanstVar.failedHttp){
         return responseTrClaim.body;
+      }else{
+        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error transaction claim");
+        return _errResponse.errResponseToJson(_errResponse);
+      }
+    }
+
+    Future<String>PostUnAttendanceTrans(PostJsonUnAtttendance unAttendanceData) async{
+      String urlTRUnAttendance = ConstanstVar.urlApi +'TRUnAttendance.php';
+      print('url $urlTRUnAttendance');
+      final http.Response responseTrUnAttendance = await http
+          .post(urlTRUnAttendance,
+          headers: {'Content-Type': 'application/json',},
+          body: PostJsonUnAtttendance().postUnAttendanceToJson(unAttendanceData)
+      );
+
+      if(responseTrUnAttendance.statusCode == ConstanstVar.successCode
+          || responseTrUnAttendance.statusCode == ConstanstVar.invalidTokenCode
+          || responseTrUnAttendance.statusCode == ConstanstVar.failedHttp){
+        return responseTrUnAttendance.body;
       }else{
         ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error transaction claim");
         return _errResponse.errResponseToJson(_errResponse);

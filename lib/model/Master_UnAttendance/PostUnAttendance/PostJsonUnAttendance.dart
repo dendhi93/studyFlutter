@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 class PostJsonUnAtttendance {
   String userId;
   String transDate;
@@ -42,5 +44,10 @@ class PostJsonUnAtttendance {
     data['status_id'] = this.statusId;
     data['reason_reject'] = this.reasonReject;
     return data;
+  }
+
+  String postUnAttendanceToJson(PostJsonUnAtttendance data) {
+    final jsonData = data.toJson();
+    return json.encode(jsonData);
   }
 }
