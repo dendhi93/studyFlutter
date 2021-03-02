@@ -7,6 +7,7 @@ import 'package:absent_hris/model/Master_UnAttendance/master/ResponseDtlMasterUn
 import 'package:absent_hris/model/Master_UnAttendance/master/ResponseHeadMasterUnAttendance.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
+import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   ResponseDtlMasterUnAttendance _selectedDtlMasterUnAttendance;
   List<ResponseDtlMasterUnAttendance> listDtlMasterUnAttendance = [];
   HrisUtil _hrisUtil = HrisUtil();
+  HrisStore _hrisStore = HrisStore();
   DateTime selectedDate = DateTime.now();
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   var isEnableText = true;
@@ -40,7 +42,9 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   int statusTrans = 0;
   int responseCode = 0;
   var isLoading = false;
-  String stResponseMessage,_selectedUnAttendanceType,tempStStartDate;
+  String stResponseMessage,
+      _selectedUnAttendanceType,
+      tempStStartDate, stUid, stToken;
 
   @override
   void initState() {
@@ -130,6 +134,41 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
           }
         }
       });
+  }
+
+  void validateConnectionSubmit(BuildContext context){
+    HrisUtil.checkConnection().then((isConnected) => {
+      isConnected ? _loadMasterUnAttendance()
+          : _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
+    });
+  }
+
+  void initUIdToken(int intType, BuildContext context){
+    if(intType == 1){
+      Future<String> authUid = _hrisStore.getAuthUserId();
+      authUid.then((data) {
+        stUid = data.trim();
+        initUIdToken(2, context);
+      },onError: (e) {_hrisUtil.toastMessage(e);});
+    }else{
+      Future<String> authUToken = _hrisStore.getAuthToken();
+      authUToken.then((data) {
+        stToken = data.trim();
+        stUid = stUid+"-"+stToken;
+        // etOtherClaim.text.isEmpty ? etOtherClaim.text = "-" : etOtherClaim.text =  etOtherClaim.text.trim();
+        // if(stPaidClaim == "")stPaidClaim = etPaidClaim.text.trim();
+        // if(stLowerId == "")stLowerId = "-";
+        // PostJsonClaimTR _postClaimTR = PostJsonClaimTR(userId: stUid,
+        //     dateTrans: etDateClaim.text.trim(), claimId: _selectedMasterClaim,
+        //     detailClaim: etOtherClaim.text.trim(), paidClaim: stPaidClaim.trim(),
+        //     descClaim: etDescClaim.text.trim(), lowerUserId: stLowerId.trim(),
+        //     transId: intTransClaimId.toString(), statusId: intStatusId.toString(),reasonReject: stReasonReject.trim(),
+        //     fileClaim: stringFileClaim);
+        //
+        // // print(PostJsonClaimTR().postClaimToJson(_postClaimTR));
+        // _submitClaim(context, _postClaimTR);
+      },onError: (e) {_hrisUtil.toastMessage(e);});
+    }
   }
 
   //view
@@ -318,12 +357,17 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
-                                      content: Text("Transaction Success"),
+                                      content: Text("Are you sure want to submit this transaction ?"),
                                       actions: <Widget>[
                                         TextButton(child: Text('OK'),
                                           onPressed: (){
                                             Navigator.of(context, rootNavigator: true).pop();
                                             Navigator.pop(context, '');
+                                          },
+                                        ),
+                                        TextButton(child: Text('Cancel'),
+                                          onPressed: (){
+                                            Navigator.of(context, rootNavigator: true).pop();
                                           },
                                         ),
                                       ],

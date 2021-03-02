@@ -13,14 +13,16 @@ class ListAdapter extends StatefulWidget{
 
 class _ListAdapterState extends State<ListAdapter> {
   String reasonAbsent = "";
+  String lowerEmployeeName = "";
 
   @override
   void initState() {
     super.initState();
       reasonAbsent = widget.modelAbsensi.reason;
-      if(reasonAbsent != "") {
-        reasonAbsent = "\nReason " +widget.modelAbsensi.reason;
-      }else{return null;}
+    lowerEmployeeName = widget.modelAbsensi.nameUser;
+    if(reasonAbsent != "") {
+      reasonAbsent = "\nReason " +widget.modelAbsensi.reason;
+    }else{return null;}
   }
 
   @override
@@ -33,7 +35,7 @@ class _ListAdapterState extends State<ListAdapter> {
               ListTile(
                 title: Text(widget.modelAbsensi.absentType +"\nTime " +widget.modelAbsensi.absentTime),
                 subtitle: Text(widget.modelAbsensi.addressAbsent+""+reasonAbsent),
-                trailing: Text(widget.modelAbsensi.dateAbsent),
+                trailing: Text(widget.modelAbsensi.dateAbsent + "\n"+lowerEmployeeName),
               )
             ],
           ),
