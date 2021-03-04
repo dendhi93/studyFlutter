@@ -23,7 +23,6 @@ class HomeActivity extends StatefulWidget {
   _HomeActivityState createState() => _HomeActivityState();
 }
 
-
 class _HomeActivityState extends State<HomeActivity> {
     HrisUtil _hrisUtil = HrisUtil();
     HrisStore _hrisStore = HrisStore();
@@ -33,18 +32,20 @@ class _HomeActivityState extends State<HomeActivity> {
     String stResponseMessage = "";
     String stUid = "";
     String stToken = "";
+    String _userType;
     List<ResponseDtlDataAbsentModel> list = [];
     var isLoading = false;
+    var isVisibleFloating  = false;
 
     @override
     void initState() {
       super.initState();
-      // Future<String> authUn = _hrisStore.getAuthUserLevelId();
-      // authUn.then((data) {
-      //   stLevelId = data.trim();
-      // },onError: (e) {
-      //   _hrisUtil.toastMessage(e);
-      // });
+      Future<String> authUType = _hrisStore.getAuthUserLevelType();
+      authUType.then((data) {
+        _userType = data.trim();
+        if(_userType != "approval" ){isVisibleFloating = !isVisibleFloating;}
+      });
+
       validateConnection(context);
     }
 
@@ -119,12 +120,15 @@ class _HomeActivityState extends State<HomeActivity> {
           body: isLoading ? Center(
             child: CircularProgressIndicator(),
           ) : _initListAbsent(),
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () {
-              Route route = MaterialPageRoute(builder: (context) => AbsentTransActivity(absentModel: null));
-              Navigator.push(context, route).then(onGoBack);
-            },
+          floatingActionButton:  new Visibility(
+            visible: isVisibleFloating,
+            child: new FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () {
+                Route route = MaterialPageRoute(builder: (context) => AbsentTransActivity(absentModel: null));
+                Navigator.push(context, route).then(onGoBack);
+              },
+            ),
           ),
         ),
       );
