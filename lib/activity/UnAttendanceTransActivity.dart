@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/Master_UnAttendance/GetUnAttendance/ResponseDtlUnAttendance.dart';
+import 'package:absent_hris/model/Master_UnAttendance/PostUnAttendance/PostJsonUnAttendance.dart';
 import 'package:absent_hris/model/Master_UnAttendance/master/ResponseDtlMasterUnAttendance.dart';
 import 'package:absent_hris/model/Master_UnAttendance/master/ResponseHeadMasterUnAttendance.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
@@ -35,7 +36,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   HrisStore _hrisStore = HrisStore();
   DateTime selectedDate = DateTime.now();
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
-  var isEnableText = true;
+  var isEnableText = false;
   var isEnableDropdown = true;
   var isShowButton = true;
   var isHideNoteUnAttendance = false;
@@ -56,11 +57,9 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
       if(widget.unAttendanceModel != null){
         statusTrans = widget.unAttendanceModel.statusId;
         if(_userType == "approval"){
-          isEnableText = !isEnableText;
           isEnableDropdown = !isEnableDropdown;
         }else{
           if(statusTrans == ConstanstVar.approvedClaimStatus){
-            isEnableText = !isEnableText;
             isEnableDropdown = !isEnableDropdown;
             isShowButton = !isShowButton;
           }else{validateConnection(context);}
@@ -73,7 +72,6 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
       }else{validateConnection(context);}
 
     });
-
   }
 
   //controller
@@ -168,9 +166,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
       authUToken.then((data) {
         stToken = data.trim();
         stUid = stUid+"-"+stToken;
-        // etOtherClaim.text.isEmpty ? etOtherClaim.text = "-" : etOtherClaim.text =  etOtherClaim.text.trim();
-        // if(stPaidClaim == "")stPaidClaim = etPaidClaim.text.trim();
-        // if(stLowerId == "")stLowerId = "-";
+        PostJsonUnAtttendance _postJsonUnAttendance = PostJsonUnAtttendance(userId: stUid);
         // PostJsonClaimTR _postClaimTR = PostJsonClaimTR(userId: stUid,
         //     dateTrans: etDateClaim.text.trim(), claimId: _selectedMasterClaim,
         //     detailClaim: etOtherClaim.text.trim(), paidClaim: stPaidClaim.trim(),
@@ -178,7 +174,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
         //     transId: intTransClaimId.toString(), statusId: intStatusId.toString(),reasonReject: stReasonReject.trim(),
         //     fileClaim: stringFileClaim);
         //
-        // // print(PostJsonClaimTR().postClaimToJson(_postClaimTR));
+        print(PostJsonUnAtttendance().postUnAttendanceToJson(_postJsonUnAttendance));
         // _submitClaim(context, _postClaimTR);
       },onError: (e) {_hrisUtil.toastMessage(e);});
     }
@@ -199,7 +195,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                         controller: etStartDate,
                         onTap: (){
                           FocusScope.of(context).requestFocus(new FocusNode());
-                            _selectDatePicker(context, ConstanstVar.selectStartDate);
+                          _selectDatePicker(context, ConstanstVar.selectStartDate);
                         },
                         decoration: new InputDecoration(
                           labelText: "Start Date",
@@ -225,8 +221,8 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                         enabled: isEnableText,
                         controller: etEndDate,
                         onTap: (){
-                          FocusScope.of(context).requestFocus(new FocusNode());
-                            _selectDatePicker(context, ConstanstVar.selectEndDate);
+                            FocusScope.of(context).requestFocus(new FocusNode());
+                            _selectDatePicker(context, ConstanstVar.selectStartDate);
                         },
                         decoration: new InputDecoration(
                           labelText: "End Date",
@@ -353,7 +349,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                         ],
                       ),
                       new Padding(padding: EdgeInsets.only(top: 25.0)),
-                      new Row(
+                      _userType == 'requester' ? new Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           isShowButton ? new RawMaterialButton(
@@ -412,7 +408,88 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                             ),
                           ) : Text(""),
                         ],
-                      ),
+                      ) :new Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          isShowButton ? new RawMaterialButton(
+                            fillColor: Colors.blue,
+                            splashColor: Colors.yellow,
+                            padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: BorderSide(color: Colors.yellow)
+                            ),
+                            onPressed: () {
+                              if (_formKey.currentState.validate()){
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      content: Text("Are you sure want to Approve this transaction ?"),
+                                      actions: <Widget>[
+                                        TextButton(child: Text('OK'),
+                                          onPressed: (){
+                                            Navigator.of(context, rootNavigator: true).pop();
+                                            Navigator.pop(context, '');
+                                          },
+                                        ),
+                                        TextButton(child: Text('Cancel'),
+                                          onPressed: (){
+                                            Navigator.of(context, rootNavigator: true).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                            child: Text(
+                              "Approve",
+                              style: TextStyle(fontSize: 20.0, color:Colors.white),
+                            ),
+                          ) : Text(""),
+
+                          isShowButton ? new RawMaterialButton(
+                            fillColor: Colors.white,
+                            splashColor: Colors.white54,
+                            padding: EdgeInsets.only(left: 50, top:20, right: 50, bottom: 20),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: BorderSide(color: Colors.grey)
+                            ),
+                            onPressed: () {
+                              if (_formKey.currentState.validate()){
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      content: Text("Are you sure want to Reject this transaction ?"),
+                                      actions: <Widget>[
+                                        TextButton(child: Text('OK'),
+                                          onPressed: (){
+                                            Navigator.of(context, rootNavigator: true).pop();
+                                            Navigator.pop(context, '');
+                                          },
+                                        ),
+                                        TextButton(child: Text('Cancel'),
+                                          onPressed: (){
+                                            Navigator.of(context, rootNavigator: true).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                            child: Text(
+                              "Reject",
+                              style: TextStyle(fontSize: 20.0, color: Colors.black),
+                            ),
+                          ) : Text(""),
+                        ],
+                      ) ,
                     ]
                 ),
             ),
