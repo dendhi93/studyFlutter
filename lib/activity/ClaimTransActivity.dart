@@ -72,36 +72,43 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
       _userType = data.trim();
 
       if(widget.claimModel != null){
-        etDateClaim.text = widget.claimModel.transDate;
-        etSelectedClaimType.text = widget.claimModel.claimDesc;
-        stPaidClaim = widget.claimModel.paidClaim.toString();
-        String moneyIdr = _hrisUtil.idrFormating(widget.claimModel.paidClaim.toString());
-        etPaidClaim.text = moneyIdr.trim();
-        etDescClaim.text = widget.claimModel.descClaim;
-        stringFileClaim = widget.claimModel.fileClaim;
-        intTransClaimId = widget.claimModel.idTrans;
-        stLowerId = widget.claimModel.lowerUserId;
-        _selectedMasterClaim = widget.claimModel.claimId;
+          etDateClaim.text = widget.claimModel.transDate;
+          etSelectedClaimType.text = widget.claimModel.claimDesc;
+          stPaidClaim = widget.claimModel.paidClaim.toString();
+          String moneyIdr = _hrisUtil.idrFormating(widget.claimModel.paidClaim.toString());
+          etPaidClaim.text = moneyIdr.trim();
+          etDescClaim.text = widget.claimModel.descClaim;
+          stringFileClaim = widget.claimModel.fileClaim;
+          intTransClaimId = widget.claimModel.idTrans;
+          stLowerId = widget.claimModel.lowerUserId;
+          _selectedMasterClaim = widget.claimModel.claimId;
+          intStatusId = widget.claimModel.statusId;
+
         if(stringFileClaim != null){_bytesImage = base64.decode(widget.claimModel.fileClaim);}
-        intStatusId = widget.claimModel.statusId;
-        if(intStatusId == ConstanstVar.approvedClaimStatus){
-          isHiddenButton = !isHiddenButton;
-          isEnableText = false;
-          isEnableDropDown = false;
-        }else{
-          isEnableText = true;
-          validateConnection(context);
-          if(_userType == "approval"){isHiddenButtonCapture = !isHiddenButtonCapture;}
-        }
-        if(widget.claimModel.detailClaim != ""){
-          isShowDetailText = true;
-          etOtherClaim.text = widget.claimModel.detailClaim;
-        }else{isShowDetailText = false;}
+          if(_userType == "approval"){
+            isHiddenButtonCapture = !isHiddenButtonCapture;
+            // isEnableText = false;
+            isEnableDropDown = !isEnableDropDown;
+          }else{
+            if(intStatusId == ConstanstVar.approvedClaimStatus || intStatusId == ConstanstVar.rejectClaimStatus){
+              isHiddenButton = !isHiddenButton;
+              // isEnableText = false;
+              isEnableDropDown = !isEnableDropDown;
+            }else{
+              isEnableText = true;
+              // isEnableDropDown = true;
+              // isHiddenButton= true;
+            }
+          }
+
+          if(widget.claimModel.detailClaim != ""){
+            isShowDetailText = true;
+            etOtherClaim.text = widget.claimModel.detailClaim;
+          }else{isShowDetailText = false;}
       }else{
         isEnableText = true;
         validateConnection(context);
       }
-
     });
   }
 

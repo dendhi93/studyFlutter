@@ -44,23 +44,36 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   var isLoading = false;
   String stResponseMessage,
       _selectedUnAttendanceType,
-      tempStStartDate, stUid, stToken;
+      tempStStartDate, stUid, stToken,_userType;
 
   @override
   void initState() {
     super.initState();
-    if(widget.unAttendanceModel != null){
-      statusTrans = widget.unAttendanceModel.statusId;
-      if(statusTrans == ConstanstVar.approvedClaimStatus){
-        isEnableText = !isEnableText;
-        isEnableDropdown = !isEnableDropdown;
-        isShowButton = !isShowButton;
+    Future<String> authUType = _hrisStore.getAuthUserLevelType();
+    authUType.then((data) {
+      _userType = data.trim();
+
+      if(widget.unAttendanceModel != null){
+        statusTrans = widget.unAttendanceModel.statusId;
+        if(_userType == "approval"){
+          isEnableText = !isEnableText;
+          isEnableDropdown = !isEnableDropdown;
+        }else{
+          if(statusTrans == ConstanstVar.approvedClaimStatus){
+            isEnableText = !isEnableText;
+            isEnableDropdown = !isEnableDropdown;
+            isShowButton = !isShowButton;
+          }else{validateConnection(context);}
+        }
+
+        etStartDate.text = widget.unAttendanceModel.startDate;
+        etEndDate.text = widget.unAttendanceModel.endDate;
+        etQtyDate.text = widget.unAttendanceModel.qtyDate.toString();
+        etUnAttendanceType.text = widget.unAttendanceModel.unattendanceDesc;
       }else{validateConnection(context);}
-      etStartDate.text = widget.unAttendanceModel.startDate;
-      etEndDate.text = widget.unAttendanceModel.endDate;
-      etQtyDate.text = widget.unAttendanceModel.qtyDate.toString();
-      etUnAttendanceType.text = widget.unAttendanceModel.unattendanceDesc;
-    }else{validateConnection(context);}
+
+    });
+
   }
 
   //controller
