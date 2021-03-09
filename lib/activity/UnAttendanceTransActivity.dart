@@ -55,6 +55,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
       _userType = data.trim();
 
       if(widget.unAttendanceModel != null){
+        loadingOption();
         statusTrans = widget.unAttendanceModel.statusId;
         if(_userType == "approval"){
           isEnableDropdown = !isEnableDropdown;
@@ -69,6 +70,10 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
         etEndDate.text = widget.unAttendanceModel.endDate;
         etQtyDate.text = widget.unAttendanceModel.qtyDate.toString();
         etUnAttendanceType.text = widget.unAttendanceModel.unattendanceDesc;
+
+        new Future.delayed(const Duration(seconds: 1), () {
+          loadingOption();
+        });
       }else{validateConnection(context);}
 
     });
@@ -166,7 +171,10 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
       authUToken.then((data) {
         stToken = data.trim();
         stUid = stUid+"-"+stToken;
-        PostJsonUnAtttendance _postJsonUnAttendance = PostJsonUnAtttendance(userId: stUid);
+        var selectedDate = DateTime.now();
+        String dateTrans = new DateFormat('y-M-dd').format(selectedDate);
+        PostJsonUnAtttendance _postJsonUnAttendance = PostJsonUnAtttendance(userId: stUid,
+            transDate: dateTrans, unattendanceId: _selectedUnAttendanceType);
         // PostJsonClaimTR _postClaimTR = PostJsonClaimTR(userId: stUid,
         //     dateTrans: etDateClaim.text.trim(), claimId: _selectedMasterClaim,
         //     detailClaim: etOtherClaim.text.trim(), paidClaim: stPaidClaim.trim(),

@@ -72,6 +72,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
       _userType = data.trim();
 
       if(widget.claimModel != null){
+        loadingOption();
           etDateClaim.text = widget.claimModel.transDate;
           etSelectedClaimType.text = widget.claimModel.claimDesc;
           stPaidClaim = widget.claimModel.paidClaim.toString();
@@ -83,21 +84,20 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
           stLowerId = widget.claimModel.lowerUserId;
           _selectedMasterClaim = widget.claimModel.claimId;
           intStatusId = widget.claimModel.statusId;
+          if(stringFileClaim != null){_bytesImage = base64.decode(widget.claimModel.fileClaim);}
 
-        if(stringFileClaim != null){_bytesImage = base64.decode(widget.claimModel.fileClaim);}
           if(_userType == "approval"){
+            print(_userType);
             isHiddenButtonCapture = !isHiddenButtonCapture;
-            // isEnableText = false;
             isEnableDropDown = !isEnableDropDown;
           }else{
+            print(_userType);
             if(intStatusId == ConstanstVar.approvedClaimStatus || intStatusId == ConstanstVar.rejectClaimStatus){
-              isHiddenButton = !isHiddenButton;
-              // isEnableText = false;
+              isHiddenButtonCapture = !isHiddenButtonCapture;
               isEnableDropDown = !isEnableDropDown;
+              isHiddenButton = !isHiddenButton;
             }else{
-              isEnableText = true;
-              // isEnableDropDown = true;
-              // isHiddenButton= true;
+              isEnableText = !isEnableText;
             }
           }
 
@@ -105,6 +105,10 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
             isShowDetailText = true;
             etOtherClaim.text = widget.claimModel.detailClaim;
           }else{isShowDetailText = false;}
+
+          new Future.delayed(const Duration(seconds: 1), () {
+            loadingOption();
+          });
       }else{
         isEnableText = true;
         validateConnection(context);
@@ -503,7 +507,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                 ),
 
                 new Padding(padding: EdgeInsets.only(top: 25.0)),
-                _userType == 'requester' ? new Row(
+                  _userType == 'requester' ? new Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         isHiddenButton ? new RawMaterialButton(

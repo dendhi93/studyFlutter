@@ -43,7 +43,9 @@ class _HomeActivityState extends State<HomeActivity> {
       Future<String> authUType = _hrisStore.getAuthUserLevelType();
       authUType.then((data) {
         _userType = data.trim();
-        if(_userType != "approval" ){isVisibleFloating = !isVisibleFloating;}
+        if(_userType != "approval" ){
+          isVisibleFloating = !isVisibleFloating;
+        }
       });
 
       validateConnection(context);
@@ -111,7 +113,7 @@ class _HomeActivityState extends State<HomeActivity> {
         child: new Scaffold(
           appBar: new AppBar(
             title: new Text(
-              "Home",
+              "Absent",
               style: new TextStyle(color: Colors.white),
             ),
             //hide left arrow
