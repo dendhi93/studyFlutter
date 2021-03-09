@@ -108,9 +108,6 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
         _hrisUtil.toastMessage("$stResponseMessage")
       }
     });
-    new Future.delayed(const Duration(seconds: 1), () {
-      loadingOption();
-    });
     return null;
   }
 
