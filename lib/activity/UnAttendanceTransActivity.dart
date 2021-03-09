@@ -60,10 +60,13 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
         if(_userType == "approval"){
           isEnableDropdown = !isEnableDropdown;
         }else{
-          if(statusTrans == ConstanstVar.approvedClaimStatus){
+          if(statusTrans == ConstanstVar.approvedClaimStatus || statusTrans == ConstanstVar.rejectClaimStatus){
             isEnableDropdown = !isEnableDropdown;
             isShowButton = !isShowButton;
-          }else{validateConnection(context);}
+          }else{
+            validateConnection(context);
+            isEnableText = !isEnableText;
+          }
         }
 
         etStartDate.text = widget.unAttendanceModel.startDate;
@@ -74,7 +77,10 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
         new Future.delayed(const Duration(seconds: 1), () {
           loadingOption();
         });
-      }else{validateConnection(context);}
+      }else{
+        validateConnection(context);
+        isEnableText = !isEnableText;
+      }
 
     });
   }
@@ -129,6 +135,9 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
         if(typeDate == ConstanstVar.selectStartDate){
           etStartDate.text = selectedDateFormat;
           tempStStartDate = selectedDateFormat;
+          if(etEndDate.text.isNotEmpty){
+            _hrisUtil.toastMessage("please set end date again to count day");
+          }
         }else{
           if(etStartDate.text.isEmpty){
             _hrisUtil.toastMessage("please set start date first");
@@ -230,7 +239,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                         controller: etEndDate,
                         onTap: (){
                             FocusScope.of(context).requestFocus(new FocusNode());
-                            _selectDatePicker(context, ConstanstVar.selectStartDate);
+                            _selectDatePicker(context, ConstanstVar.selectEndDate);
                         },
                         decoration: new InputDecoration(
                           labelText: "End Date",
