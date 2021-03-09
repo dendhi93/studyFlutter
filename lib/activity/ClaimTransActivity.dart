@@ -98,6 +98,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
               isHiddenButton = !isHiddenButton;
             }else{
               isEnableText = !isEnableText;
+              validateConnection(context);
             }
           }
 
