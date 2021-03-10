@@ -9,6 +9,8 @@ class ResponseDtlUnAttendance{
   String endDate;
   int qtyDate;
   String nameRequester;
+  String lowerUserId;
+  int transId;
 
   ResponseDtlUnAttendance.fromJson(Map<String, dynamic> json) {
     unattendanceDesc = json['unattendance_desc'];
@@ -21,5 +23,7 @@ class ResponseDtlUnAttendance{
     endDate = json['end_date'];
     qtyDate = json['qty_date'];
     nameRequester = json['name_requester'];
+    lowerUserId = json['user_id'];
+    transId = json['trans_id'];
   }
 }

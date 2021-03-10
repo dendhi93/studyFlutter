@@ -29,6 +29,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   TextEditingController etQtyDate = new TextEditingController();
   TextEditingController etUnAttendanceType = new TextEditingController();
   TextEditingController etNoteUnAttendance = new TextEditingController();
+  TextEditingController etReasonUnAttendance = new TextEditingController();
   List<ResponseDtlMasterUnAttendance> arrDtlMasterUnAttendance = [];
   ResponseDtlMasterUnAttendance _selectedDtlMasterUnAttendance;
   List<ResponseDtlMasterUnAttendance> listDtlMasterUnAttendance = [];
@@ -42,10 +43,12 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   var isHideNoteUnAttendance = false;
   int statusTrans = 0;
   int responseCode = 0;
+  int responseTransId = 0;
   var isLoading = false;
   String stResponseMessage,
       _selectedUnAttendanceType,
-      tempStStartDate, stUid, stToken,_userType;
+      tempStStartDate, stUid,
+      stToken,_userType, stLowerId;
 
   @override
   void initState() {
@@ -73,7 +76,9 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
         etEndDate.text = widget.unAttendanceModel.endDate;
         etQtyDate.text = widget.unAttendanceModel.qtyDate.toString();
         etUnAttendanceType.text = widget.unAttendanceModel.unattendanceDesc;
-
+        etReasonUnAttendance.text = widget.unAttendanceModel.dtlUnattendance;
+        stLowerId = widget.unAttendanceModel.lowerUserId;
+        responseTransId = widget.unAttendanceModel.transId;
         new Future.delayed(const Duration(seconds: 1), () {
           loadingOption();
         });
@@ -179,15 +184,15 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
         stUid = stUid+"-"+stToken;
         var selectedDate = DateTime.now();
         String dateTrans = new DateFormat('y-M-dd').format(selectedDate);
+        String stNoteUnAttendance = "";
+        if(stLowerId.isEmpty){stLowerId = "";}
+        etNoteUnAttendance.text.isEmpty ? stNoteUnAttendance = "" : stNoteUnAttendance = etNoteUnAttendance.text.trim();
         PostJsonUnAtttendance _postJsonUnAttendance = PostJsonUnAtttendance(userId: stUid,
-            transDate: dateTrans, unattendanceId: _selectedUnAttendanceType);
-        // PostJsonClaimTR _postClaimTR = PostJsonClaimTR(userId: stUid,
-        //     dateTrans: etDateClaim.text.trim(), claimId: _selectedMasterClaim,
-        //     detailClaim: etOtherClaim.text.trim(), paidClaim: stPaidClaim.trim(),
-        //     descClaim: etDescClaim.text.trim(), lowerUserId: stLowerId.trim(),
-        //     transId: intTransClaimId.toString(), statusId: intStatusId.toString(),reasonReject: stReasonReject.trim(),
-        //     fileClaim: stringFileClaim);
-        //
+            transDate: dateTrans, unattendanceId: _selectedUnAttendanceType,
+            noteUnattendance: stNoteUnAttendance, startDate: etStartDate.text.trim(),
+            endDate: etEndDate.text.trim(), qtyDate: int.parse(etQtyDate.text.trim()),
+            lowerUserId: stLowerId,transId: responseTransId.toString());
+
         print(PostJsonUnAtttendance().postUnAttendanceToJson(_postJsonUnAttendance));
         // _submitClaim(context, _postClaimTR);
       },onError: (e) {_hrisUtil.toastMessage(e);});
@@ -322,7 +327,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                               ),
                             ),
                             validator: (val) {
-                              if(val.length==0) {return "Date cannot be empty";
+                              if(val.length==0) {return "unattendance type cannot be empty";
                               }else{return null;}
                             },
                             keyboardType: TextInputType.text,
@@ -361,6 +366,30 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                           ): Container(color: Colors.white // This is optional
                           ),
                         ],
+                      ),
+                      new Padding(padding: EdgeInsets.only(top: 10.0)),
+                      new TextFormField(
+                        enabled: isEnableText,
+                        controller: etReasonUnAttendance,
+                        decoration: new InputDecoration(
+                          labelText: "Reason",
+                          contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                          fillColor: Colors.white,
+                          border: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(15.0),
+                            borderSide: new BorderSide(
+                            ),
+                          ),
+                        ),
+                        validator: (val) {
+                          if(val.length==0) {return "reason cannot be empty";
+                          }else{return null;}
+                        },
+                        keyboardType: TextInputType.text,
+                        maxLength: 25,
+                        style: new TextStyle(
+                          fontFamily: "Poppins",
+                        ),
                       ),
                       new Padding(padding: EdgeInsets.only(top: 25.0)),
                       _userType == 'requester' ? new Row(
