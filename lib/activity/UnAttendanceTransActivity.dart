@@ -79,6 +79,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
         etReasonUnAttendance.text = widget.unAttendanceModel.dtlUnattendance;
         stLowerId = widget.unAttendanceModel.lowerUserId;
         responseTransId = widget.unAttendanceModel.transId;
+        _selectedUnAttendanceType = widget.unAttendanceModel.mUnAttendanceId.toString();
         new Future.delayed(const Duration(seconds: 1), () {
           loadingOption();
         });
@@ -165,7 +166,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
 
   void validateConnectionSubmit(BuildContext context){
     HrisUtil.checkConnection().then((isConnected) => {
-      isConnected ? _loadMasterUnAttendance()
+      isConnected ? initUIdToken(1, context)
           : _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
     });
   }
@@ -191,7 +192,8 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
             transDate: dateTrans, unattendanceId: _selectedUnAttendanceType,
             noteUnattendance: stNoteUnAttendance, startDate: etStartDate.text.trim(),
             endDate: etEndDate.text.trim(), qtyDate: int.parse(etQtyDate.text.trim()),
-            lowerUserId: stLowerId,transId: responseTransId.toString());
+            lowerUserId: stLowerId,transId: responseTransId.toString(),
+            detailDesc: etReasonUnAttendance.text.trim());
 
         print(PostJsonUnAtttendance().postUnAttendanceToJson(_postJsonUnAttendance));
         // _submitClaim(context, _postClaimTR);
@@ -414,7 +416,8 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                                         TextButton(child: Text('OK'),
                                           onPressed: (){
                                             Navigator.of(context, rootNavigator: true).pop();
-                                            Navigator.pop(context, '');
+                                            // Navigator.pop(context, '');
+                                            validateConnectionSubmit(context);
                                           },
                                         ),
                                         TextButton(child: Text('Cancel'),
@@ -473,7 +476,8 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                                         TextButton(child: Text('OK'),
                                           onPressed: (){
                                             Navigator.of(context, rootNavigator: true).pop();
-                                            Navigator.pop(context, '');
+                                            // Navigator.pop(context, '');
+                                            validateConnectionSubmit(context);
                                           },
                                         ),
                                         TextButton(child: Text('Cancel'),
@@ -512,7 +516,8 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                                         TextButton(child: Text('OK'),
                                           onPressed: (){
                                             Navigator.of(context, rootNavigator: true).pop();
-                                            Navigator.pop(context, '');
+                                            // Navigator.pop(context, '');
+                                            validateConnectionSubmit(context);
                                           },
                                         ),
                                         TextButton(child: Text('Cancel'),
