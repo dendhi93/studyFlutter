@@ -149,11 +149,17 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   }
 
   void _getAddress(Position _position) async{
+    LoadingUtils.showLoadingDialog(context, _keyLoader);
     final coordinates = new Coordinates(_position.latitude, _position.longitude);
     var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
     var first = addresses.first;
     print("${first.featureName} : ${first.addressLine}");
-    if(widget.absentModel ==null){etAddressAbsent.text = "${first.addressLine}";}
+    if(widget.absentModel ==null){
+      etAddressAbsent.text = "${first.addressLine}";
+      Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+    }else{
+    Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+    }
   }
 
   void initUIdToken(int intType, BuildContext context){
@@ -205,7 +211,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
           if(responseCode == ConstanstVar.successCode){
               if(stResponseMessage == "Success Absent"){
                 hrisUtil.toastMessage("$stResponseMessage"),
-                Navigator.pop(context, ''),
+                onbackScreen(),
               }else{hrisUtil.snackBarMessageScaffoldKey("$stResponseMessage", scaffoldKey),}
           }else{hrisUtil.snackBarMessageScaffoldKey("$stResponseMessage", scaffoldKey),}
         });
@@ -214,6 +220,10 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
       hrisUtil.snackBarMessageScaffoldKey("err load claim " +error.toString(), scaffoldKey);
     }
     return null;
+  }
+
+  void onbackScreen(){
+    Navigator.pop(context, '');
   }
 
   //view
