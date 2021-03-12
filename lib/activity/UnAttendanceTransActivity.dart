@@ -30,6 +30,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   TextEditingController etUnAttendanceType = new TextEditingController();
   TextEditingController etNoteUnAttendance = new TextEditingController();
   TextEditingController etReasonUnAttendance = new TextEditingController();
+  TextEditingController etRejectReason = new TextEditingController();
   List<ResponseDtlMasterUnAttendance> arrDtlMasterUnAttendance = [];
   ResponseDtlMasterUnAttendance _selectedDtlMasterUnAttendance;
   List<ResponseDtlMasterUnAttendance> listDtlMasterUnAttendance = [];
@@ -45,6 +46,8 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   int responseCode = 0;
   int responseTransId = 0;
   var isLoading = false;
+  String stReasonReject = "";
+  String dateTrans = "";
   String stResponseMessage,
       _selectedUnAttendanceType,
       tempStStartDate, stUid,
@@ -80,6 +83,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
         stLowerId = widget.unAttendanceModel.lowerUserId;
         responseTransId = widget.unAttendanceModel.transId;
         _selectedUnAttendanceType = widget.unAttendanceModel.mUnAttendanceId.toString();
+        dateTrans = widget.unAttendanceModel.transDate;
         new Future.delayed(const Duration(seconds: 1), () {
           loadingOption();
         });
@@ -184,7 +188,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
         stToken = data.trim();
         stUid = stUid+"-"+stToken;
         var selectedDate = DateTime.now();
-        String dateTrans = new DateFormat('y-M-dd').format(selectedDate);
+        if(dateTrans == ""){new DateFormat('y-MM-dd').format(selectedDate);}
         String stNoteUnAttendance = "";
         if(stLowerId.isEmpty){stLowerId = "";}
         etNoteUnAttendance.text.isEmpty ? stNoteUnAttendance = "" : stNoteUnAttendance = etNoteUnAttendance.text.trim();
@@ -193,12 +197,44 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
             noteUnattendance: stNoteUnAttendance, startDate: etStartDate.text.trim(),
             endDate: etEndDate.text.trim(), qtyDate: int.parse(etQtyDate.text.trim()),
             lowerUserId: stLowerId,transId: responseTransId.toString(),
-            detailDesc: etReasonUnAttendance.text.trim());
+            detailDesc: etReasonUnAttendance.text.trim(),
+            statusId: statusTrans.toString(), reasonReject: stReasonReject.trim());
 
         print(PostJsonUnAtttendance().postUnAttendanceToJson(_postJsonUnAttendance));
         // _submitClaim(context, _postClaimTR);
       },onError: (e) {_hrisUtil.toastMessage(e);});
     }
+  }
+
+  void onRejectValidation(BuildContext context){
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Please Fill reason of reject'),
+            content: TextField(
+              onChanged: (value) {
+                setState(() => stReasonReject = value);
+              },
+              controller: etRejectReason,
+              decoration: InputDecoration(hintText: "reason Reject"),
+            ),
+            actions: <Widget>[
+              TextButton(child: Text('OK'),
+                onPressed: (){
+                  Navigator.of(context, rootNavigator: true).pop();
+                  //submitunAttendance
+                  validateConnectionSubmit(context);
+                },
+              ),
+              TextButton(child: Text('Cancel'),
+                onPressed: (){
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
 
   //view
@@ -478,6 +514,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                                             Navigator.of(context, rootNavigator: true).pop();
                                             // Navigator.pop(context, '');
                                             validateConnectionSubmit(context);
+                                            setState(() {statusTrans = 2;});
                                           },
                                         ),
                                         TextButton(child: Text('Cancel'),
@@ -517,7 +554,8 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                                           onPressed: (){
                                             Navigator.of(context, rootNavigator: true).pop();
                                             // Navigator.pop(context, '');
-                                            validateConnectionSubmit(context);
+                                            onRejectValidation(context);
+                                            setState(() {statusTrans = 3;});
                                           },
                                         ),
                                         TextButton(child: Text('Cancel'),

@@ -251,7 +251,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
     return null;
   }
 
-  void onRejectvalidation(BuildContext context){
+  void onRejectValidation(BuildContext context){
     showDialog(
         context: context,
         builder: (context) {
@@ -639,7 +639,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                                             intStatusId = 3;
                                           });
                                           Navigator.of(context, rootNavigator: true).pop();
-                                          onRejectvalidation(context);
+                                          onRejectValidation(context);
                                         },
                                       ),
                                       TextButton(child: Text('Cancel'),
