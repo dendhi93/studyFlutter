@@ -195,7 +195,7 @@ class ApiServiceUtils {
       }
     }
 
-    Future<String>PostUnAttendanceTrans(PostJsonUnAtttendance unAttendanceData) async{
+    Future<String>postUnAttendanceTrans(PostJsonUnAtttendance unAttendanceData) async{
       String urlTRUnAttendance = ConstanstVar.urlApi +'TRUnAttendance.php';
       print('url $urlTRUnAttendance');
       final http.Response responseTrUnAttendance = await http
@@ -209,7 +209,7 @@ class ApiServiceUtils {
           || responseTrUnAttendance.statusCode == ConstanstVar.failedHttp){
         return responseTrUnAttendance.body;
       }else{
-        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error transaction claim");
+        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error transaction unattendance");
         return _errResponse.errResponseToJson(_errResponse);
       }
     }

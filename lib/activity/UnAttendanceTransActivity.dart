@@ -13,6 +13,7 @@ import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:absent_hris/util/LoadingUtils.dart';
 
 class UnAttendanceTransActivity extends StatefulWidget {
   final ResponseDtlUnAttendance unAttendanceModel;
@@ -34,6 +35,8 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   List<ResponseDtlMasterUnAttendance> arrDtlMasterUnAttendance = [];
   ResponseDtlMasterUnAttendance _selectedDtlMasterUnAttendance;
   List<ResponseDtlMasterUnAttendance> listDtlMasterUnAttendance = [];
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   HrisUtil _hrisUtil = HrisUtil();
   HrisStore _hrisStore = HrisStore();
   DateTime selectedDate = DateTime.now();
@@ -48,10 +51,11 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   var isLoading = false;
   String stReasonReject = "";
   String dateTrans = "";
+  String stLowerId = "";
   String stResponseMessage,
       _selectedUnAttendanceType,
       tempStStartDate, stUid,
-      stToken,_userType, stLowerId;
+      stToken,_userType;
 
   @override
   void initState() {
@@ -188,9 +192,8 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
         stToken = data.trim();
         stUid = stUid+"-"+stToken;
         var selectedDate = DateTime.now();
-        if(dateTrans == ""){new DateFormat('y-MM-dd').format(selectedDate);}
+        if(dateTrans == "")dateTrans = new DateFormat('y-MM-dd').format(selectedDate);
         String stNoteUnAttendance = "";
-        if(stLowerId.isEmpty){stLowerId = "";}
         etNoteUnAttendance.text.isEmpty ? stNoteUnAttendance = "" : stNoteUnAttendance = etNoteUnAttendance.text.trim();
         PostJsonUnAtttendance _postJsonUnAttendance = PostJsonUnAtttendance(userId: stUid,
             transDate: dateTrans, unattendanceId: _selectedUnAttendanceType,
@@ -201,7 +204,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
             statusId: statusTrans.toString(), reasonReject: stReasonReject.trim());
 
         print(PostJsonUnAtttendance().postUnAttendanceToJson(_postJsonUnAttendance));
-        // _submitClaim(context, _postClaimTR);
+        _submitUnAttendance(context, _postJsonUnAttendance);
       },onError: (e) {_hrisUtil.toastMessage(e);});
     }
   }
@@ -235,6 +238,32 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
             ],
           );
         });
+  }
+
+  Future<ErrorResponse> _submitUnAttendance(BuildContext context, PostJsonUnAtttendance postData) async {
+    try{
+      LoadingUtils.showLoadingDialog(context, _keyLoader);
+      int responseCodeUnAttendance;
+      String stResponseMessage;
+      _apiServiceUtils.postUnAttendanceTrans(postData).then((value) => {
+        print(jsonDecode(value)),
+        responseCodeUnAttendance = ErrorResponse.fromJson(jsonDecode(value)).code,
+        stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+        Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop(),
+        if(responseCodeUnAttendance == ConstanstVar.successCode){
+          _hrisUtil.toastMessage("$stResponseMessage"),
+          onbackScreen(),
+        }else{_hrisUtil.snackBarMessageScaffoldKey("$stResponseMessage", _scaffoldKey),}
+      });
+    }catch(error){
+      Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+      _hrisUtil.snackBarMessageScaffoldKey("err load claim " +error.toString(), _scaffoldKey);
+    }
+    return null;
+  }
+
+  void onbackScreen(){
+    Navigator.pop(context);
   }
 
   //view
