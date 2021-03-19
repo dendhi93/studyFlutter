@@ -214,4 +214,21 @@ class ApiServiceUtils {
       }
     }
 
+    Future<String> getMasterAbsentOut() async{
+      String urlMasterAbsentOut = ConstanstVar.urlApi +'MasterAbsentOutTime.php';
+      print('url $urlMasterAbsentOut');
+      final http.Response responseMasterAbsentOut = await http
+          .get(urlMasterAbsentOut,
+          headers: {
+            'Content-Type': 'application/json',
+          }
+      );
+      if(responseMasterAbsentOut.statusCode == ConstanstVar.successCode){
+        return responseMasterAbsentOut.body;
+      }else{
+        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error master absent out");
+        return _errResponse.errResponseToJson(_errResponse);
+      }
+    }
+
 }

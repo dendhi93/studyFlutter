@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/MasterAbsent/GetAbsent/ResponseDtlAbsentModel.dart';
 import 'package:absent_hris/model/MasterAbsent/PostAbsent/PostJsonAbsent.dart';
+import 'package:absent_hris/model/MasterAbsentOut/ResponseAbsentOut.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:absent_hris/util/HrisStore.dart';
@@ -46,6 +47,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   int responseCode = 0;
   var isHiddenButton = true;
   var isEnableRadio = true;
+  String stAbsentOut;
 
   @override
   void initState() {
@@ -72,6 +74,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
       }
     }
     _gpsValidaton();
+    validateConnection(context);
   }
 
   //controller
@@ -150,16 +153,21 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
 
   void _getAddress(Position _position) async{
     LoadingUtils.showLoadingDialog(context, _keyLoader);
-    final coordinates = new Coordinates(_position.latitude, _position.longitude);
-    var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    var first = addresses.first;
-    print("${first.featureName} : ${first.addressLine}");
-    if(widget.absentModel ==null){
-      etAddressAbsent.text = "${first.addressLine}";
+    try{
+      final coordinates = new Coordinates(_position.latitude, _position.longitude);
+      var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+      var first = addresses.first;
+      print("${first.featureName} : ${first.addressLine}");
       Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
-    }else{
-    Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+      if(widget.absentModel ==null){
+        etAddressAbsent.text = "${first.addressLine}";
+      }
+    }catch(error){
+      Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+      print(error.toString());
+      hrisUtil.toastMessage("please refresh address");
     }
+
   }
 
   void initUIdToken(int intType, BuildContext context){
@@ -192,11 +200,9 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
     }
   }
 
-  void validateConnection(BuildContext context){
+  void validateConnectionSubmit(BuildContext context){
     HrisUtil.checkConnection().then((isConnected) => {
-      if(isConnected){
-        initUIdToken(1, context),
-      }else{hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)}
+      isConnected ? initUIdToken(1, context) : hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
     });
   }
 
@@ -224,6 +230,26 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
 
   void onbackScreen(){
     Navigator.pop(context, '');
+  }
+
+  void validateConnection(BuildContext context){
+    HrisUtil.checkConnection().then((isConnected) => {
+      isConnected ? _getAbsentOut() : hrisUtil.snackBarMessage(ConstanstVar.noConnectionMessage, context)
+    });
+  }
+
+  Future<ResponseAbsentOut> _getAbsentOut() async{
+    _apiServiceUtils.getMasterAbsentOut().then((value) => {
+      print(jsonDecode(value)),
+      responseCode = ResponseAbsentOut.fromJson(jsonDecode(value)).code,
+      if(responseCode == ConstanstVar.successCode){
+          stAbsentOut = ResponseAbsentOut.fromJson(jsonDecode(value)).absentOut,
+      }else{
+        stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+        hrisUtil.toastMessage("$stResponseMessage")
+      }
+    });
+    return null;
   }
 
   //view
@@ -352,7 +378,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                                           onPressed: (){
                                             Navigator.of(context, rootNavigator: true).pop();
                                             //submitAbsent
-                                            validateConnection(context);
+                                            validateConnectionSubmit(context);
                                           },
                                         ),
                                         TextButton(child: Text('Cancel'),
