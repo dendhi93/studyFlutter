@@ -41,6 +41,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   String stToken = "";
   String stUid = "";
   String stResponseMessage = "";
+  String stInputTime;
   int intDateIn = 1;
   int intDateOut = 2;
   int _groupValue = -1;
@@ -65,7 +66,8 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
       }
     }else{
       var selectedDate = DateTime.now();
-      etInputTime.text = new DateFormat.Hm().format(selectedDate);
+      stInputTime =  new DateFormat.Hm().format(selectedDate);
+      etInputTime.text = stInputTime;
       etDateAbsent.text = new DateFormat('y-M-dd').format(selectedDate);
       String nameDay = hrisUtil.nameOfDay(selectedDate);
       if(nameDay == "Saturday" || nameDay == "Sunday"){
@@ -152,18 +154,18 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   }
 
   void _getAddress(Position _position) async{
-    LoadingUtils.showLoadingDialog(context, _keyLoader);
+    // LoadingUtils.showLoadingDialog(context, _keyLoader);
     try{
       final coordinates = new Coordinates(_position.latitude, _position.longitude);
       var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
       var first = addresses.first;
       print("${first.featureName} : ${first.addressLine}");
-      Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+      // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
       if(widget.absentModel ==null){
         etAddressAbsent.text = "${first.addressLine}";
       }
     }catch(error){
-      Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+      // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
       print(error.toString());
       hrisUtil.toastMessage("please refresh address");
     }
@@ -201,8 +203,24 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   }
 
   void validateConnectionSubmit(BuildContext context){
+    // HrisUtil.checkConnection().then((isConnected) => {
+    //   isConnected ? initUIdToken(1, context) : hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
+    // });
+    var splitStartTime;
+    String finalTime;
     HrisUtil.checkConnection().then((isConnected) => {
-      isConnected ? initUIdToken(1, context) : hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
+      if(isConnected){
+        if(_groupValue == 2){
+          splitStartTime = stInputTime.split(":"),
+          finalTime = etDateAbsent.text.toString() +"-"+splitStartTime[0]+"-"+splitStartTime[1],
+          print(finalTime),
+          print(HrisUtil().hourDiff(finalTime, stAbsentOut)),
+        }else{
+          initUIdToken(1, context)
+        }
+      }else{
+        hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
+      }
     });
   }
 
