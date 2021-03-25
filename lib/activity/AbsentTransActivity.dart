@@ -33,6 +33,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   TextEditingController etDateAbsent = new TextEditingController();
   TextEditingController etInputTime = new TextEditingController();
   TextEditingController etAddressAbsent = new TextEditingController();
+  TextEditingController etReasonAbsent = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TimeOfDay timeOfDay = TimeOfDay.now();
   HrisUtil hrisUtil = HrisUtil();
@@ -40,6 +41,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   String stToken = "";
   String stUid = "";
+  String reasonAbsent = "";
   String stResponseMessage = "";
   String stInputTime;
   int intDateIn = 1;
@@ -48,6 +50,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   int responseCode = 0;
   var isHiddenButton = true;
   var isEnableRadio = true;
+  var isShowReasonText = true;
   String stAbsentOut;
 
   @override
@@ -57,37 +60,42 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
       etDateAbsent.text = widget.absentModel.dateAbsent;
       etInputTime.text = widget.absentModel.absentTime;
       etAddressAbsent.text = widget.absentModel.addressAbsent;
+      reasonAbsent = widget.absentModel.reason;
+      if(reasonAbsent == ""){isShowReasonText = !isShowReasonText;}
       isHiddenButton = !isHiddenButton;
       isEnableRadio = !isEnableRadio;
+
       if(widget.absentModel.absentType == "Absent In"){
         _groupValue = 1;
       }else{
         _groupValue = 2;
       }
     }else{
+      _gpsValidaton(context);
       var selectedDate = DateTime.now();
       stInputTime =  new DateFormat.Hm().format(selectedDate);
       etInputTime.text = stInputTime;
       etDateAbsent.text = new DateFormat('y-M-dd').format(selectedDate);
+      isShowReasonText = !isShowReasonText;
       String nameDay = hrisUtil.nameOfDay(selectedDate);
       if(nameDay == "Saturday" || nameDay == "Sunday"){
         hrisUtil.toastMessage("Today is day off");
         isHiddenButton = !isHiddenButton;
       }
     }
-    _gpsValidaton();
+
     validateConnection(context);
   }
 
   //controller
-  Future _gpsValidaton() async {
+  Future _gpsValidaton(BuildContext context) async {
     final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
     if(!(await Geolocator().isLocationServiceEnabled())){validateAlertGps();}
-    else{_getCurrentLocation(geolocator);}
+    else{_getCurrentLocation(geolocator, context);}
   }
 
-  Future _getCurrentLocation(Geolocator _geolocator){
+  Future _getCurrentLocation(Geolocator _geolocator, BuildContext context){
     _geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
@@ -95,7 +103,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
         _currentPosition = position;
         //manifest sama info.plist hrs copas manual
         if(_currentPosition != null){
-          _getAddress(position);
+          _getAddress(position, context);
         }
       });
     }).catchError((e) {print(e);});
@@ -126,7 +134,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                   intent.launch();
                   //to close alert dialog
                   Navigator.of(context, rootNavigator: true).pop();
-                  _gpsValidaton();
+                  _gpsValidaton(context);
                 },
               )
             ],
@@ -153,7 +161,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
     }
   }
 
-  void _getAddress(Position _position) async{
+  void _getAddress(Position _position, BuildContext context) async{
     // LoadingUtils.showLoadingDialog(context, _keyLoader);
     try{
       final coordinates = new Coordinates(_position.latitude, _position.longitude);
@@ -169,7 +177,6 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
       print(error.toString());
       hrisUtil.toastMessage("please refresh address");
     }
-
   }
 
   void initUIdToken(int intType, BuildContext context){
@@ -368,6 +375,29 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                     fontFamily: "Poppins",
                   ),
                 ),
+                isShowReasonText ? new Column(
+                    children: <Widget>[
+                      new Padding(padding: EdgeInsets.only(top: 30.0)),
+                      new TextFormField(
+                        controller: etReasonAbsent,
+                        enabled: false,
+                        maxLines: 3,
+                        decoration: new InputDecoration(
+                          labelText: "Reason",
+                          fillColor: Colors.white,
+                          border: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(15.0),
+                            borderSide: new BorderSide(
+                            ),
+                          ),
+                        ),
+                        keyboardType: TextInputType.text,
+                        style: new TextStyle(
+                          fontFamily: "Poppins",
+                        ),
+                      ),
+                    ]
+                ) : Text(""),
                 new Padding(padding: EdgeInsets.only(top: 50.0)),
                 new Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
