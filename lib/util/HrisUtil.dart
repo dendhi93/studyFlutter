@@ -70,10 +70,11 @@ class HrisUtil {
   int hourDiff(String startTime, String endTime){
     try{
       var splitStartValue = startTime.split("-");
-      var splitEndValue = startTime.split("-");
-      final dateOne = DateTime(int.parse(splitStartValue[0]), int.parse(splitStartValue[1]), int.parse(splitStartValue[2]), int.parse(splitStartValue[3]), int.parse(splitStartValue[4]));
-      final dateTwo = DateTime(int.parse(splitEndValue[0]), int.parse(splitEndValue[1]), int.parse(splitEndValue[2]), int.parse(splitStartValue[3]), int.parse(splitStartValue[4]));
-      return dateTwo.difference(dateOne).inMinutes;
+      var splitEndValue = endTime.split("-");
+      Duration startDuration = new Duration(hours:int.parse(splitStartValue[3]), minutes:int.parse(splitStartValue[4]), seconds:0);
+      Duration endtDuration = new Duration(hours:int.parse(splitEndValue[3]), minutes:int.parse(splitEndValue[4]), seconds:0);
+      int durationHours = startDuration.inHours - endtDuration.inHours;
+      return durationHours;
     }catch(error){
       print("err load claim " +error.toString());
       return 0;

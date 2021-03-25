@@ -213,8 +213,9 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
         if(_groupValue == 2){
           splitStartTime = stInputTime.split(":"),
           finalTime = etDateAbsent.text.toString() +"-"+splitStartTime[0]+"-"+splitStartTime[1],
-          print(finalTime),
-          print(HrisUtil().hourDiff(finalTime, stAbsentOut)),
+          print(HrisUtil().hourDiff(finalTime,stAbsentOut)),
+          HrisUtil().hourDiff(finalTime,stAbsentOut) > 0 ?  initUIdToken(1, context) : print(HrisUtil().hourDiff(finalTime,stAbsentOut))
+          //buat validasi nambah alasan
         }else{
           initUIdToken(1, context)
         }
