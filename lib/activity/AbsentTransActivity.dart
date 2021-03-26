@@ -34,6 +34,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   TextEditingController etInputTime = new TextEditingController();
   TextEditingController etAddressAbsent = new TextEditingController();
   TextEditingController etReasonAbsent = new TextEditingController();
+  TextEditingController etReasonDialogAbsent = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TimeOfDay timeOfDay = TimeOfDay.now();
   HrisUtil hrisUtil = HrisUtil();
@@ -52,6 +53,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   var isEnableRadio = true;
   var isShowReasonText = true;
   String stAbsentOut;
+  var selectedDate;
 
   @override
   void initState() {
@@ -72,10 +74,10 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
       }
     }else{
       _gpsValidaton(context);
-      var selectedDate = DateTime.now();
-      stInputTime =  new DateFormat.Hm().format(selectedDate);
+      selectedDate = DateTime.now();
+      stInputTime =  new DateFormat.Hms().format(selectedDate);
       etInputTime.text = stInputTime;
-      etDateAbsent.text = new DateFormat('y-M-dd').format(selectedDate);
+      etDateAbsent.text = new DateFormat('y-MM-dd').format(selectedDate);
       isShowReasonText = !isShowReasonText;
       String nameDay = hrisUtil.nameOfDay(selectedDate);
       if(nameDay == "Saturday" || nameDay == "Sunday"){
@@ -83,7 +85,6 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
         isHiddenButton = !isHiddenButton;
       }
     }
-
     validateConnection(context);
   }
 
@@ -189,17 +190,20 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
     }else{
       Future<String> authUToken = _hrisStore.getAuthToken();
       authUToken.then((data) {
-        stToken = data.trim();
-        stUid = stUid+"-"+stToken;
         String _stAbsentLat = "";
         String _stAbsentLongitute = "";
+        String finalReasonAbsent = "";
+
+        stToken = data.trim();
+        stUid = stUid+"-"+stToken;
         if(_currentPosition != null){
           _stAbsentLat = _currentPosition.latitude.toString();
           _stAbsentLongitute = _currentPosition.longitude.toString();
         }
+        if(etReasonDialogAbsent.text.isNotEmpty){finalReasonAbsent = etReasonDialogAbsent.text.toString().trim();}
         PostJsonAbsent _postJsonAbsent =
           PostJsonAbsent(userId: stUid,absentType: _groupValue.toString(),
-            addressAbsent: etAddressAbsent.text.trim(),reason: "-",
+            addressAbsent: etAddressAbsent.text.trim(),reason: finalReasonAbsent,
               dateAbsent: etDateAbsent.text.toString(),absentLat: _stAbsentLat,
               absentLongitude: _stAbsentLongitute, absentTime: etInputTime.text.toString());
 
@@ -210,25 +214,19 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   }
 
   void validateConnectionSubmit(BuildContext context){
-    // HrisUtil.checkConnection().then((isConnected) => {
-    //   isConnected ? initUIdToken(1, context) : hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
-    // });
-    var splitStartTime;
-    String finalTime;
+    // var splitStartTime;
+    String stfinalTime;
+    var dateTime1;
+    var dateTime2;
     HrisUtil.checkConnection().then((isConnected) => {
       if(isConnected){
         if(_groupValue == 2){
-          splitStartTime = stInputTime.split(":"),
-          finalTime = etDateAbsent.text.toString() +"-"+splitStartTime[0]+"-"+splitStartTime[1],
-          print(HrisUtil().hourDiff(finalTime,stAbsentOut)),
-          HrisUtil().hourDiff(finalTime,stAbsentOut) > 0 ?  initUIdToken(1, context) : print(HrisUtil().hourDiff(finalTime,stAbsentOut))
-          //buat validasi nambah alasan
-        }else{
-          initUIdToken(1, context)
-        }
-      }else{
-        hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
-      }
+          stfinalTime = etDateAbsent.text.toString() +" "+stInputTime,
+          dateTime1 = DateFormat('yyyy-M-d H:m').parse(stAbsentOut),
+          dateTime2 = DateFormat('yyyy-M-d H:m').parse(stfinalTime),
+          dateTime2.isBefore(dateTime1) ? urgentOutValidation(context) : initUIdToken(1, context)
+        }else{initUIdToken(1, context)}
+      }else{hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)}
     });
   }
 
@@ -276,6 +274,37 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
       }
     });
     return null;
+  }
+
+  void urgentOutValidation(BuildContext context){
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Please fill the reason if you want to absent out right now'),
+            content: TextField(
+              onChanged: (value) {
+                setState(() => reasonAbsent = value);
+              },
+              controller: etReasonDialogAbsent,
+              decoration: InputDecoration(hintText: "reason Absent Out"),
+            ),
+            actions: <Widget>[
+              TextButton(child: Text('OK'),
+                onPressed: (){
+                  Navigator.of(context, rootNavigator: true).pop();
+                  //submitAbsent
+                  validateConnectionSubmit(context);
+                },
+              ),
+              TextButton(child: Text('Cancel'),
+                onPressed: (){
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
 
   //view

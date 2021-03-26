@@ -67,7 +67,7 @@ class HrisUtil {
     }
   }
 
-  int hourDiff(String startTime, String endTime){
+  int timeDiff(String startTime, String endTime){
     try{
       var splitStartValue = startTime.split("-");
       var splitEndValue = endTime.split("-");
