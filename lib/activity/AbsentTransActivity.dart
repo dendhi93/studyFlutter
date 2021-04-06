@@ -231,10 +231,12 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
         //hrs buat function lagi
         if(_groupValue == 2){
           stfinalTime = etDateAbsent.text.toString() +" "+stInputTime,
-          dateTime1 = DateFormat('yyyy-M-d H:m').parse(stAbsentOut),
           dateTime2 = DateFormat('yyyy-M-d H:m').parse(stfinalTime),
-          dateTime2.isBefore(dateTime1) ? urgentOutValidation(context) : initUIdToken(1, context)
-        }else{initUIdToken(1, context)}
+          dateTime1 = DateFormat('yyyy-M-d H:m').parse(stAbsentOut),
+          dateTime2.isBefore(dateTime1) ? reasonValidation(context) : initUIdToken(1, context)
+        }else{
+          initUIdToken(1, context)
+        }
       }else{hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)}
     });
   }
@@ -288,7 +290,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
     return null;
   }
 
-  void urgentOutValidation(BuildContext context){
+  void reasonValidation(BuildContext context){
     showDialog(
         context: context,
         builder: (context) {
@@ -306,7 +308,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                 onPressed: (){
                   Navigator.of(context, rootNavigator: true).pop();
                   //submitAbsent
-                  validateConnectionSubmit(context);
+                  initUIdToken(1, context);
                 },
               ),
               TextButton(child: Text('Cancel'),
@@ -536,7 +538,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
               color: Colors.white,
             ),
             onPressed: () {
-              hrisUtil.toastMessage("Test");
+              _gpsValidaton(context);
             },
           )
         ],
