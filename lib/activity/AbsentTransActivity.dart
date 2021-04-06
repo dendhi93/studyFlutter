@@ -54,10 +54,12 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   var isShowReasonText = true;
   String stAbsentOut;
   var selectedDate;
+  var isLoading = false;
 
   @override
   void initState() {
     super.initState();
+    validateConnection(context);
     if(widget.absentModel != null){
       etDateAbsent.text = widget.absentModel.dateAbsent;
       etInputTime.text = widget.absentModel.absentTime;
@@ -85,14 +87,17 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
         isHiddenButton = !isHiddenButton;
       }
     }
-    validateConnection(context);
   }
 
   //controller
   Future _gpsValidaton(BuildContext context) async {
+    loadingOption();
     final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
-    if(!(await Geolocator().isLocationServiceEnabled())){validateAlertGps();}
+    if(!(await Geolocator().isLocationServiceEnabled())){
+      loadingOption();
+      validateAlertGps();
+    }
     else{_getCurrentLocation(geolocator, context);}
   }
 
@@ -106,8 +111,12 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
         if(_currentPosition != null){
           _getAddress(position, context);
         }
+        loadingOption();
       });
-    }).catchError((e) {print(e);});
+    }).catchError((e) {
+      print(e);
+      loadingOption();
+    });
     return null;
   }
 
@@ -192,7 +201,6 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
       authUToken.then((data) {
         String _stAbsentLat = "";
         String _stAbsentLongitute = "";
-        String finalReasonAbsent = "";
 
         stToken = data.trim();
         stUid = stUid+"-"+stToken;
@@ -200,10 +208,10 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
           _stAbsentLat = _currentPosition.latitude.toString();
           _stAbsentLongitute = _currentPosition.longitude.toString();
         }
-        if(etReasonDialogAbsent.text.isNotEmpty){finalReasonAbsent = etReasonDialogAbsent.text.toString().trim();}
+        if(etReasonDialogAbsent.text.isNotEmpty){reasonAbsent = etReasonDialogAbsent.text.toString().trim();}
         PostJsonAbsent _postJsonAbsent =
           PostJsonAbsent(userId: stUid,absentType: _groupValue.toString(),
-            addressAbsent: etAddressAbsent.text.trim(),reason: finalReasonAbsent,
+            addressAbsent: etAddressAbsent.text.trim(),reason: reasonAbsent,
               dateAbsent: etDateAbsent.text.toString(),absentLat: _stAbsentLat,
               absentLongitude: _stAbsentLongitute, absentTime: etInputTime.text.toString());
 
@@ -220,6 +228,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
     var dateTime2;
     HrisUtil.checkConnection().then((isConnected) => {
       if(isConnected){
+        //hrs buat function lagi
         if(_groupValue == 2){
           stfinalTime = etDateAbsent.text.toString() +" "+stInputTime,
           dateTime1 = DateFormat('yyyy-M-d H:m').parse(stAbsentOut),
@@ -263,6 +272,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   }
 
   Future<ResponseAbsentOut> _getAbsentOut() async{
+    loadingOption();
     _apiServiceUtils.getMasterAbsentOut().then((value) => {
       print(jsonDecode(value)),
       responseCode = ResponseAbsentOut.fromJson(jsonDecode(value)).code,
@@ -273,6 +283,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
         hrisUtil.toastMessage("$stResponseMessage")
       }
     });
+    loadingOption();
     return null;
   }
 
@@ -307,6 +318,12 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
         });
   }
 
+  void loadingOption(){
+    setState(() {
+      isLoading = !isLoading;
+    });
+  }
+
   //view
   Widget _initDetail(BuildContext context){
     return Form(
@@ -314,7 +331,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
       child: new Container(
         padding: const EdgeInsets.all(10.0),
         color: Colors.white,
-        child: new Container(
+        child: new SingleChildScrollView(
           child: new Center(
             child: new Column(
               children: <Widget>[
@@ -512,7 +529,9 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
       appBar: AppBar(
         title: Text('Absent'),
       ),
-      body: _initDetail(context),
+      body: isLoading ? Center(
+        child: CircularProgressIndicator(),
+      ) : _initDetail(context),
     );
   }
   Color hexToColor(String code) {return new Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);}
