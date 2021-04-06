@@ -172,18 +172,15 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   }
 
   void _getAddress(Position _position, BuildContext context) async{
-    // LoadingUtils.showLoadingDialog(context, _keyLoader);
     try{
       final coordinates = new Coordinates(_position.latitude, _position.longitude);
       var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
       var first = addresses.first;
       print("${first.featureName} : ${first.addressLine}");
-      // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
       if(widget.absentModel ==null){
         etAddressAbsent.text = "${first.addressLine}";
       }
     }catch(error){
-      // Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
       print(error.toString());
       hrisUtil.toastMessage("please refresh address");
     }
@@ -200,20 +197,20 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
       Future<String> authUToken = _hrisStore.getAuthToken();
       authUToken.then((data) {
         String _stAbsentLat = "";
-        String _stAbsentLongitute = "";
+        String _stAbsentLongitude = "";
 
         stToken = data.trim();
         stUid = stUid+"-"+stToken;
         if(_currentPosition != null){
           _stAbsentLat = _currentPosition.latitude.toString();
-          _stAbsentLongitute = _currentPosition.longitude.toString();
+          _stAbsentLongitude = _currentPosition.longitude.toString();
         }
         if(etReasonDialogAbsent.text.isNotEmpty){reasonAbsent = etReasonDialogAbsent.text.toString().trim();}
         PostJsonAbsent _postJsonAbsent =
           PostJsonAbsent(userId: stUid,absentType: _groupValue.toString(),
             addressAbsent: etAddressAbsent.text.trim(),reason: reasonAbsent,
               dateAbsent: etDateAbsent.text.toString(),absentLat: _stAbsentLat,
-              absentLongitude: _stAbsentLongitute, absentTime: etInputTime.text.toString());
+              absentLongitude: _stAbsentLongitude, absentTime: etInputTime.text.toString());
 
         print(PostJsonAbsent().absentToJson(_postJsonAbsent));
         _submitAbsent(context, _postJsonAbsent);
@@ -538,7 +535,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
               color: Colors.white,
             ),
             onPressed: () {
-              _gpsValidaton(context);
+              if(widget.absentModel == null){_gpsValidaton(context);}
             },
           )
         ],
