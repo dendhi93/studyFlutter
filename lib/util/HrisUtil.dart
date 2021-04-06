@@ -24,6 +24,7 @@ class HrisUtil {
   }
 
   void snackBarMessageScaffoldKey(String message, GlobalKey<ScaffoldState> scaffoldKey) {
+    // ignore: deprecated_member_use
     scaffoldKey.currentState.showSnackBar(
         SnackBar(
           content: Text(message),

@@ -225,14 +225,15 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
     var dateTime2;
     HrisUtil.checkConnection().then((isConnected) => {
       if(isConnected){
-        //hrs buat function lagi
-        if(_groupValue == 2){
-          stfinalTime = etDateAbsent.text.toString() +" "+stInputTime,
-          dateTime2 = DateFormat('yyyy-M-d H:m').parse(stfinalTime),
+        //validate late in or early out
+        stfinalTime = etDateAbsent.text.toString() +" "+stInputTime,
+        dateTime2 = DateFormat('yyyy-M-d H:m').parse(stfinalTime),
+        if(_groupValue == 1){
+          dateTime1 = DateFormat('yyyy-M-d H:m').parse(stAbsentIn),
+          dateTime2.isAfter(dateTime1) ? reasonValidation(context) : initUIdToken(1, context)
+        }else{
           dateTime1 = DateFormat('yyyy-M-d H:m').parse(stAbsentOut),
           dateTime2.isBefore(dateTime1) ? reasonValidation(context) : initUIdToken(1, context)
-        }else{
-          initUIdToken(1, context)
         }
       }else{hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)}
     });
@@ -288,17 +289,19 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   }
 
   void reasonValidation(BuildContext context){
+    String messageText = "";
+    _groupValue == 1 ? messageText = 'Please fill the reason if you late absent in right now' : messageText = 'Please fill the reason if you want to early absent out';
     showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Please fill the reason if you want to absent out right now'),
+            title: Text(messageText),
             content: TextField(
               onChanged: (value) {
                 setState(() => reasonAbsent = value);
               },
               controller: etReasonDialogAbsent,
-              decoration: InputDecoration(hintText: "reason Absent Out"),
+              decoration: InputDecoration(hintText: "Reason"),
             ),
             actions: <Widget>[
               TextButton(child: Text('OK'),
