@@ -20,7 +20,7 @@ class HrisUtil {
 
   void snackBarMessage(String message, BuildContext context) {
     final snackBar = SnackBar(content: Text(message),backgroundColor: Colors.blue);
-    Scaffold.of(context).showSnackBar(snackBar);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   void snackBarMessageScaffoldKey(String message, GlobalKey<ScaffoldState> scaffoldKey) {
