@@ -52,7 +52,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   var isHiddenButton = true;
   var isEnableRadio = true;
   var isShowReasonText = true;
-  String stAbsentOut;
+  String stAbsentOut, stAbsentIn;
   var selectedDate;
   var isLoading = false;
 
@@ -278,6 +278,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
       responseCode = ResponseAbsentOut.fromJson(jsonDecode(value)).code,
       if(responseCode == ConstanstVar.successCode){
           stAbsentOut = ResponseAbsentOut.fromJson(jsonDecode(value)).absentOut,
+          stAbsentIn = ResponseAbsentOut.fromJson(jsonDecode(value)).absentIn,
       }else{
         stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
         hrisUtil.toastMessage("$stResponseMessage")
@@ -528,6 +529,17 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
       key: scaffoldKey,
       appBar: AppBar(
         title: Text('Absent'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.add_location,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              hrisUtil.toastMessage("Test");
+            },
+          )
+        ],
       ),
       body: isLoading ? Center(
         child: CircularProgressIndicator(),
