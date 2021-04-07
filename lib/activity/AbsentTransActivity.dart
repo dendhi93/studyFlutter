@@ -290,7 +290,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
 
   void reasonValidation(BuildContext context){
     String messageText = "";
-    _groupValue == 1 ? messageText = 'Please fill the reason if you late absent in right now' : messageText = 'Please fill the reason if you want to early absent out';
+    _groupValue == 1 ? messageText = 'Please fill the reason if you late absent in' : messageText = 'Please fill the reason if you want to early absent out';
     showDialog(
         context: context,
         builder: (context) {
