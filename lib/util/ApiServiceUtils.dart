@@ -14,7 +14,7 @@ class ApiServiceUtils {
       map['password'] = pass;
       final http.Response responseLogin = await http.post(ConstanstVar.urlApi+'loginUser.php',
           body: map,
-      );
+      ).timeout(Duration(seconds: 100));
 
       if(responseLogin.statusCode == ConstanstVar.successCode
           || responseLogin.statusCode == ConstanstVar.failedHttp){
@@ -37,7 +37,7 @@ class ApiServiceUtils {
           'Content-Type': 'application/json',
           //'Authorization': '$getToken',
         }
-      );
+      ).timeout(Duration(seconds: 100));
 
       if(responseAbsent.statusCode == ConstanstVar.successCode
           || responseAbsent.statusCode == ConstanstVar.invalidTokenCode
@@ -57,7 +57,7 @@ class ApiServiceUtils {
           headers: {
             'Content-Type': 'application/json',
           }
-      );
+      ).timeout(Duration(seconds: 100));
       if(responseClaim.statusCode == ConstanstVar.successCode
           || responseClaim.statusCode == ConstanstVar.invalidTokenCode
           || responseClaim.statusCode == ConstanstVar.failedHttp){
@@ -72,7 +72,8 @@ class ApiServiceUtils {
     Future<String> getMasterClaim() async{
       String urlMasterClaim = ConstanstVar.urlApi+'MasterClaimData.php';
       print('url $urlMasterClaim');
-      final http.Response responseMasterClaim = await http.get(urlMasterClaim, headers: {'Content-Type': 'application/json',});
+      final http.Response responseMasterClaim = await http.get(urlMasterClaim,
+          headers: {'Content-Type': 'application/json',}).timeout(Duration(seconds: 100));
 
       if(responseMasterClaim.statusCode == ConstanstVar.successCode
           || responseMasterClaim.statusCode == ConstanstVar.failedHttp){
@@ -91,7 +92,7 @@ class ApiServiceUtils {
           headers: {
             'Content-Type': 'application/json',
           }
-      );
+      ).timeout(Duration(seconds: 100));
       if(responseUserDtl.statusCode == ConstanstVar.successCode
           || responseUserDtl.statusCode == ConstanstVar.invalidTokenCode
           || responseUserDtl.statusCode == ConstanstVar.failedHttp){
@@ -110,7 +111,7 @@ class ApiServiceUtils {
           headers: {
             'Content-Type': 'application/json',
           }
-      );
+      ).timeout(Duration(seconds: 100));
       if(responseLogout.statusCode == ConstanstVar.successCode
           || responseLogout.statusCode == ConstanstVar.failedHttp){
         return responseLogout.body;
@@ -129,7 +130,7 @@ class ApiServiceUtils {
           headers: {
             'Content-Type': 'application/json',
           }
-      );
+      ).timeout(Duration(seconds: 100));
       if(responseUnAttendance.statusCode == ConstanstVar.successCode
           || responseUnAttendance.statusCode == ConstanstVar.invalidTokenCode
           || responseUnAttendance.statusCode == ConstanstVar.failedHttp){
@@ -148,7 +149,7 @@ class ApiServiceUtils {
           headers: {
             'Content-Type': 'application/json',
           }
-      );
+      ).timeout(Duration(seconds: 100));
       if(responseMasterUnAttendance.statusCode == ConstanstVar.successCode){
         return responseMasterUnAttendance.body;
       }else{
@@ -164,7 +165,7 @@ class ApiServiceUtils {
           .post(urlTRAbsent,
           headers: {'Content-Type': 'application/json',},
           body: PostJsonAbsent().absentToJson(absentData)
-      );
+      ).timeout(Duration(seconds: 100));
 
       if(responseTrAbsent.statusCode == ConstanstVar.successCode
           || responseTrAbsent.statusCode == ConstanstVar.invalidTokenCode
@@ -183,7 +184,7 @@ class ApiServiceUtils {
           .post(urlTRClaim,
           headers: {'Content-Type': 'application/json',},
           body: PostJsonClaimTR().postClaimToJson(claimData)
-      );
+      ).timeout(Duration(seconds: 100));
 
       if(responseTrClaim.statusCode == ConstanstVar.successCode
           || responseTrClaim.statusCode == ConstanstVar.invalidTokenCode
@@ -202,7 +203,7 @@ class ApiServiceUtils {
           .post(urlTRUnAttendance,
           headers: {'Content-Type': 'application/json',},
           body: PostJsonUnAtttendance().postUnAttendanceToJson(unAttendanceData)
-      );
+      ).timeout(Duration(seconds: 100));
 
       if(responseTrUnAttendance.statusCode == ConstanstVar.successCode
           || responseTrUnAttendance.statusCode == ConstanstVar.invalidTokenCode
@@ -222,7 +223,7 @@ class ApiServiceUtils {
           headers: {
             'Content-Type': 'application/json',
           }
-      );
+      ).timeout(Duration(seconds: 100));
       if(responseMasterAbsentOut.statusCode == ConstanstVar.successCode){
         return responseMasterAbsentOut.body;
       }else{

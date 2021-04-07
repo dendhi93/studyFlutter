@@ -70,26 +70,28 @@ class _HomeActivityState extends State<HomeActivity> {
                     Navigator.push(context, route).then(onGoBack);
                   },
                 );
-  //              return Dismissible(
-  //                onDismissed: (DismissDirection direction) {
-  //                  setState(() {
-  //                    listAbsents.removeAt(index);
-  //                  });
-  //                },
-  //                secondaryBackground: Container(
-  //                  child: Center(
-  //                    child: Text(
-  //                      'Delete',
-  //                      style: TextStyle(color: Colors.white),
-  //                    ),
-  //                  ),
-  //                  color: Colors.red,
-  //                ),
-  //                background: Container(),
-  //                child: ListAdapter(modelAbsensi: listAbsents[index]),
-  //                key: UniqueKey(),
-  //                direction: DismissDirection.endToStart,
-  //              );
+
+               // return Dismissible(
+               //   onDismissed: (DismissDirection direction) {
+               //     setState(() {
+               //       list.removeAt(index);
+               //     });
+               //   },
+               //   secondaryBackground: Container(
+               //     child: Center(
+               //       child: Text(
+               //         'Delete',
+               //         style: TextStyle(color: Colors.white),
+               //       ),
+               //     ),
+               //     color: Colors.red,
+               //   ),
+               //   background: Container(),
+               //   child: ListAdapter(modelAbsensi: list[index]),
+               //   key: UniqueKey(),
+               //   direction: DismissDirection.endToStart,
+               //
+               // );
               }
           ) : Center(child: Text('No Data Found')),
       );
