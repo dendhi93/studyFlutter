@@ -37,6 +37,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   TextEditingController etPaidClaim = new TextEditingController();
   TextEditingController etDescClaim = new TextEditingController();
   TextEditingController etRejectReason = new TextEditingController();
+  TextEditingController etResultRejectReason = new TextEditingController();
   DateTime selectedDate = DateTime.now();
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   var isEnableText = false;
@@ -44,6 +45,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   var isEnableDropDown = true;
   var isHiddenButton = true;
   var isHiddenButtonCapture = true;
+  var isHiddenReasonReject = true;
   HrisUtil _hrisUtil = HrisUtil();
   HrisStore _hrisStore = HrisStore();
   int responseCode = 0;
@@ -82,6 +84,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
           stringFileClaim = widget.claimModel.fileClaim;
           intTransClaimId = widget.claimModel.idTrans;
           stLowerId = widget.claimModel.lowerUserId;
+          stReasonReject = widget.claimModel.reasonReject;
           _selectedMasterClaim = widget.claimModel.claimId;
           intStatusId = widget.claimModel.statusId;
           if(stringFileClaim != null){_bytesImage = base64.decode(widget.claimModel.fileClaim);}
@@ -96,6 +99,10 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
               isHiddenButtonCapture = !isHiddenButtonCapture;
               isEnableDropDown = !isEnableDropDown;
               isHiddenButton = !isHiddenButton;
+              if(stReasonReject.isNotEmpty){
+                isHiddenReasonReject = !isHiddenReasonReject;
+                etResultRejectReason.text = stReasonReject.trim();
+              }
             }else{
               isEnableText = !isEnableText;
               validateConnection(context);
@@ -511,6 +518,32 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                     ]
                 ),
 
+                isHiddenReasonReject ? Container(
+                    color: Colors.white
+                          ) : new Column(
+                              children: <Widget>[
+                          new Padding(padding: EdgeInsets.only(top: 15.0)),
+                    new TextFormField(
+                      enabled: false,
+                      controller: etResultRejectReason,
+                      decoration: new InputDecoration(
+                      labelText: "Reason",
+                      contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                      fillColor: Colors.white,
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(15.0),
+                        borderSide: new BorderSide(
+                        ),
+                      ),
+                    ),
+                    maxLength:100,
+                    keyboardType: TextInputType.text,
+                    style: new TextStyle(
+                      fontFamily: "Poppins",
+                    ),
+                  )
+                  ],
+                ),
                 new Padding(padding: EdgeInsets.only(top: 25.0)),
                   _userType == 'requester' ? new Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

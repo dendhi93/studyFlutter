@@ -102,14 +102,6 @@ class _ClaimActivityState extends State<ClaimActivity> {
                 Route route = MaterialPageRoute(builder: (context) => ClaimTransActivity(claimModel: listClaim[index]));
                 Navigator.push(context, route).then(onGoBack);
               },
-
-                // onHorizontalDragUpdate: (details) {
-                //   // Note: Sensitivity is integer used when you don't want to mess up vertical drag
-                //   int sensitivity = 8;
-                //   if (details.delta.dx > sensitivity) {
-                //     _hrisUtil.toastMessage("swipe donk");
-                //   }
-                // }
             );
           }
       ) : Center(child: Text('No Data Found')),

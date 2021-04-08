@@ -140,8 +140,8 @@ class _HomeActivityState extends State<HomeActivity> {
 
     //controller
     Future<ResponseDataAbsentModel> _loadAbsent(String uId,String userToken) async{
+      loadingOption();
       try{
-          loadingOption();
           _apiServiceUtils.getDataAbsen(uId, userToken).then((value) => {
             print(jsonDecode(value)),
             responseCode = ResponseDataAbsentModel.fromJson(jsonDecode(value)).code,

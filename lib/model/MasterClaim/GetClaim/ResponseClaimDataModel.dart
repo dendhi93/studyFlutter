@@ -11,6 +11,7 @@ class ResponseClaimDataModel{
   String nameRequester;
   String lowerUserId;
   int idTrans;
+  String reasonReject;
 
   ResponseClaimDataModel(
       {this.claimId,
@@ -24,7 +25,8 @@ class ResponseClaimDataModel{
       this.fileClaim,
       this.nameRequester,
       this.lowerUserId,
-      this.idTrans = 0});
+      this.idTrans = 0,
+      this.reasonReject});
 
   ResponseClaimDataModel.fromJson(Map<String, dynamic> json) {
     claimId = json['claim_id'];
@@ -39,5 +41,6 @@ class ResponseClaimDataModel{
     nameRequester = json['name_requester'];
     lowerUserId = json['user_id'];
     idTrans = json['id_trans'];
+    reasonReject = json['reason_reject'];
   }
 }

@@ -36,6 +36,8 @@ class _ListAdapterState extends State<ListAdapter> {
                 title: Text(widget.modelAbsensi.absentType +"\nTime " +widget.modelAbsensi.absentTime),
                 subtitle: Text(widget.modelAbsensi.addressAbsent+""+reasonAbsent),
                 trailing: Text(widget.modelAbsensi.dateAbsent + "\n"+lowerEmployeeName),
+                //onClick in this action
+                // onTap: () {},
               )
             ],
           ),
