@@ -32,6 +32,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   TextEditingController etNoteUnAttendance = new TextEditingController();
   TextEditingController etReasonUnAttendance = new TextEditingController();
   TextEditingController etRejectReason = new TextEditingController();
+  TextEditingController etResultRejectReason = new TextEditingController();
   List<ResponseDtlMasterUnAttendance> arrDtlMasterUnAttendance = [];
   ResponseDtlMasterUnAttendance _selectedDtlMasterUnAttendance;
   List<ResponseDtlMasterUnAttendance> listDtlMasterUnAttendance = [];
@@ -52,6 +53,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   String stReasonReject = "";
   String dateTrans = "";
   String stLowerId = "";
+  String stResultRejectReason = "";
   String stResponseMessage,
       _selectedUnAttendanceType,
       tempStStartDate, stUid,
@@ -73,6 +75,8 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
           if(statusTrans == ConstanstVar.approvedClaimStatus || statusTrans == ConstanstVar.rejectClaimStatus){
             isEnableDropdown = !isEnableDropdown;
             isShowButton = !isShowButton;
+            stResultRejectReason = widget.unAttendanceModel.reasonReject;
+            if(stResultRejectReason.isNotEmpty){etResultRejectReason.text = stResultRejectReason;}
           }else{
             validateConnection(context);
             isEnableText = !isEnableText;
@@ -95,7 +99,6 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
         validateConnection(context);
         isEnableText = !isEnableText;
       }
-
     });
   }
 
@@ -420,7 +423,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                                   ),
                                 ),
                                 validator: (val) {
-                                  if(val.length==0 && _selectedUnAttendanceType == "8") {return "Type Claim cannot be empty";
+                                  if(val.length==0 && _selectedUnAttendanceType == "8") {return "note Claim cannot be empty";
                                   }else{return null;}
                                 },
                                 maxLength:100,
@@ -434,7 +437,6 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                           ),
                         ],
                       ),
-                      new Padding(padding: EdgeInsets.only(top: 10.0)),
                       new TextFormField(
                         enabled: isEnableText,
                         controller: etReasonUnAttendance,
@@ -457,6 +459,34 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                         style: new TextStyle(
                           fontFamily: "Poppins",
                         ),
+                      ),
+                      stResultRejectReason.isNotEmpty ? new Column(
+                        children: <Widget>[
+                          new TextFormField(
+                            enabled: false,
+                            controller: etResultRejectReason,
+                            decoration: new InputDecoration(
+                              labelText: "Reject Reason",
+                              contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                              fillColor: Colors.white,
+                              border: new OutlineInputBorder(
+                                borderRadius: new BorderRadius.circular(15.0),
+                                borderSide: new BorderSide(
+                                ),
+                              ),
+                            ),
+                            validator: (val) {
+                              if(val.length==0 && _selectedUnAttendanceType == "8") {return "note Claim cannot be empty";
+                              }else{return null;}
+                            },
+                            maxLength:100,
+                            keyboardType: TextInputType.text,
+                            style: new TextStyle(
+                              fontFamily: "Poppins",
+                            ),
+                          )
+                        ],
+                      ): Container(color: Colors.white // This is optional
                       ),
                       new Padding(padding: EdgeInsets.only(top: 25.0)),
                       _userType == 'requester' ? new Row(

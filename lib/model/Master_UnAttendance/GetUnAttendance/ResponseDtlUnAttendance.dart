@@ -12,6 +12,7 @@ class ResponseDtlUnAttendance{
   String lowerUserId;
   int transId;
   int mUnAttendanceId;
+  String reasonReject;
 
   ResponseDtlUnAttendance.fromJson(Map<String, dynamic> json) {
     unattendanceDesc = json['unattendance_desc'];
@@ -27,5 +28,7 @@ class ResponseDtlUnAttendance{
     lowerUserId = json['user_id'];
     transId = json['trans_id'];
     mUnAttendanceId = json['m_attendance_id'];
+    reasonReject = json['reason_reject'];
+
   }
 }
