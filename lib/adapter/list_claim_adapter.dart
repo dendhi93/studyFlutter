@@ -20,13 +20,14 @@ class ListClaimAdapterState extends State<ListClaimAdapter> {
     super.initState();
     statusClaim = widget.responseClaimDataModel.statusId;
     if(statusClaim != null){
-        if(statusClaim == 1){
-            imageClaim = "ic_sand.png";
-        }else if(statusClaim == 2){
-            imageClaim = "ic_ok_24.png";
-        }else{
-            imageClaim = "ic_cross.png";
-        }
+      switch(statusClaim) {
+        case 1 : imageClaim = "ic_sand.png";
+        break;
+        case 2 : imageClaim = "ic_ok_24.png";
+        break;
+        default : imageClaim = "ic_cross.png";
+        break;
+      }
     }else{
       statusClaim = null;
       imageClaim = null;

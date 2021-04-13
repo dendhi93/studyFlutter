@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:core';
+
 import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/MasterAbsent/PostAbsent/PostJsonAbsent.dart';
 import 'package:absent_hris/model/MasterClaim/PostClaim/PostJsonClaimTR.dart';
@@ -14,7 +18,7 @@ class ApiServiceUtils {
       map['password'] = pass;
       final http.Response responseLogin = await http.post(ConstanstVar.urlApi+'loginUser.php',
           body: map,
-      ).timeout(Duration(seconds: 100));
+      ).timeout(Duration(seconds: 50));
 
       if(responseLogin.statusCode == ConstanstVar.successCode
           || responseLogin.statusCode == ConstanstVar.failedHttp){
@@ -37,14 +41,14 @@ class ApiServiceUtils {
           'Content-Type': 'application/json',
           //'Authorization': '$getToken',
         }
-      ).timeout(Duration(seconds: 100));
+      ).timeout(Duration(seconds: 50));
 
       if(responseAbsent.statusCode == ConstanstVar.successCode
           || responseAbsent.statusCode == ConstanstVar.invalidTokenCode
           || responseAbsent.statusCode == ConstanstVar.failedHttp){
           return responseAbsent.body;
       }else{
-        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error Absent");
+        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error Absent, please contact your administrator");
         return _errResponse.errResponseToJson(_errResponse);
       }
     }
@@ -57,14 +61,14 @@ class ApiServiceUtils {
           headers: {
             'Content-Type': 'application/json',
           }
-      ).timeout(Duration(seconds: 100));
+      ).timeout(Duration(seconds: 50));
       if(responseClaim.statusCode == ConstanstVar.successCode
           || responseClaim.statusCode == ConstanstVar.invalidTokenCode
           || responseClaim.statusCode == ConstanstVar.failedHttp){
             print('$responseClaim.body');
             return responseClaim.body;
       }else{
-        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error Claim");
+        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error Claim, please contact your administrator");
         return _errResponse.errResponseToJson(_errResponse);
       }
     }
@@ -79,7 +83,7 @@ class ApiServiceUtils {
           || responseMasterClaim.statusCode == ConstanstVar.failedHttp){
         return responseMasterClaim.body;
       }else{
-        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error Master Claim");
+        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error Master Claim, please contact your administrator");
         return _errResponse.errResponseToJson(_errResponse);
       }
     }
@@ -92,13 +96,13 @@ class ApiServiceUtils {
           headers: {
             'Content-Type': 'application/json',
           }
-      ).timeout(Duration(seconds: 100));
+      ).timeout(Duration(seconds: 50));
       if(responseUserDtl.statusCode == ConstanstVar.successCode
           || responseUserDtl.statusCode == ConstanstVar.invalidTokenCode
           || responseUserDtl.statusCode == ConstanstVar.failedHttp){
         return responseUserDtl.body;
       }else{
-        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error User Detail");
+        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error User Detail, please contact your administrator");
         return _errResponse.errResponseToJson(_errResponse);
       }
     }
@@ -117,7 +121,7 @@ class ApiServiceUtils {
         return responseLogout.body;
       }else{
         // throw new Exception("Error User Detail");
-        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error User Detail");
+        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error Logout, please contact your administrator");
         return _errResponse.errResponseToJson(_errResponse);
       }
     }
@@ -130,13 +134,13 @@ class ApiServiceUtils {
           headers: {
             'Content-Type': 'application/json',
           }
-      ).timeout(Duration(seconds: 100));
+      ).timeout(Duration(seconds: 50));
       if(responseUnAttendance.statusCode == ConstanstVar.successCode
           || responseUnAttendance.statusCode == ConstanstVar.invalidTokenCode
           || responseUnAttendance.statusCode == ConstanstVar.failedHttp){
         return responseUnAttendance.body;
       }else{
-        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error get unattendance");
+        ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error get unattendance, please contact your administrator");
         return _errResponse.errResponseToJson(_errResponse);
       }
     }
@@ -149,7 +153,7 @@ class ApiServiceUtils {
           headers: {
             'Content-Type': 'application/json',
           }
-      ).timeout(Duration(seconds: 100));
+      ).timeout(Duration(seconds: 50));
       if(responseMasterUnAttendance.statusCode == ConstanstVar.successCode){
         return responseMasterUnAttendance.body;
       }else{
@@ -165,7 +169,7 @@ class ApiServiceUtils {
           .post(urlTRAbsent,
           headers: {'Content-Type': 'application/json',},
           body: PostJsonAbsent().absentToJson(absentData)
-      ).timeout(Duration(seconds: 100));
+      ).timeout(Duration(seconds: 50));
 
       if(responseTrAbsent.statusCode == ConstanstVar.successCode
           || responseTrAbsent.statusCode == ConstanstVar.invalidTokenCode
@@ -184,7 +188,7 @@ class ApiServiceUtils {
           .post(urlTRClaim,
           headers: {'Content-Type': 'application/json',},
           body: PostJsonClaimTR().postClaimToJson(claimData)
-      ).timeout(Duration(seconds: 100));
+      ).timeout(Duration(seconds: 50));
 
       if(responseTrClaim.statusCode == ConstanstVar.successCode
           || responseTrClaim.statusCode == ConstanstVar.invalidTokenCode
@@ -203,7 +207,7 @@ class ApiServiceUtils {
           .post(urlTRUnAttendance,
           headers: {'Content-Type': 'application/json',},
           body: PostJsonUnAtttendance().postUnAttendanceToJson(unAttendanceData)
-      ).timeout(Duration(seconds: 100));
+      ).timeout(Duration(seconds: 50));
 
       if(responseTrUnAttendance.statusCode == ConstanstVar.successCode
           || responseTrUnAttendance.statusCode == ConstanstVar.invalidTokenCode
@@ -218,12 +222,17 @@ class ApiServiceUtils {
     Future<String> getMasterAbsentOut() async{
       String urlMasterAbsentOut = ConstanstVar.urlApi +'MasterAbsentOutTime.php';
       print('url $urlMasterAbsentOut');
+
       final http.Response responseMasterAbsentOut = await http
           .get(urlMasterAbsentOut,
           headers: {
             'Content-Type': 'application/json',
           }
-      ).timeout(Duration(seconds: 100));
+      ).timeout(Duration(seconds: 50),
+        onTimeout: (){
+          return null;
+        }
+      );
       if(responseMasterAbsentOut.statusCode == ConstanstVar.successCode){
         return responseMasterAbsentOut.body;
       }else{
