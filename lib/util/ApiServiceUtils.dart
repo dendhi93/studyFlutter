@@ -31,7 +31,7 @@ class ApiServiceUtils {
       }
     }
 
-    Future<String> getDataAbsen(String getuId, String getToken) async{
+    Future<String> getDataAbsen(String getuId, String getToken, loadingOption()) async{
       String urlAbsent = ConstanstVar.urlApi +'MasterAbsent2.php?user_id=$getuId-$getToken';
       //String urlAbsent = ConstanstVar.urlApi +'MasterAbsent.php?user_id=$getuId';
       print('urlnya $urlAbsent');
@@ -41,8 +41,13 @@ class ApiServiceUtils {
           'Content-Type': 'application/json',
           //'Authorization': '$getToken',
         }
-      ).timeout(Duration(seconds: 50));
-
+      ).timeout(Duration(seconds: 50),
+          onTimeout: (){
+          print('time out master absent');
+          loadingOption();
+          throw new Exception("time out");
+      });
+      loadingOption();
       if(responseAbsent.statusCode == ConstanstVar.successCode
           || responseAbsent.statusCode == ConstanstVar.invalidTokenCode
           || responseAbsent.statusCode == ConstanstVar.failedHttp){
@@ -207,7 +212,11 @@ class ApiServiceUtils {
           .post(urlTRUnAttendance,
           headers: {'Content-Type': 'application/json',},
           body: PostJsonUnAtttendance().postUnAttendanceToJson(unAttendanceData)
-      ).timeout(Duration(seconds: 50));
+      ).timeout(Duration(seconds: 50),
+          onTimeout: (){
+        print('time out master unattendance trans');
+        throw new Exception("time out");
+      });
 
       if(responseTrUnAttendance.statusCode == ConstanstVar.successCode
           || responseTrUnAttendance.statusCode == ConstanstVar.invalidTokenCode
@@ -230,7 +239,8 @@ class ApiServiceUtils {
           }
       ).timeout(Duration(seconds: 50),
         onTimeout: (){
-          return null;
+          print('time out master absent out');
+          throw new Exception("time out");
         }
       );
       if(responseMasterAbsentOut.statusCode == ConstanstVar.successCode){

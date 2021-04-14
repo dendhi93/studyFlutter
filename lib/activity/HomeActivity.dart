@@ -142,10 +142,9 @@ class _HomeActivityState extends State<HomeActivity> {
     Future<ResponseDataAbsentModel> _loadAbsent(String uId,String userToken) async{
       loadingOption();
       try{
-          _apiServiceUtils.getDataAbsen(uId, userToken).then((value) => {
+          _apiServiceUtils.getDataAbsen(uId, userToken, loadingOption).then((value) => {
             print(jsonDecode(value)),
             responseCode = ResponseDataAbsentModel.fromJson(jsonDecode(value)).code,
-            loadingOption(),
             if(responseCode == ConstanstVar.successCode){
               list = ResponseDataAbsentModel.fromJson(jsonDecode(value)).responseDtlDataAbsent,
             }else if(responseCode == ConstanstVar.invalidTokenCode){
