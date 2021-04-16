@@ -196,12 +196,7 @@ class _HomeActivityState extends State<HomeActivity> {
 
     void validateConnection(BuildContext context){
       HrisUtil.checkConnection().then((isConnected) => {
-        if(isConnected){
-          initUIdToken(1),
-        }else{
-          loadingOption(),
-          _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
-        }
+        isConnected ? initUIdToken(1) : _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
       });
     }
 

@@ -151,12 +151,7 @@ class _UserActivityState extends State<UserActivity> {
   //controller
   void validateConnection(BuildContext context){
     HrisUtil.checkConnection().then((isConnected) => {
-      if(isConnected){
-        initUIdToken(1)
-      }else{
-        loadingOption(),
-        _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
-      }
+      isConnected ? initUIdToken(1) : _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
     });
   }
 
@@ -185,10 +180,9 @@ class _UserActivityState extends State<UserActivity> {
   Future<ResponseHeadUserDetail> _loadDtlUser(String uId,String userToken) async{
     try{
       loadingOption();
-      _apiServiceUtils.getDataUser(uId, userToken).then((value) => {
+      _apiServiceUtils.getDataUser(uId, userToken, loadingOption).then((value) => {
         print(jsonDecode(value)),
         responseCode = ResponseHeadUserDetail.fromJson(jsonDecode(value)).code,
-        loadingOption(),
         if(responseCode == ConstanstVar.successCode){
           stAddress = ResponseHeadUserDetail.fromJson(jsonDecode(value)).userDetail.addressUser,
           stEmail = ResponseHeadUserDetail.fromJson(jsonDecode(value)).userDetail.emailUser,

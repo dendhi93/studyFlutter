@@ -43,7 +43,6 @@ class ApiServiceUtils {
         }
       ).timeout(Duration(seconds: 50),
           onTimeout: (){
-          print('time out master absent');
           loadingOption();
           throw new Exception("time out");
       });
@@ -58,7 +57,7 @@ class ApiServiceUtils {
       }
     }
 
-    Future<String> getDataClaim(String getuId, String getToken) async{
+    Future<String> getDataClaim(String getuId, String getToken, loadingOption()) async{
       String urlClaim = ConstanstVar.urlApi +'MasterClaimTrans.php?user_id=$getuId-$getToken';
       print('url $urlClaim');
       final http.Response responseClaim = await http
@@ -66,7 +65,12 @@ class ApiServiceUtils {
           headers: {
             'Content-Type': 'application/json',
           }
-      ).timeout(Duration(seconds: 50));
+      ).timeout(Duration(seconds: 50),
+          onTimeout: (){
+            loadingOption();
+            throw new Exception("time out");
+          });
+      loadingOption();
       if(responseClaim.statusCode == ConstanstVar.successCode
           || responseClaim.statusCode == ConstanstVar.invalidTokenCode
           || responseClaim.statusCode == ConstanstVar.failedHttp){
@@ -93,7 +97,7 @@ class ApiServiceUtils {
       }
     }
 
-    Future<String> getDataUser(String getuId, String getToken) async{
+    Future<String> getDataUser(String getuId, String getToken, loadingOption()) async{
       String urlUserDtl = ConstanstVar.urlApi +'MasterUserDetail.php?user_id=$getuId-$getToken';
       print('url $urlUserDtl');
       final http.Response responseUserDtl = await http
@@ -102,6 +106,7 @@ class ApiServiceUtils {
             'Content-Type': 'application/json',
           }
       ).timeout(Duration(seconds: 50));
+      loadingOption();
       if(responseUserDtl.statusCode == ConstanstVar.successCode
           || responseUserDtl.statusCode == ConstanstVar.invalidTokenCode
           || responseUserDtl.statusCode == ConstanstVar.failedHttp){
@@ -131,7 +136,7 @@ class ApiServiceUtils {
       }
     }
 
-    Future<String> getDataUnAttendance(String getuId, String getToken) async{
+    Future<String> getDataUnAttendance(String getuId, String getToken, loadingOption()) async{
       String urlUnAttendance = ConstanstVar.urlApi +'MasterUnattendanceTrans.php?user_id=$getuId-$getToken';
       print('url $urlUnAttendance');
       final http.Response responseUnAttendance = await http
@@ -139,7 +144,12 @@ class ApiServiceUtils {
           headers: {
             'Content-Type': 'application/json',
           }
-      ).timeout(Duration(seconds: 50));
+      ).timeout(Duration(seconds: 50),
+          onTimeout: (){
+            loadingOption();
+            throw new Exception("time out");
+          });
+      loadingOption();
       if(responseUnAttendance.statusCode == ConstanstVar.successCode
           || responseUnAttendance.statusCode == ConstanstVar.invalidTokenCode
           || responseUnAttendance.statusCode == ConstanstVar.failedHttp){
