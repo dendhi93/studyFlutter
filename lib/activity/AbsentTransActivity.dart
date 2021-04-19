@@ -273,7 +273,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
 
   Future<ResponseAbsentOut> _getAbsentOut() async{
     loadingOption();
-    _apiServiceUtils.getMasterAbsentOut().then((value) => {
+    _apiServiceUtils.getMasterAbsentOut(loadingOption).then((value) => {
       print(jsonDecode(value)),
       responseCode = ResponseAbsentOut.fromJson(jsonDecode(value)).code,
       if(responseCode == ConstanstVar.successCode){
@@ -284,7 +284,6 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
         hrisUtil.toastMessage("$stResponseMessage")
       }
     });
-    loadingOption();
     return null;
   }
 

@@ -238,7 +238,7 @@ class ApiServiceUtils {
       }
     }
 
-    Future<String> getMasterAbsentOut() async{
+    Future<String> getMasterAbsentOut(loadingOption()) async{
       String urlMasterAbsentOut = ConstanstVar.urlApi +'MasterAbsentOutTime.php';
       print('url $urlMasterAbsentOut');
 
@@ -250,9 +250,11 @@ class ApiServiceUtils {
       ).timeout(Duration(seconds: 50),
         onTimeout: (){
           print('time out master absent out');
+          loadingOption();
           throw new Exception("time out");
         }
       );
+      loadingOption();
       if(responseMasterAbsentOut.statusCode == ConstanstVar.successCode){
         return responseMasterAbsentOut.body;
       }else{
