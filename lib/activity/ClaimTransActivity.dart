@@ -523,25 +523,25 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
                           ) : new Column(
                               children: <Widget>[
                           new Padding(padding: EdgeInsets.only(top: 15.0)),
-                    new TextFormField(
-                      enabled: false,
-                      controller: etResultRejectReason,
-                      decoration: new InputDecoration(
-                      labelText: "Reason",
-                      contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
-                      fillColor: Colors.white,
-                      border: new OutlineInputBorder(
-                        borderRadius: new BorderRadius.circular(15.0),
-                        borderSide: new BorderSide(
-                        ),
-                      ),
-                    ),
-                    maxLength:100,
-                    keyboardType: TextInputType.text,
-                    style: new TextStyle(
-                      fontFamily: "Poppins",
-                    ),
-                  )
+                          new TextFormField(
+                            enabled: false,
+                            controller: etResultRejectReason,
+                            decoration: new InputDecoration(
+                            labelText: "Reason",
+                            contentPadding: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                            fillColor: Colors.white,
+                            border: new OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(15.0),
+                              borderSide: new BorderSide(
+                              ),
+                            ),
+                          ),
+                          maxLength:100,
+                          keyboardType: TextInputType.text,
+                          style: new TextStyle(
+                            fontFamily: "Poppins",
+                          ),
+                        )
                   ],
                 ),
                 new Padding(padding: EdgeInsets.only(top: 25.0)),
