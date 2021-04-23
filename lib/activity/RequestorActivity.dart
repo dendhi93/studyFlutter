@@ -14,7 +14,7 @@ class RequestorActivityState extends State<RequestorActivity> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child : Center(child: Text('Approval'),
+        child : Center(child: Text('Requestor'),
         )
     );
   }

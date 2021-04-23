@@ -127,7 +127,7 @@ class _HomeActivityState extends State<HomeActivity> {
         ),
         body: isLoading ? Center(
           child: CircularProgressIndicator(),
-        ) : _userType == "approval" ? RequestorActivity() : _initListAbsent(),
+        ) : _userType != "approval" ? RequestorActivity() : _initListAbsent(),
         floatingActionButton:  new Visibility(
           visible: isVisibleFloating,
           child: new FloatingActionButton(
