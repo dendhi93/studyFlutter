@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:absent_hris/activity/AbsentTransActivity.dart';
 import 'package:absent_hris/activity/LoginActivity.dart';
+import 'package:absent_hris/activity/RequestorActivity.dart';
 import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/adapter/list_absent_adapter.dart';
 import 'package:absent_hris/model/MasterAbsent/GetAbsent/ResponseDataAbsentModel.dart';
@@ -100,13 +101,6 @@ class _HomeActivityState extends State<HomeActivity> {
     );
   }
 
-  Widget _initApprovalAbsent(){
-    return Container(
-      child : Center(child: Text('Admin'),
-      )
-    );
-  }
-
   Future<bool> onWillPop() {
     DateTime now = DateTime.now();
     if (_currentBackPressTime == null ||
@@ -133,7 +127,7 @@ class _HomeActivityState extends State<HomeActivity> {
         ),
         body: isLoading ? Center(
           child: CircularProgressIndicator(),
-        ) : _userType == "approval" ? _initApprovalAbsent() : _initListAbsent(),
+        ) : _userType == "approval" ? RequestorActivity() : _initListAbsent(),
         floatingActionButton:  new Visibility(
           visible: isVisibleFloating,
           child: new FloatingActionButton(
