@@ -7,6 +7,7 @@ import 'package:absent_hris/activity/LoginActivity.dart';
 import 'package:absent_hris/activity/RequestorActivity.dart';
 import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/adapter/list_absent_adapter.dart';
+import 'package:absent_hris/model/MasterAbsent/GetAbsent/CustomAbsentModel.dart';
 import 'package:absent_hris/model/MasterAbsent/GetAbsent/ResponseDataAbsentModel.dart';
 import 'package:absent_hris/model/MasterAbsent/GetAbsent/ResponseDtlAbsentModel.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
@@ -38,6 +39,7 @@ class _HomeActivityState extends State<HomeActivity> {
   String stAbsentOut = "-";
   String actionBarName = "";
   List<ResponseDtlDataAbsentModel> list = [];
+  CustomAbsentModel _customAbsentModel;
   var isLoading = false;
   var isVisibleFloating  = false;
   int intIndex = 0;
@@ -129,7 +131,7 @@ class _HomeActivityState extends State<HomeActivity> {
         ),
         body: isLoading ? Center(
           child: CircularProgressIndicator(),
-        ) : _userType != "approval" ? RequestorActivity(absentModel: list[intIndex]) : _initListAbsent(),
+        ) : _userType != "approval" ? RequestorActivity(customAbsentModel: _customAbsentModel) : _initListAbsent(),
         floatingActionButton:  new Visibility(
           visible: isVisibleFloating,
           child: new FloatingActionButton(
@@ -154,7 +156,11 @@ class _HomeActivityState extends State<HomeActivity> {
         if(responseCode == ConstanstVar.successCode){
           list = ResponseDataAbsentModel.fromJson(jsonDecode(value)).responseDtlDataAbsent,
           stAbsentIn = list[0].absentTime.toString(),
-          if(list.length > 1){stAbsentOut = list[1].absentTime.toString(),}
+          _customAbsentModel = CustomAbsentModel(absentIn: stAbsentIn, absentOut: ""),
+          if(list.length > 1){
+            stAbsentOut = list[1].absentTime.toString(),
+            _customAbsentModel = CustomAbsentModel(absentIn: stAbsentIn, absentOut: stAbsentOut),
+            }
         }else if(responseCode == ConstanstVar.invalidTokenCode){
           stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
           _hrisStore.removeAllValues().then((isSuccess) =>{

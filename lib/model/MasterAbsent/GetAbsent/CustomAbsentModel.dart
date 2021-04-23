@@ -1,9 +1,9 @@
 class CustomAbsentModel {
 
   String absentIn;
-  String absenOut;
+  String absentOut;
 
   CustomAbsentModel(
       {this.absentIn,
-        this.absenOut});
+        this.absentOut});
 }
