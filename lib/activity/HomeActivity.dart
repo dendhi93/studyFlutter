@@ -100,6 +100,13 @@ class _HomeActivityState extends State<HomeActivity> {
     );
   }
 
+  Widget _initApprovalAbsent(){
+    return Container(
+      child : Center(child: Text('Admin'),
+      )
+    );
+  }
+
   Future<bool> onWillPop() {
     DateTime now = DateTime.now();
     if (_currentBackPressTime == null ||
@@ -126,7 +133,7 @@ class _HomeActivityState extends State<HomeActivity> {
         ),
         body: isLoading ? Center(
           child: CircularProgressIndicator(),
-        ) : _initListAbsent(),
+        ) : _userType == "approval" ? _initApprovalAbsent() : _initListAbsent(),
         floatingActionButton:  new Visibility(
           visible: isVisibleFloating,
           child: new FloatingActionButton(
