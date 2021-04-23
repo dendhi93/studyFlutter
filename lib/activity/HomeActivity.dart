@@ -40,6 +40,7 @@ class _HomeActivityState extends State<HomeActivity> {
   List<ResponseDtlDataAbsentModel> list = [];
   var isLoading = false;
   var isVisibleFloating  = false;
+  int intIndex = 0;
 
   @override
   void initState() {
@@ -62,6 +63,7 @@ class _HomeActivityState extends State<HomeActivity> {
       ListView.builder(
           itemCount: list.length,
           itemBuilder: (BuildContext context, int index) {
+            intIndex = index;
             return GestureDetector(
               child: ListAdapter(modelAbsensi: list[index]),
               onTap: () {
@@ -127,7 +129,7 @@ class _HomeActivityState extends State<HomeActivity> {
         ),
         body: isLoading ? Center(
           child: CircularProgressIndicator(),
-        ) : _userType != "approval" ? RequestorActivity() : _initListAbsent(),
+        ) : _userType != "approval" ? RequestorActivity(absentModel: list[intIndex]) : _initListAbsent(),
         floatingActionButton:  new Visibility(
           visible: isVisibleFloating,
           child: new FloatingActionButton(
