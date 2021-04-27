@@ -14,10 +14,9 @@ class RequestorActivity extends StatefulWidget{
 }
 
 class RequestorActivityState extends State<RequestorActivity> {
-  HrisUtil _hrisUtil = HrisUtil();
-  HrisStore _hrisStore = HrisStore();
   String intentAbsentIn = "";
   String intentAbsentOut = "";
+  String intentName = "";
 
 
   @override
@@ -26,6 +25,7 @@ class RequestorActivityState extends State<RequestorActivity> {
     if(widget.customAbsentModel != null){
       intentAbsentIn = widget.customAbsentModel.absentIn;
       intentAbsentOut = widget.customAbsentModel.absentOut;
+      intentName = widget.customAbsentModel.nameUser;
     }
   }
 
@@ -38,7 +38,7 @@ class RequestorActivityState extends State<RequestorActivity> {
               new Padding(padding: EdgeInsets.only(top: 10.0)),
               new Image.asset('assets/images/ic_user_128.png', width: 190, height: 120,),
               new Padding(padding: EdgeInsets.only(top: 25.0)),
-              new Text("Test", style: TextStyle(fontSize: 18)),
+              new Text(intentName, style: TextStyle(fontSize: 18)),
               new Padding(padding: EdgeInsets.only(top: 20.0)),
               new Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,

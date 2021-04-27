@@ -38,6 +38,7 @@ class _HomeActivityState extends State<HomeActivity> {
   String stAbsentIn = "-";
   String stAbsentOut = "-";
   String actionBarName = "";
+  String stName = "";
   List<ResponseDtlDataAbsentModel> list = [];
   CustomAbsentModel _customAbsentModel;
   var isLoading = false;
@@ -156,10 +157,11 @@ class _HomeActivityState extends State<HomeActivity> {
         if(responseCode == ConstanstVar.successCode){
           list = ResponseDataAbsentModel.fromJson(jsonDecode(value)).responseDtlDataAbsent,
           stAbsentIn = list[0].absentTime.toString(),
-          _customAbsentModel = CustomAbsentModel(absentIn: stAbsentIn, absentOut: ""),
+          stName = list[0].nameUser,
+          _customAbsentModel = CustomAbsentModel(absentIn: stAbsentIn, absentOut: "", nameUser: stName),
           if(list.length > 1){
             stAbsentOut = list[1].absentTime.toString(),
-            _customAbsentModel = CustomAbsentModel(absentIn: stAbsentIn, absentOut: stAbsentOut),
+            _customAbsentModel = CustomAbsentModel(absentIn: stAbsentIn, absentOut: stAbsentOut, nameUser: stName),
             }
         }else if(responseCode == ConstanstVar.invalidTokenCode){
           stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
