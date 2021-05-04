@@ -25,7 +25,7 @@ class RequestorActivityState extends State<RequestorActivity> {
     if(widget.customAbsentModel != null){
       intentAbsentIn = widget.customAbsentModel.absentIn;
       intentAbsentOut = widget.customAbsentModel.absentOut;
-      intentName = widget.customAbsentModel.nameUser;
+      intentName = "Welcome " +widget.customAbsentModel.nameUser;
     }
   }
 
@@ -51,7 +51,6 @@ class RequestorActivityState extends State<RequestorActivity> {
                           borderRadius: new BorderRadius.only(
                             topLeft: const Radius.circular(10.0),
                             topRight: const Radius.circular(10.0),
-                            bottomLeft: const Radius.circular(10.0),
                             bottomRight: const Radius.circular(10.0),
                           )
                       ),
@@ -72,7 +71,6 @@ class RequestorActivityState extends State<RequestorActivity> {
                           color: Colors.lightBlueAccent,
                           borderRadius: new BorderRadius.only(
                             topLeft: const Radius.circular(10.0),
-                            topRight: const Radius.circular(10.0),
                             bottomLeft: const Radius.circular(10.0),
                             bottomRight: const Radius.circular(10.0),
                           )
