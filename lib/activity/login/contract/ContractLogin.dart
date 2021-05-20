@@ -10,7 +10,6 @@ abstract class View extends BaseView {
 
 
 abstract class Presenter extends BasePresenter {
-  setUsername(String email); //to set user email for login
-  setPassword(String pwd);
-  doLogin();
+  doLogin(String un, String pwd);
+  initIsLogin();
 }

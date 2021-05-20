@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:absent_hris/activity/login/contract/ContractLogin.dart';
 import 'package:absent_hris/adapter/BottomMenuAdapter.dart';
 import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/Login/ResponseLoginModel.dart';
@@ -17,7 +18,7 @@ class LoginActivity extends StatefulWidget {
   _LoginActivityState createState() => _LoginActivityState();
 }
 
-class _LoginActivityState extends State<LoginActivity> {
+class _LoginActivityState extends State<LoginActivity> implements View {
   TextEditingController etLoginUsername = new TextEditingController();
   TextEditingController etLoginPass = new TextEditingController();
   bool _obscureText = true;
@@ -200,5 +201,35 @@ class _LoginActivityState extends State<LoginActivity> {
   Widget build(BuildContext context) {
       return Scaffold(body: _initLogin(context),
     );
+  }
+
+  @override
+  gotoHomePage() {
+    // TODO: implement gotoHomePage
+    throw UnimplementedError();
+  }
+
+  @override
+  refresh() {
+    // TODO: implement refresh
+    throw UnimplementedError();
+  }
+
+  @override
+  setPresenter(t) {
+    // TODO: implement setPresenter
+    throw UnimplementedError();
+  }
+
+  @override
+  showLoginError(msg) {
+    // TODO: implement showLoginError
+    throw UnimplementedError();
+  }
+
+  @override
+  showLoginSuccess(msg) {
+    // TODO: implement showLoginSuccess
+    throw UnimplementedError();
   }
 }
