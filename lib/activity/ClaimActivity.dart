@@ -2,7 +2,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:absent_hris/activity/LoginActivity.dart';
+import 'package:absent_hris/activity/login/view/LoginActivity.dart';
 import 'package:absent_hris/adapter/list_claim_adapter.dart';
 import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/MasterClaim/GetClaim/ResponseClaimDataModel.dart';

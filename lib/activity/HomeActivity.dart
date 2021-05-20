@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:absent_hris/activity/AbsentTransActivity.dart';
-import 'package:absent_hris/activity/LoginActivity.dart';
+import 'package:absent_hris/activity/login/view/LoginActivity.dart';
 import 'package:absent_hris/activity/RequestorActivity.dart';
 import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/adapter/list_absent_adapter.dart';

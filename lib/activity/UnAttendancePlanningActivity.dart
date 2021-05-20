@@ -13,7 +13,7 @@ import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'LoginActivity.dart';
+import 'login/view/LoginActivity.dart';
 
 class UnAttendancePlanningActivity extends StatefulWidget {
   @override

@@ -1,5 +1,5 @@
 
-import 'package:absent_hris/activity/LoginActivity.dart';
+import 'package:absent_hris/activity/login/view/LoginActivity.dart';
 import 'package:flutter/material.dart';
 
 void main() {
