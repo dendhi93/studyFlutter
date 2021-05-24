@@ -15,8 +15,14 @@ class PresenterLogin implements LoginActivityInteractor{
   void destroyLogin() => view = null;
 
   @override
-  void submitLogin(String un, String pwd) {
-    view?.toastLogin("coba");
+  void submitLogin(String un, String pwd) async {
+      view?.loadingBar(ConstanstVar.showLoadingBar);
+      try{
+        //to do execute login
+      }catch(error){
+        view?.loadingBar(ConstanstVar.hideLoadingBar);
+        view?.toastLogin("err Login " +error.toString());
+      }
   }
 
   @override
