@@ -123,7 +123,6 @@ class _LoginActivityState extends State<LoginActivity> implements LoginActivityV
                       ),
                       onPressed: () {
                         if (_formKey.currentState.validate()){
-                          // _validateConnection(context);
                           _presenterLogin.validateConn(context,etLoginUsername.text.trim(), etLoginPass.text.trim());
                         }
                       },
@@ -211,6 +210,13 @@ class _LoginActivityState extends State<LoginActivity> implements LoginActivityV
 
   @override
   void toastLogin(String message) => _hrisUtil.toastMessage(message);
+
+  @override
+  void loadingBar(int typeLoading) {
+    // implement loadingBar
+    typeLoading == ConstanstVar.showLoadingBar ? LoadingUtils.showLoadingDialog(context, _keyLoader)
+        : Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+  }
 
 
 }

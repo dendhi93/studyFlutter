@@ -36,5 +36,4 @@ class PresenterLogin implements LoginActivityInteractor{
         isConnected ? submitLogin(un, pwd) : view?.onAlertDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
       });
   }
-
 }

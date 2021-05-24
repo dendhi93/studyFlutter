@@ -11,4 +11,5 @@ class LoginActivityView{
   void toastLogin(String message){}
   void onAlertDialog(String titleMsg, titleContent, BuildContext context){}
   void goToHome(){}
+  void loadingBar(int typeLoading){}
 }
