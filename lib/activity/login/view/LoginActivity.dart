@@ -42,23 +42,10 @@ class _LoginActivityState extends State<LoginActivity> implements LoginActivityV
     super.initState();
     _presenterLogin = PresenterLogin(this);
     // initUsername();
+    _presenterLogin.initLogin();
   }
 
-  void initUsername(){
-    Future<String> authUn = _hrisStore.getAuthUsername();
-    authUn.then((data) {
-      if(data != ""){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => BottomMenuNavigationAdapter()),
-        );
-      }
-    },onError: (e) {
-      _hrisUtil.toastMessage(e);
-    });
-  }
-
-  Widget _initLogin(BuildContext context){
+  Widget _initViewLogin(BuildContext context){
     return Form(
       key: _formKey,
       child: new Container(
@@ -137,6 +124,7 @@ class _LoginActivityState extends State<LoginActivity> implements LoginActivityV
                       onPressed: () {
                         if (_formKey.currentState.validate()){
                           // _validateConnection(context);
+                          _presenterLogin.validateConn(context,etLoginUsername.text.trim(), etLoginPass.text.trim());
                         }
                       },
                       child: Text(
@@ -202,7 +190,7 @@ class _LoginActivityState extends State<LoginActivity> implements LoginActivityV
 
   @override
   Widget build(BuildContext context) {
-      return Scaffold(body: _initLogin(context),
+      return Scaffold(body: _initViewLogin(context),
     );
   }
 
@@ -216,12 +204,9 @@ class _LoginActivityState extends State<LoginActivity> implements LoginActivityV
 
   @override
   void onAlertDialog(String titleMsg, titleContent, BuildContext context) {
-    // TODO: implement onAlertDialog
-  }
-
-  @override
-  void snackBarLogin(String message, BuildContext context) {
-    // TODO: implement snackBarLogin
+    // implement onAlertDialog
+    _hrisUtil.showNoActionDialog(titleMsg,
+        titleContent, context);
   }
 
   @override
