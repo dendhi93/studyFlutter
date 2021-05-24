@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:absent_hris/activity/login/contract/ContractLogin.dart';
+import 'package:absent_hris/activity/login/presenter/PresenterLogin.dart';
 import 'package:absent_hris/adapter/BottomMenuAdapter.dart';
 import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/Login/ResponseLoginModel.dart';
@@ -34,6 +35,7 @@ class _LoginActivityState extends State<LoginActivity> implements View {
   String stResponseMessage;
   int responseCode = 0;
   String stUId;
+  Presenter presenter;
 
   @override
   void initState() {
@@ -218,6 +220,7 @@ class _LoginActivityState extends State<LoginActivity> implements View {
   @override
   setPresenter(t) {
     // TODO: implement setPresenter
+    presenter = t;
     throw UnimplementedError();
   }
 
