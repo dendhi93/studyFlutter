@@ -1,15 +1,15 @@
+import 'package:flutter/cupertino.dart';
 
-import 'package:absent_hris/contract/BasePresenter.dart';
-import 'package:absent_hris/contract/BaseView.dart';
-
-abstract class View extends BaseView {
-  showLoginError(var msg); //called when the is an error to display
-  showLoginSuccess(var msg); //message displayed when login is successful
-  gotoHomePage();
+class LoginActivityInteractor {
+  void submitLogin(String un, String pwd){}
+  void destroyLogin(){}
+  void initLogin(){}
+  void validateConn(BuildContext context){}
 }
 
-
-abstract class Presenter extends BasePresenter {
-  doLogin(String un, String pwd);
-  initIsLogin();
+class LoginActivityView{
+  void toastLogin(String message){}
+  void snackBarLogin(String message, BuildContext context){}
+  void onAlertDialog(String titleMsg, titleContent, BuildContext context){}
+  void goToHome(){}
 }

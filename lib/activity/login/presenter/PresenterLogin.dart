@@ -1,49 +1,37 @@
 
 
 import 'package:absent_hris/activity/login/contract/ContractLogin.dart';
+import 'package:absent_hris/util/HrisStore.dart';
+import 'package:flutter/src/widgets/framework.dart';
 
-class PresenterLogin implements Presenter {
-    View mView;
+class PresenterLogin implements LoginActivityInteractor{
+  LoginActivityView view;
+  PresenterLogin(this.view);
+  HrisStore _hrisStore = HrisStore();
 
-  PresenterLogin(View v){
-    v.setPresenter(this);
-    mView = v;
+  @override
+  void destroyLogin() => view = null;
+
+  @override
+  void submitLogin(String un, String pwd) {
+    // TODO: implement login
   }
 
   @override
-  doLogin(String un, String pwd) {
-    // TODO: implement doLogin
-    throw UnimplementedError();
+  void initLogin() {
+    Future<String> authUn = _hrisStore.getAuthUsername();
+    authUn.then((data) {
+      if(data != ""){
+        view?.goToHome();
+      }
+    },onError: (e) {
+      view?.toastLogin(e);
+    });
   }
 
   @override
-  onError(String msg) {
-    // TODO: implement onError
-    throw UnimplementedError();
-  }
-
-  @override
-  onSuccess(payload, String msg) {
-    // TODO: implement onSuccess
-    throw UnimplementedError();
-  }
-
-  @override
-  Future subscribe() {
-    // TODO: implement subscribe
-    throw UnimplementedError();
-  }
-
-  @override
-  Future unsubscribe() {
-    // TODO: implement unsubscribe
-    throw UnimplementedError();
-  }
-
-  @override
-  initIsLogin() {
-    // TODO: implement initIsLogin
-    throw UnimplementedError();
+  void validateConn(BuildContext context) {
+    // TODO: implement validateConn
   }
 
 }

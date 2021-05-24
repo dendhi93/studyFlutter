@@ -19,7 +19,7 @@ class LoginActivity extends StatefulWidget {
   _LoginActivityState createState() => _LoginActivityState();
 }
 
-class _LoginActivityState extends State<LoginActivity> implements View {
+class _LoginActivityState extends State<LoginActivity> implements LoginActivityView {
   TextEditingController etLoginUsername = new TextEditingController();
   TextEditingController etLoginPass = new TextEditingController();
   bool _obscureText = true;
@@ -35,12 +35,13 @@ class _LoginActivityState extends State<LoginActivity> implements View {
   String stResponseMessage;
   int responseCode = 0;
   String stUId;
-  Presenter presenter;
+  PresenterLogin _presenterLogin;
 
   @override
   void initState() {
     super.initState();
-    initUsername();
+    _presenterLogin = PresenterLogin(this);
+    // initUsername();
   }
 
   void initUsername(){
@@ -135,7 +136,7 @@ class _LoginActivityState extends State<LoginActivity> implements View {
                       ),
                       onPressed: () {
                         if (_formKey.currentState.validate()){
-                          _validateConnection(context);
+                          // _validateConnection(context);
                         }
                       },
                       child: Text(
@@ -188,16 +189,16 @@ class _LoginActivityState extends State<LoginActivity> implements View {
     return null;
   }
 
-  void _validateConnection(BuildContext context) {
-    HrisUtil.checkConnection().then((isConnected) => {
-        if(isConnected){
-          _submitLogin(context),
-        }else{
-            _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle,
-                ConstanstVar.noConnectionMessage, context),
-        }
-    });
-  }
+  // void _validateConnection(BuildContext context) {
+  //   HrisUtil.checkConnection().then((isConnected) => {
+  //       if(isConnected){
+  //         _submitLogin(context),
+  //       }else{
+  //           _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle,
+  //               ConstanstVar.noConnectionMessage, context),
+  //       }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -206,33 +207,25 @@ class _LoginActivityState extends State<LoginActivity> implements View {
   }
 
   @override
-  gotoHomePage() {
-    // TODO: implement gotoHomePage
-    throw UnimplementedError();
+  void goToHome() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => BottomMenuNavigationAdapter()),
+    );
   }
 
   @override
-  refresh() {
-    // TODO: implement refresh
-    throw UnimplementedError();
+  void onAlertDialog(String titleMsg, titleContent, BuildContext context) {
+    // TODO: implement onAlertDialog
   }
 
   @override
-  setPresenter(t) {
-    // TODO: implement setPresenter
-    presenter = t;
-    throw UnimplementedError();
+  void snackBarLogin(String message, BuildContext context) {
+    // TODO: implement snackBarLogin
   }
 
   @override
-  showLoginError(msg) {
-    // TODO: implement showLoginError
-    throw UnimplementedError();
-  }
+  void toastLogin(String message) => _hrisUtil.toastMessage(message);
 
-  @override
-  showLoginSuccess(msg) {
-    // TODO: implement showLoginSuccess
-    throw UnimplementedError();
-  }
+
 }
