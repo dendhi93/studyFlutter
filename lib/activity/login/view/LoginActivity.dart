@@ -28,20 +28,12 @@ class _LoginActivityState extends State<LoginActivity> implements LoginActivityV
   HrisUtil _hrisUtil = HrisUtil();
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
-  String stToken;
-  String stName;
-  String uLevelId = "";
-  String userType = "";
-  String stResponseMessage;
-  int responseCode = 0;
-  String stUId;
   PresenterLogin _presenterLogin;
 
   @override
   void initState() {
     super.initState();
     _presenterLogin = PresenterLogin(this);
-    // initUsername();
     _presenterLogin.initLogin();
   }
 
@@ -146,45 +138,34 @@ class _LoginActivityState extends State<LoginActivity> implements LoginActivityV
     });
   }
 
-  Future<ResponseLoginModel> _submitLogin(BuildContext context) async {
-    try{
-      LoadingUtils.showLoadingDialog(context, _keyLoader);
-        _apiServiceUtils.getLogin(etLoginUsername.text.trim(),
-            etLoginPass.text.trim()).then((value) => {
-        responseCode = ResponseLoginModel.fromJson(jsonDecode(value)).code,
-        Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop(),
-          if(responseCode == ConstanstVar.successCode){
-            uLevelId =  ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.levelId.toString(),
-            userType =  ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.userType.toString(),
-            stToken = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.token,
-            stName = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.nameUser,
-            stUId = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.userId.toString(),
-            _hrisStore.setAuthUsername(stName, stToken,stUId, uLevelId,userType),
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => BottomMenuNavigationAdapter()),
-              )
-          }else{
-            stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
-            _hrisUtil.toastMessage("$stResponseMessage")
-          },
-        });
-    }catch(error){
-      Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
-      _hrisUtil.toastMessage("err Login " +error.toString());
-    }
-    return null;
-  }
-
-  // void _validateConnection(BuildContext context) {
-  //   HrisUtil.checkConnection().then((isConnected) => {
-  //       if(isConnected){
-  //         _submitLogin(context),
-  //       }else{
-  //           _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle,
-  //               ConstanstVar.noConnectionMessage, context),
-  //       }
-  //   });
+  // Future<ResponseLoginModel> _submitLogin(BuildContext context) async {
+  //   try{
+  //     LoadingUtils.showLoadingDialog(context, _keyLoader);
+  //       _apiServiceUtils.getLogin(etLoginUsername.text.trim(),
+  //           etLoginPass.text.trim()).then((value) => {
+  //       responseCode = ResponseLoginModel.fromJson(jsonDecode(value)).code,
+  //       Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop(),
+  //         if(responseCode == ConstanstVar.successCode){
+  //           uLevelId =  ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.levelId.toString(),
+  //           userType =  ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.userType.toString(),
+  //           stToken = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.token,
+  //           stName = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.nameUser,
+  //           stUId = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.userId.toString(),
+  //           _hrisStore.setAuthUsername(stName, stToken,stUId, uLevelId,userType),
+  //             Navigator.push(
+  //               context,
+  //               MaterialPageRoute(builder: (context) => BottomMenuNavigationAdapter()),
+  //             )
+  //         }else{
+  //           stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+  //           _hrisUtil.toastMessage("$stResponseMessage")
+  //         },
+  //       });
+  //   }catch(error){
+  //     Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+  //     _hrisUtil.toastMessage("err Login " +error.toString());
+  //   }
+  //   return null;
   // }
 
   @override
