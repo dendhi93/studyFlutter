@@ -1,14 +1,8 @@
-
-import 'dart:convert';
-
 import 'package:absent_hris/activity/login/contract/ContractLogin.dart';
 import 'package:absent_hris/activity/login/presenter/PresenterLogin.dart';
 import 'package:absent_hris/adapter/BottomMenuAdapter.dart';
-import 'package:absent_hris/model/ErrorResponse.dart';
-import 'package:absent_hris/model/Login/ResponseLoginModel.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
-import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/LoadingUtils.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,10 +18,8 @@ class _LoginActivityState extends State<LoginActivity> implements LoginActivityV
   TextEditingController etLoginPass = new TextEditingController();
   bool _obscureText = true;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  HrisStore _hrisStore = HrisStore();
   HrisUtil _hrisUtil = HrisUtil();
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
-  ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   PresenterLogin _presenterLogin;
 
   @override
@@ -137,36 +129,6 @@ class _LoginActivityState extends State<LoginActivity> implements LoginActivityV
       _obscureText = !_obscureText;
     });
   }
-
-  // Future<ResponseLoginModel> _submitLogin(BuildContext context) async {
-  //   try{
-  //     LoadingUtils.showLoadingDialog(context, _keyLoader);
-  //       _apiServiceUtils.getLogin(etLoginUsername.text.trim(),
-  //           etLoginPass.text.trim()).then((value) => {
-  //       responseCode = ResponseLoginModel.fromJson(jsonDecode(value)).code,
-  //       Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop(),
-  //         if(responseCode == ConstanstVar.successCode){
-  //           uLevelId =  ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.levelId.toString(),
-  //           userType =  ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.userType.toString(),
-  //           stToken = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.token,
-  //           stName = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.nameUser,
-  //           stUId = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.userId.toString(),
-  //           _hrisStore.setAuthUsername(stName, stToken,stUId, uLevelId,userType),
-  //             Navigator.push(
-  //               context,
-  //               MaterialPageRoute(builder: (context) => BottomMenuNavigationAdapter()),
-  //             )
-  //         }else{
-  //           stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
-  //           _hrisUtil.toastMessage("$stResponseMessage")
-  //         },
-  //       });
-  //   }catch(error){
-  //     Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
-  //     _hrisUtil.toastMessage("err Login " +error.toString());
-  //   }
-  //   return null;
-  // }
 
   @override
   Widget build(BuildContext context) {
