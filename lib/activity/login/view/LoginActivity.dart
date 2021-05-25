@@ -29,6 +29,12 @@ class _LoginActivityState extends State<LoginActivity> implements LoginActivityV
     _presenterLogin.initLogin();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(body: _initViewLogin(context),
+    );
+  }
+
   Widget _initViewLogin(BuildContext context){
     return Form(
       key: _formKey,
@@ -131,12 +137,6 @@ class _LoginActivityState extends State<LoginActivity> implements LoginActivityV
   }
 
   @override
-  Widget build(BuildContext context) {
-      return Scaffold(body: _initViewLogin(context),
-    );
-  }
-
-  @override
   void goToHome() {
     Navigator.push(
       context,
@@ -160,6 +160,4 @@ class _LoginActivityState extends State<LoginActivity> implements LoginActivityV
     typeLoading == ConstanstVar.showLoadingBar ? LoadingUtils.showLoadingDialog(context, _keyLoader)
         : Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
   }
-
-
 }
