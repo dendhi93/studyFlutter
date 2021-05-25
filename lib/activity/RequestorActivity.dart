@@ -26,6 +26,8 @@ class RequestorActivityState extends State<RequestorActivity> {
       intentAbsentIn = widget.customAbsentModel.absentIn;
       intentAbsentOut = widget.customAbsentModel.absentOut;
       intentName = "Welcome " +widget.customAbsentModel.nameUser;
+    }else{
+      intentName = "Welcome User";
     }
   }
 
