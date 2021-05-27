@@ -1,6 +1,6 @@
 
 import 'package:absent_hris/activity/ClaimActivity.dart';
-import 'package:absent_hris/activity/HomeActivity.dart';
+import 'package:absent_hris/activity/home/view/HomeActivity.dart';
 import 'package:absent_hris/activity/UnAttendancePlanningActivity.dart';
 import 'package:absent_hris/activity/UserActivity.dart';
 import 'package:absent_hris/util/HrisUtil.dart';

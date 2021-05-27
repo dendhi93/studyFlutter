@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:absent_hris/activity/AbsentTransActivity.dart';
+import 'package:absent_hris/activity/home/contract/HomeContract.dart';
 import 'package:absent_hris/activity/login/view/LoginActivity.dart';
 import 'package:absent_hris/activity/requestor/RequestorActivity.dart';
 import 'package:absent_hris/model/ErrorResponse.dart';
@@ -25,7 +26,7 @@ class HomeActivity extends StatefulWidget {
   _HomeActivityState createState() => _HomeActivityState();
 }
 
-class _HomeActivityState extends State<HomeActivity> {
+class _HomeActivityState extends State<HomeActivity> implements HomeActView {
   HrisUtil _hrisUtil = HrisUtil();
   HrisStore _hrisStore = HrisStore();
   DateTime _currentBackPressTime;
@@ -219,6 +220,31 @@ class _HomeActivityState extends State<HomeActivity> {
   FutureOr onGoBack(dynamic value) {
     validateConnection(context);
     setState(() {});
+  }
+
+  @override
+  void loadingBar() {
+    // implement loadingBar
+    setState(() {
+      isLoading = !isLoading;
+    });
+  }
+
+  @override
+  void onAlertDialog(String titleMsg, titleContent, BuildContext context)=> _hrisUtil.showNoActionDialog(titleMsg, titleContent, context);
+
+  @override
+  void toastLogin(String message) => _hrisUtil.toastMessage(message);
+
+  @override
+  void backToLogin() {
+    // implement backToLogin
+    new Future.delayed(const Duration(seconds: 4), () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginActivity()),
+      );
+    });
   }
 }
 
