@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:absent_hris/activity/AbsentTransActivity.dart';
 import 'package:absent_hris/activity/home/contract/HomeContract.dart';
+import 'package:absent_hris/activity/home/presenter/PresenterHome.dart';
 import 'package:absent_hris/activity/login/view/LoginActivity.dart';
 import 'package:absent_hris/activity/requestor/RequestorActivity.dart';
 import 'package:absent_hris/model/ErrorResponse.dart';
@@ -44,11 +45,12 @@ class _HomeActivityState extends State<HomeActivity> implements HomeActView {
   CustomAbsentModel _customAbsentModel;
   var isLoading = false;
   var isVisibleFloating  = false;
-  int intIndex = 0;
+  PresenterHome _presenterHome;
 
   @override
   void initState() {
     super.initState();
+    _presenterHome = PresenterHome(this);
     Future<String> authUType = _hrisStore.getAuthUserLevelType();
     authUType.then((data) {
       _userType = data.trim();
@@ -67,7 +69,6 @@ class _HomeActivityState extends State<HomeActivity> implements HomeActView {
       ListView.builder(
           itemCount: list.length,
           itemBuilder: (BuildContext context, int index) {
-            intIndex = index;
             return GestureDetector(
               child: ListAdapter(modelAbsensi: list[index]),
               onTap: () {
