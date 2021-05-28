@@ -29,7 +29,7 @@ class ApiServiceUtils {
       }
     }
 
-    Future<String> getDataAbsen(String getuId, String getToken, loadingOption()) async{
+    Future<String> getDataAbsen(String getuId, String getToken) async{
       String urlAbsent = ConstanstVar.urlApi +'MasterAbsent2.php?user_id=$getuId-$getToken';
       //String urlAbsent = ConstanstVar.urlApi +'MasterAbsent.php?user_id=$getuId';
       print('urlnya $urlAbsent');
@@ -41,10 +41,8 @@ class ApiServiceUtils {
         }
       ).timeout(Duration(seconds: 50),
           onTimeout: (){
-          loadingOption();
           throw new Exception("time out");
       });
-      loadingOption();
       if(responseAbsent.statusCode == ConstanstVar.successCode
           || responseAbsent.statusCode == ConstanstVar.invalidTokenCode
           || responseAbsent.statusCode == ConstanstVar.failedHttp){

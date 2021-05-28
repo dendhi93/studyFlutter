@@ -3,8 +3,10 @@
 import 'dart:convert';
 
 import 'package:absent_hris/activity/home/contract/HomeContract.dart';
-import 'package:absent_hris/activity/home/view/HomeActivity.dart';
+import 'package:absent_hris/model/ErrorResponse.dart';
+import 'package:absent_hris/model/MasterAbsent/GetAbsent/CustomAbsentModel.dart';
 import 'package:absent_hris/model/MasterAbsent/GetAbsent/ResponseDataAbsentModel.dart';
+import 'package:absent_hris/model/MasterAbsent/GetAbsent/ResponseDtlAbsentModel.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
 import 'package:absent_hris/util/HrisStore.dart';
@@ -21,10 +23,8 @@ class PresenterHome implements HomeActInteractor{
   int responseCode = 0;
   String stResponseMessage = "";
   String _userType;
-  String stAbsentIn = "-";
-  String stAbsentOut = "-";
-  String stName = "";
   List<ResponseDtlDataAbsentModel> list = [];
+  CustomAbsentModel _customAbsentModel;
 
   @override
   void destroyHome() => view = null;
@@ -35,6 +35,8 @@ class PresenterHome implements HomeActInteractor{
     Future<String> authUType = _hrisStore.getAuthUserLevelType();
     authUType.then((data) {
       _userType = data.trim();
+      print("$_userType");
+      view?.initUserType(_userType);
       if(_userType != "approval" ) view?.visibleFloating();
     });
   }
@@ -64,15 +66,31 @@ class PresenterHome implements HomeActInteractor{
     });
   }
 
-  @override
-  void loadDataAbsent(stUid, stToken) {
+
+  Future<ResponseDataAbsentModel> loadDataAbsent(stUid, stToken) async {
     // implement loadDataAbsent
     view?.loadingBar();
     try{
-          _apiServiceUtils.getDataAbsen(uId, userToken, view?.loadingBar).then((value) => {
+          _apiServiceUtils.getDataAbsen(stUid, stToken).then((value) => {
             print(jsonDecode(value)),
             responseCode = ResponseDataAbsentModel.fromJson(jsonDecode(value)).code,
+            view?.loadingBar(),
           if(responseCode == ConstanstVar.successCode){
+            list = ResponseDataAbsentModel.fromJson(jsonDecode(value)).responseDtlDataAbsent,
+            view?.loadUIApproval(list),
+
+            if(list.isNotEmpty){
+                  if(list.length > 1){
+                    _customAbsentModel = CustomAbsentModel(absentIn: list[0].absentTime.toString(),
+                        absentOut: list[1].absentTime.toString(),
+                        nameUser: list[0].nameUser)
+                  }else{
+                    _customAbsentModel = CustomAbsentModel(absentIn: list[0].absentTime.toString(),
+                        absentOut: "",
+                        nameUser: list[0].nameUser)
+                  },
+                  view?.loadUIHomeRequestor(_customAbsentModel),
+            }else{view?.loadUIHomeRequestor(null)}
 
           }else if(responseCode == ConstanstVar.invalidTokenCode){
             stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
@@ -90,7 +108,9 @@ class PresenterHome implements HomeActInteractor{
     }catch(error){
       view?.loadingBar();
       view?.toastHome("err load Absent " +error.toString());
+      print(error.toString());
     }
-  }
 
+    return null;
+  }
 }

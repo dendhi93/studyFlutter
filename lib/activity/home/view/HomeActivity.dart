@@ -37,11 +37,11 @@ class _HomeActivityState extends State<HomeActivity> implements HomeActView {
   String stUid = "";
   String stToken = "";
   String _userType;
-  String stAbsentIn = "-";
-  String stAbsentOut = "-";
-  String stName = "";
-  List<ResponseDtlDataAbsentModel> list = [];
-  CustomAbsentModel _customAbsentModel;
+  String stMAbsentIn = "-";
+  String stMAbsentOut = "-";
+  String stMName = "";
+  List<ResponseDtlDataAbsentModel> mList = [];
+  CustomAbsentModel _mCustomAbsentModel;
   var isLoading = false;
   var isVisibleFloating  = false;
   PresenterHome _presenterHome;
@@ -58,19 +58,19 @@ class _HomeActivityState extends State<HomeActivity> implements HomeActView {
   //view
   Widget _initListAbsent(){
     return Container(
-      child: list.length > 0  ?
+      child: mList.length > 0  ?
       ListView.builder(
-          itemCount: list.length,
+          itemCount: mList.length,
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
-              child: ListAdapter(modelAbsensi: list[index]),
+              child: ListAdapter(modelAbsensi: mList[index]),
               onTap: () {
                 // Navigator.of(context)
                 //     .push(new MaterialPageRoute<String>(builder: (context) => AbsentTransActivity(absentModel: list[index])))
                 //     .then((String value) {
                 //           print(value);
                 //     });
-                Route route = MaterialPageRoute(builder: (context) => AbsentTransActivity(absentModel: list[index]));
+                Route route = MaterialPageRoute(builder: (context) => AbsentTransActivity(absentModel: mList[index]));
                 Navigator.push(context, route).then(onGoBack);
               },
             );
@@ -127,7 +127,7 @@ class _HomeActivityState extends State<HomeActivity> implements HomeActView {
         ),
         body: isLoading ? Center(
           child: CircularProgressIndicator(),
-        ) : _userType != "approval" ? RequestorActivity(customAbsentModel: _customAbsentModel) : _initListAbsent(),
+        ) : _userType != "approval" ? RequestorActivity(customAbsentModel: _mCustomAbsentModel) : _initListAbsent(),
         floatingActionButton:  new Visibility(
           visible: isVisibleFloating,
           child: new FloatingActionButton(
@@ -143,72 +143,44 @@ class _HomeActivityState extends State<HomeActivity> implements HomeActView {
   }
 
   //controller
-  Future<ResponseDataAbsentModel> _loadAbsent(String uId,String userToken) async{
-    loadingBar();
-    try{
-      _apiServiceUtils.getDataAbsen(uId, userToken, loadingBar).then((value) => {
-        print(jsonDecode(value)),
-        responseCode = ResponseDataAbsentModel.fromJson(jsonDecode(value)).code,
-        if(responseCode == ConstanstVar.successCode){
-          list = ResponseDataAbsentModel.fromJson(jsonDecode(value)).responseDtlDataAbsent,
-          stAbsentIn = list[0].absentTime.toString(),
-          stName = list[0].nameUser,
-          _customAbsentModel = CustomAbsentModel(absentIn: stAbsentIn, absentOut: "", nameUser: stName),
-          if(list.length > 1){
-            stAbsentOut = list[1].absentTime.toString(),
-            _customAbsentModel = CustomAbsentModel(absentIn: stAbsentIn, absentOut: stAbsentOut, nameUser: stName),
-            }
-        }else if(responseCode == ConstanstVar.invalidTokenCode){
-          stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
-          _hrisStore.removeAllValues().then((isSuccess) =>{
-            if(isSuccess){
-              _hrisUtil.toastMessage("$stResponseMessage"),
-              new Future.delayed(const Duration(seconds: 4), () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginActivity()),
-                );
-              }),
-            }
-          }),
-        }else{
-          stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
-          _hrisUtil.toastMessage("$stResponseMessage")
-        }
-      });
-    }catch(error){
-      loadingBar();
-      _hrisUtil.toastMessage("err load Absent " +error.toString());
-    }
-    return null;
-  }
-
-  // void loadingOption(){
-  //   setState(() {
-  //     isLoading = !isLoading;
-  //   });
-  // }
-
-  // void initUIdToken(int intType){
-  //   if(intType == 1){
-  //     Future<String> authUid = _hrisStore.getAuthUserId();
-  //     authUid.then((data) {
-  //       stUid = data.trim();
-  //       initUIdToken(2);
-  //     },onError: (e) {_hrisUtil.toastMessage(e);});
-  //   }else{
-  //     Future<String> authUToken = _hrisStore.getAuthToken();
-  //     authUToken.then((data) {
-  //       stToken = data.trim();
-  //       _loadAbsent(stUid, stToken);
-  //     },onError: (e) {_hrisUtil.toastMessage(e);});
+  // Future<ResponseDataAbsentModel> _loadAbsent(String uId,String userToken) async{
+  //   loadingBar();
+  //   try{
+  //     _apiServiceUtils.getDataAbsen(uId, userToken, loadingBar).then((value) => {
+  //       print(jsonDecode(value)),
+  //       responseCode = ResponseDataAbsentModel.fromJson(jsonDecode(value)).code,
+  //       if(responseCode == ConstanstVar.successCode){
+  //         mList = ResponseDataAbsentModel.fromJson(jsonDecode(value)).responseDtlDataAbsent,
+  //         stMAbsentIn = mList[0].absentTime.toString(),
+  //         stMName = mList[0].nameUser,
+  //         _mCustomAbsentModel = CustomAbsentModel(absentIn: stMAbsentIn, absentOut: "", nameUser: stMName),
+  //         if(mList.length > 1){
+  //           stMAbsentOut = mList[1].absentTime.toString(),
+  //           _mCustomAbsentModel = CustomAbsentModel(absentIn: stMAbsentIn, absentOut: stMAbsentOut, nameUser: stMName),
+  //           }
+  //       }else if(responseCode == ConstanstVar.invalidTokenCode){
+  //         stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+  //         _hrisStore.removeAllValues().then((isSuccess) =>{
+  //           if(isSuccess){
+  //             _hrisUtil.toastMessage("$stResponseMessage"),
+  //             new Future.delayed(const Duration(seconds: 4), () {
+  //               Navigator.push(
+  //                 context,
+  //                 MaterialPageRoute(builder: (context) => LoginActivity()),
+  //               );
+  //             }),
+  //           }
+  //         }),
+  //       }else{
+  //         stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
+  //         _hrisUtil.toastMessage("$stResponseMessage")
+  //       }
+  //     });
+  //   }catch(error){
+  //     loadingBar();
+  //     _hrisUtil.toastMessage("err load Absent " +error.toString());
   //   }
-  // }
-
-  // void validateConnection(BuildContext context){
-  //   HrisUtil.checkConnection().then((isConnected) => {
-  //     isConnected ? initUIdToken(1) : _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
-  //   });
+  //   return null;
   // }
 
   FutureOr onGoBack(dynamic value) {
@@ -218,7 +190,9 @@ class _HomeActivityState extends State<HomeActivity> implements HomeActView {
   }
 
   @override
-  void loadingBar() => isLoading = !isLoading;
+  void loadingBar(){
+    setState(() {isLoading = !isLoading;});
+  }
 
   @override
   void onAlertDialog(String titleMsg, titleContent, BuildContext context)=> _hrisUtil.showNoActionDialog(titleMsg, titleContent, context);
@@ -228,7 +202,6 @@ class _HomeActivityState extends State<HomeActivity> implements HomeActView {
 
   @override
   void backToLogin() {
-    // implement backToLogin
     new Future.delayed(const Duration(seconds: 4), () {
       Navigator.push(
         context,
@@ -238,7 +211,24 @@ class _HomeActivityState extends State<HomeActivity> implements HomeActView {
   }
 
   @override
-  void visibleFloating() => isVisibleFloating = !isVisibleFloating;
+  void visibleFloating(){
+    setState(() {isVisibleFloating = !isVisibleFloating;});
+  }
+
+  @override
+  void loadUIHomeRequestor(CustomAbsentModel _customAbsentModel) {
+    setState(() {_mCustomAbsentModel = _customAbsentModel;});
+  }
+
+  @override
+  void loadUIApproval(List<ResponseDtlDataAbsentModel> list) {
+    setState(() {mList = list;});
+  }
+
+  @override
+  void initUserType(String _mUserType) {
+    setState(() {_userType = _mUserType;});
+  }
 }
 
 
