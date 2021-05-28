@@ -39,7 +39,6 @@ class _HomeActivityState extends State<HomeActivity> implements HomeActView {
   String _userType;
   String stAbsentIn = "-";
   String stAbsentOut = "-";
-  String actionBarName = "";
   String stName = "";
   List<ResponseDtlDataAbsentModel> list = [];
   CustomAbsentModel _customAbsentModel;
@@ -51,15 +50,9 @@ class _HomeActivityState extends State<HomeActivity> implements HomeActView {
   void initState() {
     super.initState();
     _presenterHome = PresenterHome(this);
-    Future<String> authUType = _hrisStore.getAuthUserLevelType();
-    authUType.then((data) {
-      _userType = data.trim();
-      if(_userType != "approval" ){
-        isVisibleFloating = !isVisibleFloating;
-      }
-    });
-
-    validateConnection(context);
+    _presenterHome.initHome();
+    // validateConnection(context);
+    _presenterHome.validateConn(context);
   }
 
   //view
@@ -151,9 +144,9 @@ class _HomeActivityState extends State<HomeActivity> implements HomeActView {
 
   //controller
   Future<ResponseDataAbsentModel> _loadAbsent(String uId,String userToken) async{
-    loadingOption();
+    loadingBar();
     try{
-      _apiServiceUtils.getDataAbsen(uId, userToken, loadingOption).then((value) => {
+      _apiServiceUtils.getDataAbsen(uId, userToken, loadingBar).then((value) => {
         print(jsonDecode(value)),
         responseCode = ResponseDataAbsentModel.fromJson(jsonDecode(value)).code,
         if(responseCode == ConstanstVar.successCode){
@@ -184,58 +177,54 @@ class _HomeActivityState extends State<HomeActivity> implements HomeActView {
         }
       });
     }catch(error){
-      loadingOption();
+      loadingBar();
       _hrisUtil.toastMessage("err load Absent " +error.toString());
     }
     return null;
   }
 
-  void loadingOption(){
-    setState(() {
-      isLoading = !isLoading;
-    });
-  }
+  // void loadingOption(){
+  //   setState(() {
+  //     isLoading = !isLoading;
+  //   });
+  // }
 
-  void initUIdToken(int intType){
-    if(intType == 1){
-      Future<String> authUid = _hrisStore.getAuthUserId();
-      authUid.then((data) {
-        stUid = data.trim();
-        initUIdToken(2);
-      },onError: (e) {_hrisUtil.toastMessage(e);});
-    }else{
-      Future<String> authUToken = _hrisStore.getAuthToken();
-      authUToken.then((data) {
-        stToken = data.trim();
-        _loadAbsent(stUid, stToken);
-      },onError: (e) {_hrisUtil.toastMessage(e);});
-    }
-  }
+  // void initUIdToken(int intType){
+  //   if(intType == 1){
+  //     Future<String> authUid = _hrisStore.getAuthUserId();
+  //     authUid.then((data) {
+  //       stUid = data.trim();
+  //       initUIdToken(2);
+  //     },onError: (e) {_hrisUtil.toastMessage(e);});
+  //   }else{
+  //     Future<String> authUToken = _hrisStore.getAuthToken();
+  //     authUToken.then((data) {
+  //       stToken = data.trim();
+  //       _loadAbsent(stUid, stToken);
+  //     },onError: (e) {_hrisUtil.toastMessage(e);});
+  //   }
+  // }
 
-  void validateConnection(BuildContext context){
-    HrisUtil.checkConnection().then((isConnected) => {
-      isConnected ? initUIdToken(1) : _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
-    });
-  }
+  // void validateConnection(BuildContext context){
+  //   HrisUtil.checkConnection().then((isConnected) => {
+  //     isConnected ? initUIdToken(1) : _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
+  //   });
+  // }
 
   FutureOr onGoBack(dynamic value) {
-    validateConnection(context);
+    // validateConnection(context);
+    _presenterHome.validateConn(context);
     setState(() {});
   }
 
   @override
-  void loadingBar() {
-    // implement loadingBar
-    setState(() {
-      isLoading = !isLoading;
-    });
-  }
+  void loadingBar() => isLoading = !isLoading;
 
   @override
   void onAlertDialog(String titleMsg, titleContent, BuildContext context)=> _hrisUtil.showNoActionDialog(titleMsg, titleContent, context);
 
   @override
-  void toastLogin(String message) => _hrisUtil.toastMessage(message);
+  void toastHome(String message) => _hrisUtil.toastMessage(message);
 
   @override
   void backToLogin() {
@@ -247,6 +236,9 @@ class _HomeActivityState extends State<HomeActivity> implements HomeActView {
       );
     });
   }
+
+  @override
+  void visibleFloating() => isVisibleFloating = !isVisibleFloating;
 }
 
 
