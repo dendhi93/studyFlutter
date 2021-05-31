@@ -2,7 +2,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:absent_hris/activity/AbsentTransActivity.dart';
+import 'package:absent_hris/activity/absent_trans/view/AbsentTransActivity.dart';
 import 'package:absent_hris/activity/home/contract/HomeContract.dart';
 import 'package:absent_hris/activity/home/presenter/PresenterHome.dart';
 import 'package:absent_hris/activity/login/view/LoginActivity.dart';
