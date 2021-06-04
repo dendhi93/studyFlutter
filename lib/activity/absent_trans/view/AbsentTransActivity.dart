@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:absent_hris/activity/absent_trans/contract/AbsentTransContract.dart';
 import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/MasterAbsent/GetAbsent/ResponseDtlAbsentModel.dart';
 import 'package:absent_hris/model/MasterAbsent/PostAbsent/PostJsonAbsent.dart';
@@ -19,11 +20,61 @@ import 'package:android_intent/android_intent.dart';
 import 'dart:io' show Platform;
 
 
-class AbsentTransActivity extends StatefulWidget {
+class AbsentTransActivity extends StatefulWidget implements AbsentTransView {
   final ResponseDtlDataAbsentModel absentModel;
   AbsentTransActivity({Key key, @required this.absentModel}) : super(key: key);
   @override
   _AbsentTransActivityState createState() => _AbsentTransActivityState();
+
+  @override
+  void backScreen() {
+    //  implement backScreen
+  }
+
+  @override
+  void cantGetCoordinatAlert(BuildContext context) {
+    //  implement cantGetCoordinatAlert
+  }
+
+  @override
+  void getAbsentAddress(Position _position, BuildContext context) {
+    //  implement getAbsentAddress
+  }
+
+  @override
+  void initAbsentTrans(int typeInit) {
+    //  implement initAbsentTrans
+  }
+
+  @override
+  void loadingBar(int typeLoading) {
+    //  implement loadingBar
+  }
+
+  @override
+  void loadingUIBar() {
+    //  implement loadingUIBar
+  }
+
+  @override
+  void resultAddress(String finalAddress) {
+    //  implement resultAddress
+  }
+
+  @override
+  void snackBarMessage(String message) {
+    //  implement snackBarMessage
+  }
+
+  @override
+  void toastMessage(String theMessage) {
+    //  implement toastMessage
+  }
+
+  @override
+  void validateGps() {
+    //  implement validateGps
+  }
 }
 
 class _AbsentTransActivityState extends State<AbsentTransActivity> {
@@ -569,6 +620,5 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
   //       if(optionText == intDateIn){etInputTime.text = "$stHour:$stMinutes";
   //       }else{etLeaveTime.text = "$stHour:$stMinutes";}
   //     });
-  //
   // }
 }
