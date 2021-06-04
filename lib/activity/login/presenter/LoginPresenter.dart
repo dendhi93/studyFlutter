@@ -9,9 +9,9 @@ import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-class PresenterLogin implements LoginActivityInteractor{
+class LoginPresenter implements LoginActivityInteractor{
   LoginActivityView view;
-  PresenterLogin(this.view);
+  LoginPresenter(this.view);
   HrisStore _hrisStore = HrisStore();
   ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   int responseCode = 0;

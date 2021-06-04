@@ -1,5 +1,5 @@
 import 'package:absent_hris/activity/login/contract/ContractLogin.dart';
-import 'package:absent_hris/activity/login/presenter/PresenterLogin.dart';
+import 'package:absent_hris/activity/login/presenter/LoginPresenter.dart';
 import 'package:absent_hris/adapter/BottomMenuAdapter.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/ConstanstVar.dart';
@@ -20,12 +20,12 @@ class _LoginActivityState extends State<LoginActivity> implements LoginActivityV
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   HrisUtil _hrisUtil = HrisUtil();
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
-  PresenterLogin _presenterLogin;
+  LoginPresenter _presenterLogin;
 
   @override
   void initState() {
     super.initState();
-    _presenterLogin = PresenterLogin(this);
+    _presenterLogin = LoginPresenter(this);
     _presenterLogin.initLogin();
   }
 

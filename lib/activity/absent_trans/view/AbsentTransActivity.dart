@@ -220,14 +220,14 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
 
   void validateConnectionSubmit(BuildContext context){
     // var splitStartTime;
-    String stfinalTime;
+    String stFinalTime;
     var dateTime1;
     var dateTime2;
     HrisUtil.checkConnection().then((isConnected) => {
       if(isConnected){
         //validate late in or early out
-        stfinalTime = etDateAbsent.text.toString() +" "+stInputTime,
-        dateTime2 = DateFormat('yyyy-M-d H:m').parse(stfinalTime),
+        stFinalTime = etDateAbsent.text.toString() +" "+stInputTime,
+        dateTime2 = DateFormat('yyyy-M-d H:m').parse(stFinalTime),
         if(_groupValue == 1){
           dateTime1 = DateFormat('yyyy-M-d H:m').parse(stAbsentIn),
           dateTime2.isAfter(dateTime1) ? reasonValidation(context) : initUIdToken(1, context)
