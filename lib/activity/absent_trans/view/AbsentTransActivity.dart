@@ -20,64 +20,14 @@ import 'package:android_intent/android_intent.dart';
 import 'dart:io' show Platform;
 
 
-class AbsentTransActivity extends StatefulWidget implements AbsentTransView {
+class AbsentTransActivity extends StatefulWidget {
   final ResponseDtlDataAbsentModel absentModel;
   AbsentTransActivity({Key key, @required this.absentModel}) : super(key: key);
   @override
   _AbsentTransActivityState createState() => _AbsentTransActivityState();
-
-  @override
-  void backScreen() {
-    //  implement backScreen
-  }
-
-  @override
-  void cantGetCoordinatAlert(BuildContext context) {
-    //  implement cantGetCoordinatAlert
-  }
-
-  @override
-  void getAbsentAddress(Position _position, BuildContext context) {
-    //  implement getAbsentAddress
-  }
-
-  @override
-  void initAbsentTrans(int typeInit) {
-    //  implement initAbsentTrans
-  }
-
-  @override
-  void loadingBar(int typeLoading) {
-    //  implement loadingBar
-  }
-
-  @override
-  void loadingUIBar() {
-    //  implement loadingUIBar
-  }
-
-  @override
-  void resultAddress(String finalAddress) {
-    //  implement resultAddress
-  }
-
-  @override
-  void snackBarMessage(String message) {
-    //  implement snackBarMessage
-  }
-
-  @override
-  void toastMessage(String theMessage) {
-    //  implement toastMessage
-  }
-
-  @override
-  void validateGps() {
-    //  implement validateGps
-  }
 }
 
-class _AbsentTransActivityState extends State<AbsentTransActivity> {
+class _AbsentTransActivityState extends State<AbsentTransActivity> implements AbsentTransView {
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
   Position _currentPosition;
@@ -194,7 +144,8 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                       action: 'android.settings.LOCATION_SOURCE_SETTINGS');
                   intent.launch();
                   //to close alert dialog
-                  Navigator.of(context, rootNavigator: true).pop();
+                  // Navigator.of(context, rootNavigator: true).pop();
+                  closeAlert(context);
                   _gpsValidaton(context);
                 },
               )
@@ -356,14 +307,14 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
             actions: <Widget>[
               TextButton(child: Text('OK'),
                 onPressed: (){
-                  Navigator.of(context, rootNavigator: true).pop();
+                  closeAlert(context);
                   //submitAbsent
                   initUIdToken(1, context);
                 },
               ),
               TextButton(child: Text('Cancel'),
                 onPressed: (){
-                  Navigator.of(context, rootNavigator: true).pop();
+                  closeAlert(context);
                 },
               ),
             ],
@@ -375,6 +326,63 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
     setState(() {
       isLoading = !isLoading;
     });
+  }
+
+  @override
+  void backScreen() {
+    //  implement backScreen
+    Navigator.pop(context, '');
+  }
+
+  @override
+  void cantGetCoordinatAlert(BuildContext context) {
+    //  implement cantGetCoordinatAlert
+  }
+
+  @override
+  void getAbsentAddress(Position _position, BuildContext context) {
+    //  implement getAbsentAddress
+  }
+
+  @override
+  void initAbsentTrans(int typeInit) {
+    //  implement initAbsentTrans
+  }
+
+  @override
+  void loadingBar(int typeLoading) {
+    //  implement loadingBar
+  }
+
+  @override
+  void loadingUIBar() {
+    //  implement loadingUIBar
+    setState(() {
+      isLoading = !isLoading;
+    });
+  }
+
+  @override
+  void resultAddress(String finalAddress) {
+    //  implement resultAddress
+    if(widget.absentModel ==null){
+      etAddressAbsent.text = "${finalAddress}";
+    }
+  }
+
+  @override
+  void snackBarMessage(String message) {
+    //  implement snackBarMessage
+  }
+
+  @override
+  void toastMessage(String theMessage) {
+    //  implement toastMessage
+  }
+
+  @override
+  void validateGps() {
+    //  implement validateGps
   }
 
   //view
@@ -524,14 +532,14 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
                                       actions: <Widget>[
                                         TextButton(child: Text('OK'),
                                           onPressed: (){
-                                            Navigator.of(context, rootNavigator: true).pop();
+                                            closeAlert(context);
                                             //submitAbsent
                                             validateConnectionSubmit(context);
                                           },
                                         ),
                                         TextButton(child: Text('Cancel'),
                                           onPressed: (){
-                                            Navigator.of(context, rootNavigator: true).pop();
+                                            closeAlert(context);
                                           },
                                         ),
                                       ],
@@ -599,6 +607,12 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> {
     );
   }
   Color hexToColor(String code) {return new Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);}
+
+  @override
+  void closeAlert(BuildContext context) {
+    // implement closeAlert
+    Navigator.of(context, rootNavigator: true).pop();
+  }
 
   // _selectTimeAbsent(BuildContext context, int optionText) async{
   //   TimeOfDay t = await showTimePicker(

@@ -1,9 +1,7 @@
-import 'dart:html';
-
 import 'package:absent_hris/activity/absent_trans/contract/AbsentTransContract.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/HrisStore.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoder/geocoder.dart';
 
@@ -36,7 +34,6 @@ class AbsentTransPresenter implements AbsentTransInteractor{
 
   @override
   void getAddress(Position _position, BuildContext context) async {
-    // implement getAddress
     try{
       final coordinates = new Coordinates(_position.latitude, _position.longitude);
       var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
@@ -48,7 +45,7 @@ class AbsentTransPresenter implements AbsentTransInteractor{
       // }
     }catch(error){
       print(error.toString());
-      view?.toastMessage("please refresh coordinat")
+      view?.toastMessage("please refresh coordinat");
     }
   }
 
@@ -56,6 +53,11 @@ class AbsentTransPresenter implements AbsentTransInteractor{
   void initUnIdToken(int intType) {
     // implement initUnIdToken
 
+  }
+
+  @override
+  void getDataAbsentOut() {
+    // implement getDataAbsentOut
   }
 
 }

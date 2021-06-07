@@ -1,20 +1,14 @@
 
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:absent_hris/activity/absent_trans/view/AbsentTransActivity.dart';
 import 'package:absent_hris/activity/home/contract/HomeContract.dart';
 import 'package:absent_hris/activity/home/presenter/PresenterHome.dart';
 import 'package:absent_hris/activity/login/view/LoginActivity.dart';
 import 'package:absent_hris/activity/requestor/RequestorActivity.dart';
-import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/adapter/list_absent_adapter.dart';
 import 'package:absent_hris/model/MasterAbsent/GetAbsent/CustomAbsentModel.dart';
-import 'package:absent_hris/model/MasterAbsent/GetAbsent/ResponseDataAbsentModel.dart';
 import 'package:absent_hris/model/MasterAbsent/GetAbsent/ResponseDtlAbsentModel.dart';
-import 'package:absent_hris/util/ApiServiceUtils.dart';
-import 'package:absent_hris/util/ConstanstVar.dart';
-import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/material.dart';
 
@@ -29,9 +23,7 @@ class HomeActivity extends StatefulWidget {
 
 class _HomeActivityState extends State<HomeActivity> implements HomeActView {
   HrisUtil _hrisUtil = HrisUtil();
-  HrisStore _hrisStore = HrisStore();
   DateTime _currentBackPressTime;
-  ApiServiceUtils _apiServiceUtils = ApiServiceUtils();
   int responseCode = 0;
   String stResponseMessage = "";
   String stUid = "";

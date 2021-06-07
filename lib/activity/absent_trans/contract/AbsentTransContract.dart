@@ -9,6 +9,7 @@ class AbsentTransInteractor{
     void getCoordinat(Geolocator geolocator, BuildContext context){}
     void getAddress(Position _position, BuildContext context){}
     void initUnIdToken(int intType){}
+    void getDataAbsentOut(){}
 }
 
 class AbsentTransView{
@@ -22,4 +23,5 @@ class AbsentTransView{
     void resultAddress(String finalAddress){}
     void snackBarMessage(String message){}
     void toastMessage(String theMessage){}
+    void closeAlert(BuildContext context){}
 }
