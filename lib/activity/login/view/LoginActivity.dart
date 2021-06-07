@@ -2,7 +2,7 @@ import 'package:absent_hris/activity/login/contract/ContractLogin.dart';
 import 'package:absent_hris/activity/login/presenter/LoginPresenter.dart';
 import 'package:absent_hris/adapter/BottomMenuAdapter.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
-import 'package:absent_hris/util/ConstanstVar.dart';
+import 'package:absent_hris/util/ConstantsVar.dart';
 import 'package:absent_hris/util/LoadingUtils.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/cupertino.dart';

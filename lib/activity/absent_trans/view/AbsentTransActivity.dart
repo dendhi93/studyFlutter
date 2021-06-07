@@ -7,7 +7,7 @@ import 'package:absent_hris/model/MasterAbsent/GetAbsent/ResponseDtlAbsentModel.
 import 'package:absent_hris/model/MasterAbsent/PostAbsent/PostJsonAbsent.dart';
 import 'package:absent_hris/model/MasterAbsentOut/ResponseAbsentOut.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
-import 'package:absent_hris/util/ConstanstVar.dart';
+import 'package:absent_hris/util/ConstantsVar.dart';
 import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:absent_hris/util/LoadingUtils.dart';
@@ -366,7 +366,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
   void resultAddress(String finalAddress) {
     //  implement resultAddress
     if(widget.absentModel ==null){
-      etAddressAbsent.text = "${finalAddress}";
+      etAddressAbsent.text = finalAddress.trim();
     }
   }
 
@@ -613,6 +613,9 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
     // implement closeAlert
     Navigator.of(context, rootNavigator: true).pop();
   }
+
+  @override
+  void noConnectionAlert(String titleMsg, titleContent, BuildContext context) => hrisUtil.showNoActionDialog(titleMsg, titleContent, context);
 
   // _selectTimeAbsent(BuildContext context, int optionText) async{
   //   TimeOfDay t = await showTimePicker(

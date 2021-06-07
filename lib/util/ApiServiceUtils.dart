@@ -4,7 +4,7 @@ import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/MasterAbsent/PostAbsent/PostJsonAbsent.dart';
 import 'package:absent_hris/model/MasterClaim/PostClaim/PostJsonClaimTR.dart';
 import 'package:absent_hris/model/Master_UnAttendance/PostUnAttendance/PostJsonUnAttendance.dart';
-import 'package:absent_hris/util/ConstanstVar.dart';
+import 'package:absent_hris/util/ConstantsVar.dart';
 import 'package:http/http.dart' as http;
 
 class ApiServiceUtils {

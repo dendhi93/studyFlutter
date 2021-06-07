@@ -8,7 +8,7 @@ import 'package:absent_hris/model/MasterClaim/PostClaim/PostJsonClaimTR.dart';
 import 'package:absent_hris/model/MasterClaim/master/ResponseDetailMasterClaim.dart';
 import 'package:absent_hris/model/MasterClaim/master/ResponseMasterClaim.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
-import 'package:absent_hris/util/ConstanstVar.dart';
+import 'package:absent_hris/util/ConstantsVar.dart';
 import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:absent_hris/util/LoadingUtils.dart';

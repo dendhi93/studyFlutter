@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:absent_hris/model/MasterAbsent/GetAbsent/ResponseDtlAbsentModel.dart';
 
 class AbsentTransInteractor{
     void validateConn(BuildContext context) {}
@@ -10,6 +9,7 @@ class AbsentTransInteractor{
     void getAddress(Position _position, BuildContext context){}
     void initUnIdToken(int intType){}
     void getDataAbsentOut(){}
+    void interactorLoading(){}
 }
 
 class AbsentTransView{
@@ -24,4 +24,5 @@ class AbsentTransView{
     void snackBarMessage(String message){}
     void toastMessage(String theMessage){}
     void closeAlert(BuildContext context){}
+    void noConnectionAlert(String titleMsg, titleContent,BuildContext context){}
 }

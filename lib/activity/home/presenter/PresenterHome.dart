@@ -8,7 +8,7 @@ import 'package:absent_hris/model/MasterAbsent/GetAbsent/CustomAbsentModel.dart'
 import 'package:absent_hris/model/MasterAbsent/GetAbsent/ResponseDataAbsentModel.dart';
 import 'package:absent_hris/model/MasterAbsent/GetAbsent/ResponseDtlAbsentModel.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
-import 'package:absent_hris/util/ConstanstVar.dart';
+import 'package:absent_hris/util/ConstantsVar.dart';
 import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
 import 'package:flutter/src/widgets/framework.dart';

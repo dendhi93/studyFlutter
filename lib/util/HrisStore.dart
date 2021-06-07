@@ -1,4 +1,4 @@
-import 'package:absent_hris/util/ConstanstVar.dart';
+import 'package:absent_hris/util/ConstantsVar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HrisStore {
