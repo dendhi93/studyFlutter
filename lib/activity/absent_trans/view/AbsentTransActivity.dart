@@ -97,7 +97,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
 
     if(!(await Geolocator().isLocationServiceEnabled())){
       loadingOption();
-      validateAlertGps();
+      alertGpsOff();
     }
     else{_getCurrentLocation(geolocator, context);}
   }
@@ -130,48 +130,6 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
     );
   }
 
-  void validateAlertGps(){
-    if(Platform.isAndroid){
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: Text("Can't get current location"),
-            actions: <Widget>[
-              TextButton(child: Text('OK'),
-                onPressed: (){
-                  final AndroidIntent intent = AndroidIntent(
-                      action: 'android.settings.LOCATION_SOURCE_SETTINGS');
-                  intent.launch();
-                  //to close alert dialog
-                  // Navigator.of(context, rootNavigator: true).pop();
-                  closeAlert(context);
-                  _gpsValidaton(context);
-                },
-              )
-            ],
-          );
-        },
-      );
-    }else{
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: Text("Can't get current location"),
-            actions: <Widget>[
-              TextButton(child: Text('OK'),
-                onPressed: (){
-                  // Navigator.pop(context, '');
-                  Navigator.of(context).pop('String');
-                },
-              )
-            ],
-          );
-        },
-      );
-    }
-  }
 
   void _getAddress(Position _position, BuildContext context) async{
     try{
@@ -335,16 +293,6 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
   }
 
   @override
-  void cantGetCoordinatAlert(BuildContext context) {
-    //  implement cantGetCoordinatAlert
-  }
-
-  @override
-  void getAbsentAddress(Position _position, BuildContext context) {
-    //  implement getAbsentAddress
-  }
-
-  @override
   void initAbsentTrans(int typeInit) {
     //  implement initAbsentTrans
   }
@@ -352,37 +300,70 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
   @override
   void loadingBar(int typeLoading) {
     //  implement loadingBar
+    typeLoading == ConstanstVar.showLoadingBar ? LoadingUtils.showLoadingDialog(context, _keyLoader): Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
   }
 
   @override
   void loadingUIBar() {
     //  implement loadingUIBar
-    setState(() {
-      isLoading = !isLoading;
-    });
+    setState(() {isLoading = !isLoading;});
   }
 
   @override
   void resultAddress(String finalAddress) {
     //  implement resultAddress
-    if(widget.absentModel ==null){
-      etAddressAbsent.text = finalAddress.trim();
-    }
+    if(widget.absentModel ==null) etAddressAbsent.text = finalAddress.trim();
   }
 
   @override
-  void snackBarMessage(String message) {
-    //  implement snackBarMessage
-  }
+  void snackBarMessage(String message) => hrisUtil.snackBarMessageScaffoldKey(message, scaffoldKey);
 
   @override
-  void toastMessage(String theMessage) {
-    //  implement toastMessage
-  }
+  void toastMessage(String theMessage) => hrisUtil.toastMessage(theMessage);
 
   @override
-  void validateGps() {
+  void alertGpsOff() {
     //  implement validateGps
+    if(Platform.isAndroid){
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text("Can't get current location"),
+            actions: <Widget>[
+              TextButton(child: Text('OK'),
+                onPressed: (){
+                  final AndroidIntent intent = AndroidIntent(
+                      action: 'android.settings.LOCATION_SOURCE_SETTINGS');
+                  intent.launch();
+                  //to close alert dialog
+                  // Navigator.of(context, rootNavigator: true).pop();
+                  closeAlert(context);
+                  _gpsValidaton(context);
+                },
+              )
+            ],
+          );
+        },
+      );
+    }else{
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text("Can't get current location"),
+            actions: <Widget>[
+              TextButton(child: Text('OK'),
+                onPressed: (){
+                  // Navigator.pop(context, '');
+                  Navigator.of(context).pop('String');
+                },
+              )
+            ],
+          );
+        },
+      );
+    }
   }
 
   //view

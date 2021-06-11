@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 
 import 'package:absent_hris/activity/home/contract/HomeContract.dart';
@@ -11,7 +9,6 @@ import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/ConstantsVar.dart';
 import 'package:absent_hris/util/HrisStore.dart';
 import 'package:absent_hris/util/HrisUtil.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class PresenterHome implements HomeActInteractor{
   HomeActView view;

@@ -7,19 +7,18 @@ class AbsentTransInteractor{
     void toSubmitAbsent(){}
     void getCoordinat(Geolocator geolocator, BuildContext context){}
     void getAddress(Position _position, BuildContext context){}
-    void initUnIdToken(int intType){}
+    void initUnIdToken(int intType, String reasonAbsent, String address,String dateAbsent){}
     void getDataAbsentOut(){}
     void interactorLoading(){}
+    void validateGpsService(BuildContext context){}
 }
 
 class AbsentTransView{
-    void validateGps(){}
-    void getAbsentAddress(Position _position, BuildContext context){}
+    void alertGpsOff(){}
     void backScreen(){}
     void loadingUIBar(){}
     void loadingBar(int typeLoading) {}
     void initAbsentTrans(int typeInit){}
-    void cantGetCoordinatAlert(BuildContext context){}
     void resultAddress(String finalAddress){}
     void snackBarMessage(String message){}
     void toastMessage(String theMessage){}

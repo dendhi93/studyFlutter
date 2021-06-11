@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:core';
 
 import 'package:absent_hris/activity/absent_trans/contract/AbsentTransContract.dart';
 import 'package:absent_hris/model/ErrorResponse.dart';
+import 'package:absent_hris/model/MasterAbsent/PostAbsent/PostJsonAbsent.dart';
 import 'package:absent_hris/model/MasterAbsentOut/ResponseAbsentOut.dart';
 import 'package:absent_hris/util/ApiServiceUtils.dart';
 import 'package:absent_hris/util/ConstantsVar.dart';
@@ -19,6 +21,11 @@ class AbsentTransPresenter implements AbsentTransInteractor{
   AbsentTransPresenter(this.view);
   int responseCode = 0;
   String stResponseMessage = "";
+  String stUid = "";
+  String stToken = "";
+  String _stAbsentLat = "";
+  String _stAbsentLongitude = "";
+  Position _currentPosition;
 
   @override
   void toSubmitAbsent() async {
@@ -42,6 +49,15 @@ class AbsentTransPresenter implements AbsentTransInteractor{
   @override
   void getCoordinat(Geolocator geolocator, BuildContext context) async {
     // implement getCoordinat
+    geolocator
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) {
+          if(_currentPosition != null)getAddress(position, context);
+          view?.loadingUIBar();
+    }).catchError((e) {
+      print(e);
+      view?.loadingUIBar();
+    });
   }
 
   @override
@@ -59,9 +75,33 @@ class AbsentTransPresenter implements AbsentTransInteractor{
   }
 
   @override
-  void initUnIdToken(int intType) {
+  void initUnIdToken(int intType,String reasonAbsent,String address,String dateAbsent) async{
     // implement initUnIdToken
+    if(intType == 1){
+      Future<String> authUid = hrisStore.getAuthUserId();
+      authUid.then((data) {
+        stUid = data.trim();
+        initUnIdToken(2);
+      },onError: (e) {view?.toastMessage(e);});
+    }else{
+      Future<String> authUToken = hrisStore.getAuthToken();
+      authUToken.then((data) {
+        stToken = data.trim();
+        stUid = stUid+"-"+stToken;
+        if(_currentPosition != null){
+          _stAbsentLat = _currentPosition.latitude.toString();
+          _stAbsentLongitude = _currentPosition.longitude.toString();
+        }
+        PostJsonAbsent _postJsonAbsent =
+        PostJsonAbsent(userId: stUid,absentType: _groupValue.toString(),
+            addressAbsent: address.trim(),reason: reasonAbsent,
+            dateAbsent: dateAbsent.trim(),absentLat: _stAbsentLat,
+            absentLongitude: _stAbsentLongitude, absentTime: etInputTime.text.toString());
 
+        print(PostJsonAbsent().absentToJson(_postJsonAbsent));
+        // _submitAbsent(context, _postJsonAbsent);
+      },onError: (e) {view?.toastMessage(e);});
+    }
   }
 
   @override
@@ -83,5 +123,18 @@ class AbsentTransPresenter implements AbsentTransInteractor{
 
   @override
   void interactorLoading() => view?.loadingUIBar();
+
+  @override
+  void validateGpsService(BuildContext context) async{
+    // implement validateGpsService
+    view?.loadingUIBar();
+    final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+
+    if(!(await Geolocator().isLocationServiceEnabled())){
+      view?.loadingUIBar();
+      view?.alertGpsOff();
+    }
+    else{getCoordinat(geolocator, context);}
+  }
 
 }
