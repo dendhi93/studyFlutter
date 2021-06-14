@@ -18,5 +18,7 @@ class ConstanstVar{
   static int selectEndDate = 15;
   static int showLoadingBar = 4;
   static int hideLoadingBar = 8;
+  static int notNullAbsentTrans = 14;
+  static int nullAbsentTrans = 24;
 
 }

@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:absent_hris/activity/absent_trans/contract/AbsentTransContract.dart';
+import 'package:absent_hris/activity/absent_trans/presenter/AbsentTransPresenter.dart';
 import 'package:absent_hris/model/ErrorResponse.dart';
 import 'package:absent_hris/model/MasterAbsent/GetAbsent/ResponseDtlAbsentModel.dart';
 import 'package:absent_hris/model/MasterAbsent/PostAbsent/PostJsonAbsent.dart';
@@ -56,38 +57,15 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
   String stAbsentOut, stAbsentIn;
   var selectedDate;
   var isLoading = false;
+  AbsentTransPresenter _absentTransPresenter;
 
   @override
   void initState() {
     super.initState();
-    validateConnection(context);
-    if(widget.absentModel != null){
-      etDateAbsent.text = widget.absentModel.dateAbsent;
-      etInputTime.text = widget.absentModel.absentTime;
-      etAddressAbsent.text = widget.absentModel.addressAbsent;
-      reasonAbsent = widget.absentModel.reason;
-      if(reasonAbsent == ""){isShowReasonText = !isShowReasonText;}
-      isHiddenButton = !isHiddenButton;
-      isEnableRadio = !isEnableRadio;
-
-      if(widget.absentModel.absentType == "Absent In"){
-        _groupValue = 1;
-      }else{
-        _groupValue = 2;
-      }
-    }else{
-      _gpsValidaton(context);
-      selectedDate = DateTime.now();
-      stInputTime =  new DateFormat.Hms().format(selectedDate);
-      etInputTime.text = stInputTime;
-      etDateAbsent.text = new DateFormat('y-MM-dd').format(selectedDate);
-      isShowReasonText = !isShowReasonText;
-      String nameDay = hrisUtil.nameOfDay(selectedDate);
-      if(nameDay == "Saturday" || nameDay == "Sunday"){
-        hrisUtil.toastMessage("Today is day off");
-        isHiddenButton = !isHiddenButton;
-      }
-    }
+    _absentTransPresenter = AbsentTransPresenter(this);
+    _absentTransPresenter.validateConn(context);
+    widget.absentModel != null ? initAbsentTrans(ConstanstVar.notNullAbsentTrans) : initAbsentTrans(ConstanstVar.nullAbsentTrans);
+    // validateConnection(context);
   }
 
   //controller
@@ -295,6 +273,29 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
   @override
   void initAbsentTrans(int typeInit) {
     //  implement initAbsentTrans
+    if(typeInit == ConstanstVar.notNullAbsentTrans){
+        etDateAbsent.text = widget.absentModel.dateAbsent;
+        etInputTime.text = widget.absentModel.absentTime;
+        etAddressAbsent.text = widget.absentModel.addressAbsent;
+        reasonAbsent = widget.absentModel.reason;
+        if(reasonAbsent == ""){isShowReasonText = !isShowReasonText;}
+        isHiddenButton = !isHiddenButton;
+        isEnableRadio = !isEnableRadio;
+        widget.absentModel.absentType == "Absent In" ? _groupValue = 1 : _groupValue = 2;
+    }else{
+        // _gpsValidaton(context);
+        _absentTransPresenter.validateGpsService(context);
+        selectedDate = DateTime.now();
+        stInputTime =  new DateFormat.Hms().format(selectedDate);
+        etInputTime.text = stInputTime;
+        etDateAbsent.text = new DateFormat('y-MM-dd').format(selectedDate);
+        isShowReasonText = !isShowReasonText;
+        String nameDay = hrisUtil.nameOfDay(selectedDate);
+        if(nameDay == "Saturday" || nameDay == "Sunday"){
+          hrisUtil.toastMessage("Today is day off");
+          isHiddenButton = !isHiddenButton;
+        }
+    }
   }
 
   @override
@@ -339,7 +340,8 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
                   //to close alert dialog
                   // Navigator.of(context, rootNavigator: true).pop();
                   closeAlert(context);
-                  _gpsValidaton(context);
+                  // _gpsValidaton(context);
+                  _absentTransPresenter.validateGpsService(context)
                 },
               )
             ],
@@ -577,7 +579,10 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
               color: Colors.white,
             ),
             onPressed: () {
-              if(widget.absentModel == null){_gpsValidaton(context);}
+              if(widget.absentModel == null){
+                // _gpsValidaton(context);
+                _absentTransPresenter.validateGpsService(context);
+              }
             },
           )
         ],
@@ -597,6 +602,13 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
 
   @override
   void noConnectionAlert(String titleMsg, titleContent, BuildContext context) => hrisUtil.showNoActionDialog(titleMsg, titleContent, context);
+
+  @override
+  void paramAbsent(String paramAbsentIn, String paramAbsentOut) {
+    //implement paramAbsent
+    stAbsentOut = paramAbsentIn.trim();
+    stAbsentIn = paramAbsentOut.trim();
+  }
 
   // _selectTimeAbsent(BuildContext context, int optionText) async{
   //   TimeOfDay t = await showTimePicker(

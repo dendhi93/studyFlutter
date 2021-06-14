@@ -26,6 +26,7 @@ class AbsentTransPresenter implements AbsentTransInteractor{
   String _stAbsentLat = "";
   String _stAbsentLongitude = "";
   Position _currentPosition;
+  String stAbsentOut, stAbsentIn;
 
   @override
   void toSubmitAbsent() async {
@@ -75,13 +76,15 @@ class AbsentTransPresenter implements AbsentTransInteractor{
   }
 
   @override
-  void initUnIdToken(int intType,String reasonAbsent,String address,String dateAbsent) async{
+  void initUnIdToken(int intType,String reasonAbsent,
+      String address,String dateAbsent, int groupValue, String inputTime) async{
     // implement initUnIdToken
     if(intType == 1){
       Future<String> authUid = hrisStore.getAuthUserId();
       authUid.then((data) {
         stUid = data.trim();
-        initUnIdToken(2);
+        initUnIdToken(2, address.trim(),
+            reasonAbsent.trim(), dateAbsent.trim(), groupValue, inputTime);
       },onError: (e) {view?.toastMessage(e);});
     }else{
       Future<String> authUToken = hrisStore.getAuthToken();
@@ -93,10 +96,10 @@ class AbsentTransPresenter implements AbsentTransInteractor{
           _stAbsentLongitude = _currentPosition.longitude.toString();
         }
         PostJsonAbsent _postJsonAbsent =
-        PostJsonAbsent(userId: stUid,absentType: _groupValue.toString(),
+        PostJsonAbsent(userId: stUid,absentType: groupValue.toString(),
             addressAbsent: address.trim(),reason: reasonAbsent,
             dateAbsent: dateAbsent.trim(),absentLat: _stAbsentLat,
-            absentLongitude: _stAbsentLongitude, absentTime: etInputTime.text.toString());
+            absentLongitude: _stAbsentLongitude, absentTime: inputTime);
 
         print(PostJsonAbsent().absentToJson(_postJsonAbsent));
         // _submitAbsent(context, _postJsonAbsent);
@@ -111,14 +114,14 @@ class AbsentTransPresenter implements AbsentTransInteractor{
       print(jsonDecode(value)),
       responseCode = ResponseAbsentOut.fromJson(jsonDecode(value)).code,
       if(responseCode == ConstanstVar.successCode){
-        // stAbsentOut = ResponseAbsentOut.fromJson(jsonDecode(value)).absentOut,
-        // stAbsentIn = ResponseAbsentOut.fromJson(jsonDecode(value)).absentIn,
+        stAbsentOut = ResponseAbsentOut.fromJson(jsonDecode(value)).absentOut,
+        stAbsentIn = ResponseAbsentOut.fromJson(jsonDecode(value)).absentIn,
+        view?.paramAbsent(stAbsentIn, stAbsentOut),
       }else{
         stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
         view?.toastMessage("$stResponseMessage"),
       }
     });
-
   }
 
   @override
