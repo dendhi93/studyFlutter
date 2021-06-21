@@ -59,7 +59,7 @@ class PresenterHome implements HomeActInteractor{
   void validateConn(BuildContext context) {
     // implement validateConn
     HrisUtil.checkConnection().then((isConnected) => {
-      isConnected ? initUIdToken(1) : view?.onAlertDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
+      isConnected ? initUIdToken(1) : view?.onAlertDialog(ConstantsVar.noConnectionTitle, ConstantsVar.noConnectionMessage, context)
     });
   }
 
@@ -72,7 +72,7 @@ class PresenterHome implements HomeActInteractor{
             print(jsonDecode(value)),
             responseCode = ResponseDataAbsentModel.fromJson(jsonDecode(value)).code,
             view?.loadingBar(),
-          if(responseCode == ConstanstVar.successCode){
+          if(responseCode == ConstantsVar.successCode){
             list = ResponseDataAbsentModel.fromJson(jsonDecode(value)).responseDtlDataAbsent,
             view?.loadUIApproval(list),
 
@@ -89,7 +89,7 @@ class PresenterHome implements HomeActInteractor{
                   view?.loadUIHomeRequestor(_customAbsentModel),
             }else{view?.loadUIHomeRequestor(null)}
 
-          }else if(responseCode == ConstanstVar.invalidTokenCode){
+          }else if(responseCode == ConstantsVar.invalidTokenCode){
             stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
             _hrisStore.removeAllValues().then((isSuccess) =>{
                   if(isSuccess){

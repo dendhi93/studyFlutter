@@ -157,7 +157,7 @@ class _LoginActivityState extends State<LoginActivity> implements LoginActivityV
   @override
   void loadingBar(int typeLoading) {
     // implement loadingBar
-    typeLoading == ConstanstVar.showLoadingBar ? LoadingUtils.showLoadingDialog(context, _keyLoader)
+    typeLoading == ConstantsVar.showLoadingBar ? LoadingUtils.showLoadingDialog(context, _keyLoader)
         : Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
   }
 }

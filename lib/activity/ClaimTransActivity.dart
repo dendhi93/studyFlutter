@@ -95,7 +95,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
             isEnableDropDown = !isEnableDropDown;
           }else{
             print(_userType);
-            if(intStatusId == ConstanstVar.approvedClaimStatus || intStatusId == ConstanstVar.rejectClaimStatus){
+            if(intStatusId == ConstantsVar.approvedClaimStatus || intStatusId == ConstantsVar.rejectClaimStatus){
               isHiddenButtonCapture = !isHiddenButtonCapture;
               isEnableDropDown = !isEnableDropDown;
               isHiddenButton = !isHiddenButton;
@@ -155,7 +155,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   void validateConnection(BuildContext context){
     HrisUtil.checkConnection().then((isConnected) => {
       isConnected ? _loadMasterClaim()
-          : _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
+          : _hrisUtil.showNoActionDialog(ConstantsVar.noConnectionTitle, ConstantsVar.noConnectionMessage, context)
     });
   }
 
@@ -164,7 +164,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
       _apiServiceUtils.getMasterClaim().then((value) => {
         print(jsonDecode(value)),
           responseCode = ResponseMasterClaim.fromJson(jsonDecode(value)).code,
-        if(responseCode == ConstanstVar.successCode){
+        if(responseCode == ConstantsVar.successCode){
            listDtlMasterClaim = ResponseMasterClaim.fromJson(jsonDecode(value)).masterClaim,
            if(listDtlMasterClaim.length > 0){
              arrDtlMasterClaim.addAll(listDtlMasterClaim),
@@ -204,7 +204,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
   void validateConnectionTransaction(BuildContext context){
     HrisUtil.checkConnection().then((isConnected) => {
       isConnected ? initUIdToken(1, context)
-          : _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
+          : _hrisUtil.showNoActionDialog(ConstantsVar.noConnectionTitle, ConstantsVar.noConnectionMessage, context)
     });
   }
 
@@ -246,7 +246,7 @@ class _ClaimTransActivityState extends State<ClaimTransActivity> {
         responseCodeClaim = ErrorResponse.fromJson(jsonDecode(value)).code,
         stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
         Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop(),
-        if(responseCodeClaim == ConstanstVar.successCode){
+        if(responseCodeClaim == ConstantsVar.successCode){
           _hrisUtil.toastMessage("$stResponseMessage"),
           onbackScreen(),
         }else{_hrisUtil.snackBarMessageScaffoldKey("$stResponseMessage", _scaffoldKey),}

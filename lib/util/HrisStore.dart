@@ -62,10 +62,10 @@ class HrisStore {
 
   Future<bool>removeParticularPref(int prefType) async{
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    if(prefType == ConstanstVar.unPrefType){
+    if(prefType == ConstantsVar.unPrefType){
       pref.remove(usernameStore);
       return true;
-    }else if(prefType == ConstanstVar.uIdPrefType){
+    }else if(prefType == ConstantsVar.uIdPrefType){
       pref.remove(userIDStore);
       return true;
     }else{

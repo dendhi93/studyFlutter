@@ -59,7 +59,7 @@ class _ClaimActivityState extends State<ClaimActivity> {
 
   void validateConnection(BuildContext context){
     HrisUtil.checkConnection().then((isConnected) => {
-      isConnected ? initUIdToken(1) : _hrisUtil.snackBarMessage(ConstanstVar.noConnectionMessage, context)
+      isConnected ? initUIdToken(1) : _hrisUtil.snackBarMessage(ConstantsVar.noConnectionMessage, context)
     });
   }
 
@@ -109,9 +109,9 @@ class _ClaimActivityState extends State<ClaimActivity> {
       _apiServiceUtils.getDataClaim(uId, userToken, loadingOption).then((value) => {
         print(jsonDecode(value)),
         responseCode = ResponseClaimModel.fromJson(jsonDecode(value)).code,
-        if(responseCode == ConstanstVar.successCode){
+        if(responseCode == ConstantsVar.successCode){
           listClaim = ResponseClaimModel.fromJson(jsonDecode(value)).responseClaimDataModel,
-        }else if(responseCode == ConstanstVar.invalidTokenCode){
+        }else if(responseCode == ConstantsVar.invalidTokenCode){
           stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
           _hrisStore.removeAllValues().then((isSuccess) =>{
             if(isSuccess){

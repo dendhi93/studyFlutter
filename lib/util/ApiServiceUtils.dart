@@ -10,16 +10,16 @@ import 'package:http/http.dart' as http;
 class ApiServiceUtils {
     Future<String> getLogin(String un, String pass) async{
       //post using form data
-      print(ConstanstVar.urlApi+'loginUser.php');
+      print(ConstantsVar.urlApi+'loginUser.php');
       var map = new Map<String, dynamic>();
       map['username'] = un;
       map['password'] = pass;
-      final http.Response responseLogin = await http.post(ConstanstVar.urlApi+'loginUser.php',
+      final http.Response responseLogin = await http.post(ConstantsVar.urlApi+'loginUser.php',
           body: map,
       ).timeout(Duration(seconds: 50));
 
-      if(responseLogin.statusCode == ConstanstVar.successCode
-          || responseLogin.statusCode == ConstanstVar.failedHttp){
+      if(responseLogin.statusCode == ConstantsVar.successCode
+          || responseLogin.statusCode == ConstantsVar.failedHttp){
         print(responseLogin.body);
         return responseLogin.body;
       }else{
@@ -30,7 +30,7 @@ class ApiServiceUtils {
     }
 
     Future<String> getDataAbsen(String getuId, String getToken) async{
-      String urlAbsent = ConstanstVar.urlApi +'MasterAbsent2.php?user_id=$getuId-$getToken';
+      String urlAbsent = ConstantsVar.urlApi +'MasterAbsent2.php?user_id=$getuId-$getToken';
       //String urlAbsent = ConstanstVar.urlApi +'MasterAbsent.php?user_id=$getuId';
       print('urlnya $urlAbsent');
       final http.Response responseAbsent = await http
@@ -43,9 +43,9 @@ class ApiServiceUtils {
           onTimeout: (){
           throw new Exception("time out");
       });
-      if(responseAbsent.statusCode == ConstanstVar.successCode
-          || responseAbsent.statusCode == ConstanstVar.invalidTokenCode
-          || responseAbsent.statusCode == ConstanstVar.failedHttp){
+      if(responseAbsent.statusCode == ConstantsVar.successCode
+          || responseAbsent.statusCode == ConstantsVar.invalidTokenCode
+          || responseAbsent.statusCode == ConstantsVar.failedHttp){
           return responseAbsent.body;
       }else{
         ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error Absent, please contact your administrator");
@@ -54,7 +54,7 @@ class ApiServiceUtils {
     }
 
     Future<String> getDataClaim(String getuId, String getToken, loadingOption()) async{
-      String urlClaim = ConstanstVar.urlApi +'MasterClaimTrans.php?user_id=$getuId-$getToken';
+      String urlClaim = ConstantsVar.urlApi +'MasterClaimTrans.php?user_id=$getuId-$getToken';
       print('url $urlClaim');
       final http.Response responseClaim = await http
           .get(urlClaim,
@@ -67,9 +67,9 @@ class ApiServiceUtils {
             throw new Exception("time out");
           });
       loadingOption();
-      if(responseClaim.statusCode == ConstanstVar.successCode
-          || responseClaim.statusCode == ConstanstVar.invalidTokenCode
-          || responseClaim.statusCode == ConstanstVar.failedHttp){
+      if(responseClaim.statusCode == ConstantsVar.successCode
+          || responseClaim.statusCode == ConstantsVar.invalidTokenCode
+          || responseClaim.statusCode == ConstantsVar.failedHttp){
             print('$responseClaim.body');
             return responseClaim.body;
       }else{
@@ -79,13 +79,13 @@ class ApiServiceUtils {
     }
 
     Future<String> getMasterClaim() async{
-      String urlMasterClaim = ConstanstVar.urlApi+'MasterClaimData.php';
+      String urlMasterClaim = ConstantsVar.urlApi+'MasterClaimData.php';
       print('url $urlMasterClaim');
       final http.Response responseMasterClaim = await http.get(urlMasterClaim,
           headers: {'Content-Type': 'application/json',}).timeout(Duration(seconds: 100));
 
-      if(responseMasterClaim.statusCode == ConstanstVar.successCode
-          || responseMasterClaim.statusCode == ConstanstVar.failedHttp){
+      if(responseMasterClaim.statusCode == ConstantsVar.successCode
+          || responseMasterClaim.statusCode == ConstantsVar.failedHttp){
         return responseMasterClaim.body;
       }else{
         ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error Master Claim, please contact your administrator");
@@ -94,7 +94,7 @@ class ApiServiceUtils {
     }
 
     Future<String> getDataUser(String getuId, String getToken, loadingOption()) async{
-      String urlUserDtl = ConstanstVar.urlApi +'MasterUserDetail.php?user_id=$getuId-$getToken';
+      String urlUserDtl = ConstantsVar.urlApi +'MasterUserDetail.php?user_id=$getuId-$getToken';
       print('url $urlUserDtl');
       final http.Response responseUserDtl = await http
           .get(urlUserDtl,
@@ -103,9 +103,9 @@ class ApiServiceUtils {
           }
       ).timeout(Duration(seconds: 50));
       loadingOption();
-      if(responseUserDtl.statusCode == ConstanstVar.successCode
-          || responseUserDtl.statusCode == ConstanstVar.invalidTokenCode
-          || responseUserDtl.statusCode == ConstanstVar.failedHttp){
+      if(responseUserDtl.statusCode == ConstantsVar.successCode
+          || responseUserDtl.statusCode == ConstantsVar.invalidTokenCode
+          || responseUserDtl.statusCode == ConstantsVar.failedHttp){
         return responseUserDtl.body;
       }else{
         ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error User Detail, please contact your administrator");
@@ -114,7 +114,7 @@ class ApiServiceUtils {
     }
 
     Future<String> transLogout(String getuId, String getToken) async{
-      String urlLogout = ConstanstVar.urlApi +'Logout.php?user_id=$getuId-$getToken';
+      String urlLogout = ConstantsVar.urlApi +'Logout.php?user_id=$getuId-$getToken';
       print('url $urlLogout');
       final http.Response responseLogout = await http
           .get(urlLogout,
@@ -122,8 +122,8 @@ class ApiServiceUtils {
             'Content-Type': 'application/json',
           }
       ).timeout(Duration(seconds: 100));
-      if(responseLogout.statusCode == ConstanstVar.successCode
-          || responseLogout.statusCode == ConstanstVar.failedHttp){
+      if(responseLogout.statusCode == ConstantsVar.successCode
+          || responseLogout.statusCode == ConstantsVar.failedHttp){
         return responseLogout.body;
       }else{
         // throw new Exception("Error User Detail");
@@ -133,7 +133,7 @@ class ApiServiceUtils {
     }
 
     Future<String> getDataUnAttendance(String getuId, String getToken, loadingOption()) async{
-      String urlUnAttendance = ConstanstVar.urlApi +'MasterUnattendanceTrans.php?user_id=$getuId-$getToken';
+      String urlUnAttendance = ConstantsVar.urlApi +'MasterUnattendanceTrans.php?user_id=$getuId-$getToken';
       print('url $urlUnAttendance');
       final http.Response responseUnAttendance = await http
           .get(urlUnAttendance,
@@ -146,9 +146,9 @@ class ApiServiceUtils {
             throw new Exception("time out");
           });
       loadingOption();
-      if(responseUnAttendance.statusCode == ConstanstVar.successCode
-          || responseUnAttendance.statusCode == ConstanstVar.invalidTokenCode
-          || responseUnAttendance.statusCode == ConstanstVar.failedHttp){
+      if(responseUnAttendance.statusCode == ConstantsVar.successCode
+          || responseUnAttendance.statusCode == ConstantsVar.invalidTokenCode
+          || responseUnAttendance.statusCode == ConstantsVar.failedHttp){
         return responseUnAttendance.body;
       }else{
         ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error get unattendance, please contact your administrator");
@@ -157,7 +157,7 @@ class ApiServiceUtils {
     }
 
     Future<String> getMasterUnAttendance() async{
-      String urlMasterUnAttendance = ConstanstVar.urlApi +'MasterUnAttendanceData.php';
+      String urlMasterUnAttendance = ConstantsVar.urlApi +'MasterUnAttendanceData.php';
       print('url $urlMasterUnAttendance');
       final http.Response responseMasterUnAttendance = await http
           .get(urlMasterUnAttendance,
@@ -165,7 +165,7 @@ class ApiServiceUtils {
             'Content-Type': 'application/json',
           }
       ).timeout(Duration(seconds: 50));
-      if(responseMasterUnAttendance.statusCode == ConstanstVar.successCode){
+      if(responseMasterUnAttendance.statusCode == ConstantsVar.successCode){
         return responseMasterUnAttendance.body;
       }else{
         ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error master unattendance");
@@ -174,7 +174,7 @@ class ApiServiceUtils {
     }
 
     Future<String>createAbsent(PostJsonAbsent absentData) async{
-      String urlTRAbsent = ConstanstVar.urlApi +'TRAbsent.php';
+      String urlTRAbsent = ConstantsVar.urlApi +'TRAbsent.php';
       print('url $urlTRAbsent');
       final http.Response responseTrAbsent = await http
           .post(urlTRAbsent,
@@ -182,9 +182,9 @@ class ApiServiceUtils {
           body: PostJsonAbsent().absentToJson(absentData)
       ).timeout(Duration(seconds: 50));
 
-      if(responseTrAbsent.statusCode == ConstanstVar.successCode
-          || responseTrAbsent.statusCode == ConstanstVar.invalidTokenCode
-          || responseTrAbsent.statusCode == ConstanstVar.failedHttp){
+      if(responseTrAbsent.statusCode == ConstantsVar.successCode
+          || responseTrAbsent.statusCode == ConstantsVar.invalidTokenCode
+          || responseTrAbsent.statusCode == ConstantsVar.failedHttp){
         return responseTrAbsent.body;
       }else{
         ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error transaction absent");
@@ -193,7 +193,7 @@ class ApiServiceUtils {
     }
 
     Future<String>postClaimTrans(PostJsonClaimTR claimData) async{
-      String urlTRClaim = ConstanstVar.urlApi +'TRClaim.php';
+      String urlTRClaim = ConstantsVar.urlApi +'TRClaim.php';
       print('url $urlTRClaim');
       final http.Response responseTrClaim = await http
           .post(urlTRClaim,
@@ -201,9 +201,9 @@ class ApiServiceUtils {
           body: PostJsonClaimTR().postClaimToJson(claimData)
       ).timeout(Duration(seconds: 50));
 
-      if(responseTrClaim.statusCode == ConstanstVar.successCode
-          || responseTrClaim.statusCode == ConstanstVar.invalidTokenCode
-          || responseTrClaim.statusCode == ConstanstVar.failedHttp){
+      if(responseTrClaim.statusCode == ConstantsVar.successCode
+          || responseTrClaim.statusCode == ConstantsVar.invalidTokenCode
+          || responseTrClaim.statusCode == ConstantsVar.failedHttp){
         return responseTrClaim.body;
       }else{
         ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error transaction claim");
@@ -212,7 +212,7 @@ class ApiServiceUtils {
     }
 
     Future<String>postUnAttendanceTrans(PostJsonUnAtttendance unAttendanceData) async{
-      String urlTRUnAttendance = ConstanstVar.urlApi +'TRUnAttendance.php';
+      String urlTRUnAttendance = ConstantsVar.urlApi +'TRUnAttendance.php';
       print('url $urlTRUnAttendance');
       final http.Response responseTrUnAttendance = await http
           .post(urlTRUnAttendance,
@@ -224,9 +224,9 @@ class ApiServiceUtils {
         throw new Exception("time out");
       });
 
-      if(responseTrUnAttendance.statusCode == ConstanstVar.successCode
-          || responseTrUnAttendance.statusCode == ConstanstVar.invalidTokenCode
-          || responseTrUnAttendance.statusCode == ConstanstVar.failedHttp){
+      if(responseTrUnAttendance.statusCode == ConstantsVar.successCode
+          || responseTrUnAttendance.statusCode == ConstantsVar.invalidTokenCode
+          || responseTrUnAttendance.statusCode == ConstantsVar.failedHttp){
         return responseTrUnAttendance.body;
       }else{
         ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error transaction unattendance");
@@ -235,7 +235,7 @@ class ApiServiceUtils {
     }
 
     Future<String> getMasterAbsentOut(loadingOption()) async{
-      String urlMasterAbsentOut = ConstanstVar.urlApi +'MasterAbsentOutTime.php';
+      String urlMasterAbsentOut = ConstantsVar.urlApi +'MasterAbsentOutTime.php';
       print('url $urlMasterAbsentOut');
 
       final http.Response responseMasterAbsentOut = await http
@@ -251,7 +251,7 @@ class ApiServiceUtils {
         }
       );
       loadingOption();
-      if(responseMasterAbsentOut.statusCode == ConstanstVar.successCode){
+      if(responseMasterAbsentOut.statusCode == ConstantsVar.successCode){
         return responseMasterAbsentOut.body;
       }else{
         ErrorResponse _errResponse = ErrorResponse(code: 900,message: "Error master absent out");

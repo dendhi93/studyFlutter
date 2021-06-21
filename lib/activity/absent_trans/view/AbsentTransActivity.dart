@@ -64,40 +64,40 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
     super.initState();
     _absentTransPresenter = AbsentTransPresenter(this);
     _absentTransPresenter.validateConn(context);
-    widget.absentModel != null ? initAbsentTrans(ConstanstVar.notNullAbsentTrans) : initAbsentTrans(ConstanstVar.nullAbsentTrans);
+    widget.absentModel != null ? initAbsentTrans(ConstantsVar.notNullAbsentTrans) : initAbsentTrans(ConstantsVar.nullAbsentTrans);
     // validateConnection(context);
   }
 
   //controller
-  Future _gpsValidaton(BuildContext context) async {
-    loadingOption();
-    final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+  // Future _gpsValidaton(BuildContext context) async {
+  //   loadingOption();
+  //   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+  //
+  //   if(!(await Geolocator().isLocationServiceEnabled())){
+  //     loadingOption();
+  //     alertGpsOff();
+  //   }
+  //   else{_getCurrentLocation(geolocator, context);}
+  // }
 
-    if(!(await Geolocator().isLocationServiceEnabled())){
-      loadingOption();
-      alertGpsOff();
-    }
-    else{_getCurrentLocation(geolocator, context);}
-  }
-
-  Future _getCurrentLocation(Geolocator _geolocator, BuildContext context){
-    _geolocator
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-        .then((Position position) {
-      setState(() {
-        _currentPosition = position;
-        //manifest sama info.plist hrs copas manual
-        if(_currentPosition != null){
-          _getAddress(position, context);
-        }
-        loadingOption();
-      });
-    }).catchError((e) {
-      print(e);
-      loadingOption();
-    });
-    return null;
-  }
+  // Future _getCurrentLocation(Geolocator _geolocator, BuildContext context){
+  //   _geolocator
+  //       .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+  //       .then((Position position) {
+  //     setState(() {
+  //       _currentPosition = position;
+  //       //manifest sama info.plist hrs copas manual
+  //       if(_currentPosition != null){
+  //         _getAddress(position, context);
+  //       }
+  //       loadingOption();
+  //     });
+  //   }).catchError((e) {
+  //     print(e);
+  //     loadingOption();
+  //   });
+  //   return null;
+  // }
 
   Widget _myRadioButton({String title, int value, Function onChanged}) {
     return RadioListTile(
@@ -108,21 +108,20 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
     );
   }
 
-
-  void _getAddress(Position _position, BuildContext context) async{
-    try{
-      final coordinates = new Coordinates(_position.latitude, _position.longitude);
-      var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-      var first = addresses.first;
-      print("${first.featureName} : ${first.addressLine}");
-      if(widget.absentModel ==null){
-        etAddressAbsent.text = "${first.addressLine}";
-      }
-    }catch(error){
-      print(error.toString());
-      hrisUtil.toastMessage("please refresh address");
-    }
-  }
+  // void _getAddress(Position _position, BuildContext context) async{
+  //   try{
+  //     final coordinates = new Coordinates(_position.latitude, _position.longitude);
+  //     var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+  //     var first = addresses.first;
+  //     print("${first.featureName} : ${first.addressLine}");
+  //     if(widget.absentModel ==null){
+  //       etAddressAbsent.text = "${first.addressLine}";
+  //     }
+  //   }catch(error){
+  //     print(error.toString());
+  //     hrisUtil.toastMessage("please refresh address");
+  //   }
+  // }
 
   void initUIdToken(int intType, BuildContext context){
     if(intType == 1){
@@ -173,7 +172,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
           dateTime1 = DateFormat('yyyy-M-d H:m').parse(stAbsentOut),
           dateTime2.isBefore(dateTime1) ? reasonValidation(context) : initUIdToken(1, context)
         }
-      }else{hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)}
+      }else{hrisUtil.showNoActionDialog(ConstantsVar.noConnectionTitle, ConstantsVar.noConnectionMessage, context)}
     });
   }
 
@@ -185,7 +184,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
           responseCode = ErrorResponse.fromJson(jsonDecode(value)).code,
             stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
           Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop(),
-          if(responseCode == ConstanstVar.successCode){
+          if(responseCode == ConstantsVar.successCode){
               if(stResponseMessage == "Success Absent"){
                 hrisUtil.toastMessage("$stResponseMessage"),
                 onbackScreen(),
@@ -205,7 +204,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
 
   void validateConnection(BuildContext context){
     HrisUtil.checkConnection().then((isConnected) => {
-      isConnected ? _getAbsentOut() : hrisUtil.snackBarMessage(ConstanstVar.noConnectionMessage, context)
+      isConnected ? _getAbsentOut() : hrisUtil.snackBarMessage(ConstantsVar.noConnectionMessage, context)
     });
   }
 
@@ -214,7 +213,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
     _apiServiceUtils.getMasterAbsentOut(loadingOption).then((value) => {
       print(jsonDecode(value)),
       responseCode = ResponseAbsentOut.fromJson(jsonDecode(value)).code,
-      if(responseCode == ConstanstVar.successCode){
+      if(responseCode == ConstantsVar.successCode){
           stAbsentOut = ResponseAbsentOut.fromJson(jsonDecode(value)).absentOut,
           stAbsentIn = ResponseAbsentOut.fromJson(jsonDecode(value)).absentIn,
       }else{
@@ -273,7 +272,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
   @override
   void initAbsentTrans(int typeInit) {
     //  implement initAbsentTrans
-    if(typeInit == ConstanstVar.notNullAbsentTrans){
+    if(typeInit == ConstantsVar.notNullAbsentTrans){
         etDateAbsent.text = widget.absentModel.dateAbsent;
         etInputTime.text = widget.absentModel.absentTime;
         etAddressAbsent.text = widget.absentModel.addressAbsent;
@@ -301,7 +300,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
   @override
   void loadingBar(int typeLoading) {
     //  implement loadingBar
-    typeLoading == ConstanstVar.showLoadingBar ? LoadingUtils.showLoadingDialog(context, _keyLoader): Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
+    typeLoading == ConstantsVar.showLoadingBar ? LoadingUtils.showLoadingDialog(context, _keyLoader): Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop();
   }
 
   @override
@@ -341,7 +340,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
                   // Navigator.of(context, rootNavigator: true).pop();
                   closeAlert(context);
                   // _gpsValidaton(context);
-                  _absentTransPresenter.validateGpsService(context)
+                  _absentTransPresenter.validateGpsService(context);
                 },
               )
             ],
@@ -505,7 +504,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
                               if(_groupValue == -1){
                                 hrisUtil.snackBarMessageScaffoldKey("Please choose absent type", scaffoldKey);
                               }else if(etAddressAbsent.text.isEmpty){
-                                hrisUtil.snackBarMessageScaffoldKey(ConstanstVar.blankStatement, scaffoldKey);
+                                hrisUtil.snackBarMessageScaffoldKey(ConstantsVar.blankStatement, scaffoldKey);
                               } else{
                                 showDialog(
                                   context: context,

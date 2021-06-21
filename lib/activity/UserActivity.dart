@@ -151,7 +151,7 @@ class _UserActivityState extends State<UserActivity> {
   //controller
   void validateConnection(BuildContext context){
     HrisUtil.checkConnection().then((isConnected) => {
-      isConnected ? initUIdToken(1) : _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
+      isConnected ? initUIdToken(1) : _hrisUtil.showNoActionDialog(ConstantsVar.noConnectionTitle, ConstantsVar.noConnectionMessage, context)
     });
   }
 
@@ -183,12 +183,12 @@ class _UserActivityState extends State<UserActivity> {
       _apiServiceUtils.getDataUser(uId, userToken, loadingOption).then((value) => {
         print(jsonDecode(value)),
         responseCode = ResponseHeadUserDetail.fromJson(jsonDecode(value)).code,
-        if(responseCode == ConstanstVar.successCode){
+        if(responseCode == ConstantsVar.successCode){
           stAddress = ResponseHeadUserDetail.fromJson(jsonDecode(value)).userDetail.addressUser,
           stEmail = ResponseHeadUserDetail.fromJson(jsonDecode(value)).userDetail.emailUser,
           stPhone = ResponseHeadUserDetail.fromJson(jsonDecode(value)).userDetail.phoneUser,
           stNameUser = ResponseHeadUserDetail.fromJson(jsonDecode(value)).userDetail.nameUser,
-        }else if(responseCode == ConstanstVar.invalidTokenCode){
+        }else if(responseCode == ConstantsVar.invalidTokenCode){
           stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
           _hrisStore.removeAllValues().then((isSuccess) =>{
             if(isSuccess){
@@ -220,7 +220,7 @@ class _UserActivityState extends State<UserActivity> {
         responseCode = ErrorResponse.fromJson(jsonDecode(value)).code,
         stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
         loadingOption(),
-        if(responseCode == ConstanstVar.successCode && stResponseMessage.contains('Success')){
+        if(responseCode == ConstantsVar.successCode && stResponseMessage.contains('Success')){
           _hrisStore.removeAllValues().then((isSuccess) =>{
               if(isSuccess){
                   Navigator.of(context).pop(),

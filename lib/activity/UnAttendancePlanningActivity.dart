@@ -59,7 +59,7 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
 
   void validateConnection(BuildContext context){
     HrisUtil.checkConnection().then((isConnected) => {
-      isConnected ? initUIdToken(1) : _hrisUtil.snackBarMessage(ConstanstVar.noConnectionMessage, context)
+      isConnected ? initUIdToken(1) : _hrisUtil.snackBarMessage(ConstantsVar.noConnectionMessage, context)
     });
   }
 
@@ -91,9 +91,9 @@ class _UnAttendancePlanningActivityState extends State<UnAttendancePlanningActiv
       _apiServiceUtils.getDataUnAttendance(uId, userToken, loadingOption).then((value) => {
         print(jsonDecode(value)),
         responseCode = ResponseHeadUnAttendance.fromJson(jsonDecode(value)).code,
-        if(responseCode == ConstanstVar.successCode){
+        if(responseCode == ConstantsVar.successCode){
           listDataUnAttendance = ResponseHeadUnAttendance.fromJson(jsonDecode(value)).unAttendanceData,
-        }else if(responseCode == ConstanstVar.invalidTokenCode){
+        }else if(responseCode == ConstantsVar.invalidTokenCode){
           stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
           _hrisStore.removeAllValues().then((isSuccess) =>{
             if(isSuccess){

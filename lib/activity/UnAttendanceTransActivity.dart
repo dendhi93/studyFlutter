@@ -72,7 +72,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
         if(_userType == "approval"){
           isEnableDropdown = !isEnableDropdown;
         }else{
-          if(statusTrans == ConstanstVar.approvedClaimStatus || statusTrans == ConstanstVar.rejectClaimStatus){
+          if(statusTrans == ConstantsVar.approvedClaimStatus || statusTrans == ConstantsVar.rejectClaimStatus){
             isEnableDropdown = !isEnableDropdown;
             isShowButton = !isShowButton;
             stResultRejectReason = widget.unAttendanceModel.reasonReject;
@@ -106,7 +106,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   void validateConnection(BuildContext context){
     HrisUtil.checkConnection().then((isConnected) => {
       isConnected ? _loadMasterUnAttendance()
-          : _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
+          : _hrisUtil.showNoActionDialog(ConstantsVar.noConnectionTitle, ConstantsVar.noConnectionMessage, context)
     });
   }
 
@@ -115,7 +115,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
     _apiServiceUtils.getMasterUnAttendance().then((value) => {
       print(jsonDecode(value)),
       responseCode = ResponseHeadMasterUnAttendance.fromJson(jsonDecode(value)).code,
-      if(responseCode == ConstanstVar.successCode){
+      if(responseCode == ConstantsVar.successCode){
         listDtlMasterUnAttendance = ResponseHeadMasterUnAttendance.fromJson(jsonDecode(value)).masterUnAttendance,
         if(listDtlMasterUnAttendance.length > 0){
           arrDtlMasterUnAttendance.addAll(listDtlMasterUnAttendance),
@@ -146,7 +146,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
       setState(() {
         selectedDate = picked;
         String selectedDateFormat = new DateFormat("yyyy-MM-dd").format(selectedDate);
-        if(typeDate == ConstanstVar.selectStartDate){
+        if(typeDate == ConstantsVar.selectStartDate){
           etStartDate.text = selectedDateFormat;
           tempStStartDate = selectedDateFormat;
           if(etEndDate.text.isNotEmpty){
@@ -178,7 +178,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
   void validateConnectionSubmit(BuildContext context){
     HrisUtil.checkConnection().then((isConnected) => {
       isConnected ? initUIdToken(1, context)
-          : _hrisUtil.showNoActionDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
+          : _hrisUtil.showNoActionDialog(ConstantsVar.noConnectionTitle, ConstantsVar.noConnectionMessage, context)
     });
   }
 
@@ -253,7 +253,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
         responseCodeUnAttendance = ErrorResponse.fromJson(jsonDecode(value)).code,
         stResponseMessage = ErrorResponse.fromJson(jsonDecode(value)).message,
         Navigator.of(_keyLoader.currentContext,rootNavigator: true).pop(),
-        if(responseCodeUnAttendance == ConstanstVar.successCode){
+        if(responseCodeUnAttendance == ConstantsVar.successCode){
           _hrisUtil.toastMessage("$stResponseMessage"),
           onbackScreen(),
         }else{_hrisUtil.snackBarMessageScaffoldKey("$stResponseMessage", _scaffoldKey),}
@@ -284,7 +284,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                         controller: etStartDate,
                         onTap: (){
                           FocusScope.of(context).requestFocus(new FocusNode());
-                          _selectDatePicker(context, ConstanstVar.selectStartDate);
+                          _selectDatePicker(context, ConstantsVar.selectStartDate);
                         },
                         decoration: new InputDecoration(
                           labelText: "Start Date",
@@ -311,7 +311,7 @@ class _UnAttendanceTransActivityState extends State<UnAttendanceTransActivity> {
                         controller: etEndDate,
                         onTap: (){
                             FocusScope.of(context).requestFocus(new FocusNode());
-                            _selectDatePicker(context, ConstanstVar.selectEndDate);
+                            _selectDatePicker(context, ConstantsVar.selectEndDate);
                         },
                         decoration: new InputDecoration(
                           labelText: "End Date",

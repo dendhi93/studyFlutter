@@ -27,13 +27,13 @@ class LoginPresenter implements LoginActivityInteractor{
 
   @override
   void submitLogin(String un, String pwd) async {
-      view?.loadingBar(ConstanstVar.showLoadingBar);
+      view?.loadingBar(ConstantsVar.showLoadingBar);
       try{
         //to do execute login
         _apiServiceUtils.getLogin(un.trim(), pwd.trim()).then((value) => {
             responseCode = ResponseLoginModel.fromJson(jsonDecode(value)).code,
-            view?.loadingBar(ConstanstVar.hideLoadingBar),
-            if(responseCode == ConstanstVar.successCode){
+            view?.loadingBar(ConstantsVar.hideLoadingBar),
+            if(responseCode == ConstantsVar.successCode){
               uLevelId =  ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.levelId.toString(),
               userType =  ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.userType.toString(),
               stToken = ResponseLoginModel.fromJson(jsonDecode(value)).modelDataLogin.token,
@@ -48,7 +48,7 @@ class LoginPresenter implements LoginActivityInteractor{
             }
         });
       }catch(error){
-        view?.loadingBar(ConstanstVar.hideLoadingBar);
+        view?.loadingBar(ConstantsVar.hideLoadingBar);
         view?.toastLogin("err Login " +error.toString());
       }
   }
@@ -67,7 +67,7 @@ class LoginPresenter implements LoginActivityInteractor{
   void validateConn(BuildContext context,String un, String pwd) {
     // implement validateConn
       HrisUtil.checkConnection().then((isConnected) => {
-        isConnected ? submitLogin(un, pwd) : view?.onAlertDialog(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
+        isConnected ? submitLogin(un, pwd) : view?.onAlertDialog(ConstantsVar.noConnectionTitle, ConstantsVar.noConnectionMessage, context)
       });
   }
 }

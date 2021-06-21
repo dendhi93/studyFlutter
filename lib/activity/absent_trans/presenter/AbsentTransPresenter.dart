@@ -37,7 +37,7 @@ class AbsentTransPresenter implements AbsentTransInteractor{
   void validateConn(BuildContext context) {
     // implement validateConn
     HrisUtil.checkConnection().then((isConnected) => {
-      isConnected ? getDataAbsentOut() : view?.noConnectionAlert(ConstanstVar.noConnectionTitle, ConstanstVar.noConnectionMessage, context)
+      isConnected ? getDataAbsentOut() : view?.noConnectionAlert(ConstantsVar.noConnectionTitle, ConstantsVar.noConnectionMessage, context)
     });
   }
 
@@ -113,7 +113,7 @@ class AbsentTransPresenter implements AbsentTransInteractor{
     apiServiceUtils.getMasterAbsentOut(interactorLoading).then((value) => {
       print(jsonDecode(value)),
       responseCode = ResponseAbsentOut.fromJson(jsonDecode(value)).code,
-      if(responseCode == ConstanstVar.successCode){
+      if(responseCode == ConstantsVar.successCode){
         stAbsentOut = ResponseAbsentOut.fromJson(jsonDecode(value)).absentOut,
         stAbsentIn = ResponseAbsentOut.fromJson(jsonDecode(value)).absentIn,
         view?.paramAbsent(stAbsentIn, stAbsentOut),
