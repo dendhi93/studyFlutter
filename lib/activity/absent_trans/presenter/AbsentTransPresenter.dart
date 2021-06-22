@@ -43,7 +43,7 @@ class AbsentTransPresenter implements AbsentTransInteractor{
 
 
   @override
-  void validateConnSubmit(BuildContext context) {
+  void validateConnSubmit(BuildContext context, String stDateAbsent, String absentTime) {
     // implement validateConnSubmit
   }
 

@@ -3,7 +3,7 @@ import 'package:geolocator/geolocator.dart';
 
 class AbsentTransInteractor{
     void validateConn(BuildContext context) {}
-    void validateConnSubmit(BuildContext context) {}
+    void validateConnSubmit(BuildContext context, String stDateAbsent, String absentTime) {}
     void toSubmitAbsent(){}
     void getCoordinat(Geolocator geolocator, BuildContext context){}
     void getAddress(Position _position, BuildContext context){}

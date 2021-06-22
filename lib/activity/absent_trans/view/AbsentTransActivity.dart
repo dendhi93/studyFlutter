@@ -15,12 +15,11 @@ import 'package:absent_hris/util/LoadingUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:intl/intl.dart';
 import 'package:android_intent/android_intent.dart';
 import 'dart:io' show Platform;
 
-
+//manifest sama info.plist hrs copas manual
 class AbsentTransActivity extends StatefulWidget {
   final ResponseDtlDataAbsentModel absentModel;
   AbsentTransActivity({Key key, @required this.absentModel}) : super(key: key);
@@ -86,7 +85,7 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
   //       .then((Position position) {
   //     setState(() {
   //       _currentPosition = position;
-  //       //manifest sama info.plist hrs copas manual
+  //
   //       if(_currentPosition != null){
   //         _getAddress(position, context);
   //       }
@@ -244,7 +243,11 @@ class _AbsentTransActivityState extends State<AbsentTransActivity> implements Ab
                 onPressed: (){
                   closeAlert(context);
                   //submitAbsent
-                  initUIdToken(1, context);
+                  // initUIdToken(1, context);
+                  if(etReasonDialogAbsent.text.isNotEmpty){reasonAbsent = etReasonDialogAbsent.text.toString().trim();}
+                  _absentTransPresenter.initUnIdToken(1, reasonAbsent,
+                      etAddressAbsent.text.trim(), etDateAbsent.text.trim(),
+                      _groupValue, etInputTime.text.toString());
                 },
               ),
               TextButton(child: Text('Cancel'),
