@@ -30,8 +30,7 @@ class _LoginActivityState extends State<LoginActivity> implements LoginActivityV
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: _initViewLogin(context),
-    );
+    return Scaffold(body: _initViewLogin(context),);
   }
 
   Widget _initViewLogin(BuildContext context){
